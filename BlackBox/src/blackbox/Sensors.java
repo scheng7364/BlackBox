@@ -4,22 +4,37 @@ import java.util.Observable;
 
 public class Sensors extends Observable {
 
-	private int speed;
+	private Car car1 = new Car();
 
-	public Sensors(int speed) {
-		setSpeed(speed);
+	private static int count = 0;
+	
+	public Sensors() {
 	}
-
-	public void setSpeed(int currentSpeed) {
-		speed = currentSpeed;
-
-		setChanged();
-		// notify Observers that model has changed
-		notifyObservers(new Integer(speed));
+	
+	// Talk to car speed sensor
+	public double getCarSpeed() {
+		car1.setSpeedAVG(40.0);
+		car1.setSpeedSTD(20.0);
+			
+		return car1.getSpeed();
 	}
-
-	public int getSpeed() {
-		return speed;
+	
+	// Talk to tire pressure sensor
+	public String getCarTirePressure() {
+		String status = "Healthy";
+		
+		car1.setSysTires(new Tires(20.0, 40.0, "","",""));
+		
+	//	System.out.println(car1.sysTires.getTirePressure());
+		if (car1.sysTires.getTirePressure() >= 40) {
+			count++;
+		} else count = 0;
+			
+		if (count > 10) {	// if the tire pressure is > 20 for 20 sec, show warning
+			status = "Warning";
+		}
+		 
+		 return status;
 	}
 	
 }

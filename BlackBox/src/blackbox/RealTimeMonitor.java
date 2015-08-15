@@ -1,5 +1,6 @@
 package blackbox;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -24,7 +25,7 @@ public class RealTimeMonitor extends JPanel implements ActionListener {
 	private JButton btnStop = new JButton("Stop");
 	private JButton btnStart = new JButton("Restart");
 
-	Timer tm = new Timer(1500, this);
+	Timer tm = new Timer(2000, this); // Change every 2 seconds;
 	
 	// Constructor to add the GUI components to the window
 	public RealTimeMonitor() {
@@ -47,27 +48,26 @@ public class RealTimeMonitor extends JPanel implements ActionListener {
 		btnStart.setBounds(518, 11, 89, 23);
 		add(btnStart);
 		
-		lblTextPressure.setBounds(418, 81, 89, 23);
+		lblTextPressure.setBounds(471, 219, 100, 14);
 		add(lblTextPressure);
 		tm.start(); 
 	}
 
 	public void actionPerformed(ActionEvent e) {
 
-		Car car1 = new Car();
+		Sensors sensor = new Sensors();
 		
-		SensorsView view1 = new SensorsView(car1);
-		
-		car1.setSpeedAVG(40.0);
-		car1.setSpeedSTD(20.0);
-		
-		car1.setSysTires(new Tires(20.0, 40.0, "","",""));
+		SensorsView view1 = new SensorsView(sensor);
 		
 		DecimalFormat one = new DecimalFormat("#0.0");
 		
-		lblTextSpeed.setText(one.format(car1.getSpeed()));
+		lblTextSpeed.setText(one.format(sensor.getCarSpeed()));		
 		
-		lblTextPressure.setText(one.format(car1.sysTires.getTirePressure()));
+		lblTextPressure.setForeground(Color.RED);
+		lblTextPressure.setText(sensor.getCarTirePressure());
+		if(sensor.getCarTirePressure().equals("Healthy")) {
+			lblTextPressure.setForeground(Color.GREEN);
+		}
 		
 		// Stop button to stop the real time monitoring function
 		btnStop.addActionListener(new ActionListener() {

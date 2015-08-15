@@ -5,11 +5,11 @@ import java.util.Observer;
 
 public class SensorsView implements Observer {
 	
-	private Car car  = new Car();
+	private Sensors sensor  = new Sensors();
 	
-	public SensorsView(Car car) {
-		this.car = car;
-		car.addObserver(this);
+	public SensorsView(Sensors sensor) {
+		this.sensor = sensor;
+		sensor.addObserver(this);
 	}
 	
 	public void update(Observable obale, Object ob) {
