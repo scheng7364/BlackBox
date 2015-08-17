@@ -1,0 +1,402 @@
+0010,P0010 Variable Valve Timing Control (VTC) Oil Control Solenoid Valve Malfunction
+0011,P0011 Variable Valve Timing Control (VTC) System Malfunction
+0101,P0101 Mass Airflow (MAF) Sensor Range/Performance Problem
+0102,P0102 Mass Airflow (MAF) Sensor Circuit Low Voltage
+0103,P0103 Mass Airflow (MAF) Sensor Circuit High Voltage
+0106,P0106 Manifold Absolute Pressure (MAP) Sensor Range/Performance Problem
+0107,P0107 Manifold Absolute Pressure (MAP) Sensor Circuit Low Voltage
+0108,P0108 Manifold Absolute Pressure (MAP) Sensor Circuit High Voltage
+0111,P0111 Intake Air Temperature (IAT) Sensor Circuit Range/Performance Problem
+0112,P0112 Intake Air Temperature (IAT) Sensor Circuit Low Voltage
+0113,P0113 Intake Air Temperature (IAT) Sensor Circuit High Voltage
+0116,P0116 Engine Coolant Temperature (ECT) Sensor Circuit Range/Performance Problem
+0117,P0117 Engine Coolant Temperature (ECT) Sensor Circuit Low Input
+0118,P0118 Engine Coolant Temperature (ECT) Sensor Circuit High Input
+0122,P0122 Throttle Position (TP) Sensor Circuit Low Input
+0123,P0123 Throttle Position (TP) Sensor Circuit High Input
+0125,P0125 Engine Coolant Temperature (ECT) Sensor Slow Response
+0128,P0128 Cooling System Malfunction
+0131,P0131 Primary Heated Oxygen Sensor (Primary HO2S) (Sensor 1) Circuit Low Voltage
+0132,P0132 Primary Heated Oxygen Sensor (Primary HO2S) (Sensor 1) Circuit High Voltage
+0133,"P0133 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) Circuit Slow Response"
+0134,P0134 Air/Fuel Ratio (A/F) Sensor (Sensor 1) No Activity Detected
+0135,P0135 Primary Heated Oxygen Sensor (Primary HO2S) (Sensor 1) Heater Circuit Malfunction
+0137,P0137 Secondary Heated Oxygen Sensor (Secondary HO2S) Circuit Low Voltage
+0138,P0138 Secondary Heated Oxygen Sensor (Secondary HO2S) Circuit High Voltage
+0139,P0139 Secondary Heated Oxygen Sensor (Secondary HO2S) Slow Response
+0141,P0141 Secondary Heated Oxygen Sensor (Secondary HO2S) (Sensor 2) Heater Circuit Malfunction
+0143,P0143 Third Heated Oxygen Sensor (Third HO2S) (Sensor 3) Circuit Low Voltage
+0144,P0144 Third Heated Oxygen Sensor (Third HO2S) (Sensor 3) Circuit High Voltage
+0145,P0145 Third Heated Oxygen Sensor (Third HO2S) (Sensor 3) Circuit Slow Response
+0147,P0147 Third Heated Oxygen Sensor (Third HO2S) (Sensor 3) Heater Circuit Malfunction
+0153,"P0153 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) Circuit Slow Response"
+0154,"P0154 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) Heater System Malfunction"
+0155,"P0155 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) Heater Circuit Malfunction"
+0157,"P0157 Front Secondary Heated Oxygen Sensor (Secondary HO2S) (Bank 2, Sensor 2)"
+0158,"P0158 Front Secondary Heated Oxygen Sensor (Secondary HO2S) (Bank 2, Sensor 2)"
+0159,"P0159 Front Secondary Heated Oxygen Sensor (Secondary HO2S) (Bank 2, Sensor 2)"
+0161,"P0161 Front Secondary Heated Oxygen Sensor (Secondary HO2S) (Bank 2, Sensor 2)"
+0171,P0171 Fuel System Too Lean
+0172,P0172 Fuel System Too Rich
+0174,P0174 Front Bank (Bank 2) Fuel System Too Lean
+0175,P0175 Front Bank (Bank 2) Fuel System Too Rich
+0191,P0191 Fuel Pressure Sensor Range/Performance Problem
+0192,P0192 Fuel Pressure Sensor Circuit Low Voltage
+0193,P0193 Fuel Pressure Sensor Circuit High Voltage
+0196,P0196 EOT Sensor/Range Performance Problem
+0197,P0197 EOT Sensor Circuit Low Voltage
+0198,P0198 EOT Sensor Circuit High Voltage
+0222,P0222 Throttle Position (TP) Sensor 2 Circuit Low Voltage
+0223,P0223 Throttle Position (TP) Sensor 2 Circuit High Voltage
+0300,P0300 Random Misfire
+0301,P0301 No. 1 Cylinder Misfire
+0302,P0302 No. 2 Cylinder Misfire
+0303,P0303 No. 3 Cylinder Misfire
+0304,P0304 No. 4 Cylinder Misfire
+0305,P0305 No. 5 Cylinder Misfire
+0306,P0306 No. 6 Cylinder Misfire
+0325,P0325 Knock Sensor Circuit Malfunction
+0335,P0335 Crankshaft Position (CKP) Sensor Circuit No Signal
+0336,P0336
+0339,P0339
+0340,P0340 Camshaft Position (CMP) Sensor No Signal
+0341,P0341 Camshaft Position (CMP) Sensor A Intermittent Interruption
+0341,P0341 Variable Valve Timing Control (VTC) Phase Gap
+0344,P0344 Camshaft Position (CMP) Sensor Intermittent Interruption
+0365,P0365 Camshaft Position (CMP) Sensor B No Signal
+0366,P0366
+0369,P0369
+0385,P0385 Crankshaft Position (CKP) Sensor B No Signal
+0389,P0389 Crankshaft Position (CKP) Sensor B Intermittent Interruption
+0401,P0401 Exhaust Gas Recirculation (EGR) Insufficient Flow
+0404,P0404 Exhaust Gas Recirculation (EGR) Control Circuit Range/Performance Problem
+0406,P0406 Exhaust Gas Recirculation (EGR) Valve Position Sensor Circuit High Voltage
+0410,P0410 Air Pump Circuit Malfunction
+0411,P0411 Secondary Air Injection System Incorrect Flow
+0420,P0420 Catalyst System Efficiency Below Threshold
+0430,P0430 Front Bank Catalyst System Efficiency Below Threshold (Bank 2)
+0441,P0441 Evaporative Emission (EVAP) Control System Incorrect Purge Flow
+0442,P0442 Evaporative Emission (EVAP) System Small Leak Detected
+0443,P0443 Evaporative Emission (EVAP) Canister Purge Valve Circuit Malfunction
+0451,P0451 Fuel Tank Pressure (FTP) Sensor Range/Performance Problem
+0452,P0452 Fuel Tank Pressure (FTP) Sensor Circuit Low Voltage
+0453,P0453 Fuel Tank Pressure (FTP) Sensor Circuit High Voltage
+0456,P0456 Evaporative Emission (EVAP) System Very Small Leak Detected
+0457,P0457 Evaporative Emission (EVAP) System Leak Detected Fuel Fill Cap Loose/Off
+0461,P0461 Fuel Gauge Sending Unit Range/Performance Problem
+0462,P0462 Fuel Gauge Sending Unit Circuit Low Voltage
+0463,P0463 Fuel Gauge Sending Unit Circuit High Voltage
+0496,P0496 Evaporative Emission (EVAP) System High Purge Flow
+0497,P0497 Evaporative Emission (EVAP) System Low Purge Flow
+0498,P0498 Evaporative Emission (EVAP) Canister Vent Shut Valve Control Circuit Low Voltage
+0499,P0499 Evaporative Emission (EVAP) Canister Vent Shut Valve Control Circuit High Voltage
+0500,P0500 Vehicle Speed Sensor (VSS) Circuit Malfunction
+0501,P0501 Vehicle Speed Sensor (VSS) Range/Peformance Problem
+0505,P0505 Idle Control System Malfunction
+0506,P0506 Idle Control System RPM Lower Than Expected
+0507,P0507 Idle Control System RPM Higher Than Expected
+0511,P0511 Idle Air Control (IAC) Valve Circuit Malfunction
+0521,P0521 EOP Sensor Range/Performance Problem
+0522,P0522 EOP Sensor Circuit Low Voltage
+0523,P0523 EOP Sensor Circuit High Voltage
+0560,P0560 ECM Back-up Circuit Low Voltage
+0563,P0563 Engine Control Module (ECM)/Powertrain Control Module (PCM) Power Source Circuit
+0600,P0600 Multiplex Control System Troubleshooting
+0603,P0603 ECM/PCM Internal Control Module Keep Alive Memory (KAM) Error
+0606,P0606 ECM/PCM Processor Malfunction
+0661,P0661 Intake Manifold Runner Control (IMRC) Valve Position Sensor Circuit Low Voltage
+0662,P0662 Intake Manifold Runner Control (IMRC) Valve Position Sensor Circuit High Voltage
+0685,P0685 ECM/PCM Power Relay Control Circuit Malfunction
+0700,P0700 Automatic Transmission Control System
+0705,P0705 Short in Transmission Range Switch Circuit (Multiple Shift-position Input)
+0706,P0706 Open in Transmission Range Switch Circuit
+0710,P0710
+0711,P0711
+0712,P0712 Short in ATF Temperature Sensor Circuit
+0713,P0713 Open in ATF Temperature Sensor Circuit
+0715,P0715
+0716,P0716
+0717,P0717 Problem in Mainshaft Speed Sensor Circuit (No Signal Input)
+0718,P0718 Mainshaft Speed Sensor Intermittent Failure
+0720,P0720 Countershaft Speed Sensor Circuit Malfunction
+0720,P0720
+0721,P0721
+0722,P0722 Problem in Countershaft Speed Sensor Circuit (No Signal Input)
+0723,P0723 Countershaft Speed Sensor Intermittent Failure
+0725,P0725 Engine Speed Input Circuit Malfunction
+0730,P0730 Problem in Shift Control System
+0731,P0731 Problem in 1st Clutch and 1st Clutch Hydraulic Circuit
+0732,P0732 Problem in 2nd Clutch and 2nd Clutch Hydraulic Circuit
+0733,P0733 Problem in 3rd Clutch and 3rd Clutch Hydraulic Circuit
+0734,P0734 Problem in 4th Clutch and 4th Clutch Hydraulic Clutch
+0735,P0735 Problem in 5th Clutch and 5th Clutch Hydraulic Circuit
+0740,P0740 Problem in Lock-up Control System
+0741,P0741 Torque Converter Clutch Hydraulic Clutch Stuck OFF
+0743,P0743 Problem in Torque Converter Clutch Solenoid Valve Circuit
+0745,P0745 Problem in Hydraulic Control System of A/T Clutch Pressure Control Solenoid Valve A Circuit
+0746,P0746 A/T Clutch Pressure Control Solenoid Valve A Stuck OFF
+0747,P0747 A/T Clutch Pressure Control Solenoid Valve A Stuck ON
+0748,P0748 Problem in A/T Clutch Pressure Control Solenoid Valve A Circuit
+0750,P0750 Problem in Hydraulic Control System of Shift Solenoid Valve A Circuit
+0751,P0751 Shift Solenoid Valve A Stuck OFF
+0752,P0752 Shift Solenoid Valve A Stuck ON
+0753,P0753 Problem in Shift Solenoid Valve A Circuit
+0756,P0756 Shift Solenoid Valve B Stuck OFF
+0757,P0757 Shift Solenoid Valve B Stuck ON
+0758,P0758 Problem in Shift Solenoid Valve B Circuit
+0761,P0761 Shift Solenoid Valve C Stuck OFF
+0762,P0762 Shift Solenoid Valve C Stuck ON
+0763,P0763 Problem in Shift Solenoid Valve C Circuit
+0771,P0771 Shift Solenoid Valve E Stuck OFF
+0773,P0773 Problem in Shift Solenoid Valve E Circuit
+0775,P0775 Problem in the Hydraulic Control System of A/T Clutch Pressure Control Solenoid Valve B
+0776,P0776 A/T Clutch Pressure Control Solenoid Valve B Stuck OFF
+0777,P0777 A/T Clutch Pressure Control Solenoid Valve B Stuck ON
+0778,P0778 Problem in A/T Clutch Pressure Control Solenoid Valve B Circuit
+0780,P0780 Problem in Shift Control System
+0795,P0795 Problem in Hydraulic Control System of A/T Clutch Pressure Control Solenoid Valve C Circuit
+0796,P0796 A/T Clutch Pressure Control Solenoid Valve C Stuck OFF
+0797,P0797 A/T Clutch Pressure Control Solenoid Valve C Stuck ON
+0798,P0798 Problem in A/T Clutch Pressure Control Solenoid Valve C Ciruit
+0812,P0812 Open in Transmission Range Switch ATP RVS Switch Circuit
+0842,"P0842 Short in 2nd Clutch Transmission Fluid Pressure Switch Clutch, or 2nd Clutch Transmission"
+0843,"P0843 Open in 2nd Clutch Transmission Fluid Pressure Switch Circuit, or 2nd Clutch Transmission"
+0845,P0845 Problem in 3rd Clutch Pressure Switch Circuit
+0847,"P0847 Short in 3rd Clutch Transmission Fluid Pressure Switch Circuit, or 3rd Clutch Transmission"
+0848,"P0848 Open in 3rd Clutch Transmission Fluid Pressure Switch Circuit, or 3rd Clutch Transmission"
+0872,"P0872 Short in 4th Clutch Transmission Fluid Pressure Switch Circuit, or 4th Clutch Transmission"
+0873,"P0873 Open in 4th Clutch Transmission Fluid Pressure Switch Circuit, or 4th Clutch Transmission"
+0962,P0962 Problem in A/T Clutch Pressure Control Solenoid Valve A Circuit
+0963,P0963 Problem in A/T Clutch Pressure Control Solenoid Valve A
+0966,P0966 Problem in A/T Clutch Pressure Control Solenoid Valve B Circuit
+0967,P0967 Problem in A/T Clutch Pressure Control Solenoid Valve B
+0970,P0970 Problem in A/T Clutch Pressure Control Solenoid Valve C Circuit
+0971,P0971 Problem in A/T Clutch Pressure Control Solenoid Valve C
+0973,P0973 Short in Shift Solenoid Valve A Circuit
+0974,P0974 Open in Shift Solenoid Valve A Circuit
+0976,P0976 Short in Shift Solenoid Valve B Circuit
+0977,P0977 Open in Shift Solenoid Valve B Circuit
+0979,P0979 Short in Shift Solenoid Valve C Circuit
+0980,P0980 Open in Shift Solenoid Valve C Circuit
+0982,P0982 Short in Shift Solenoid Valve D Circuit
+0983,P0983 Open in Shift Solenoid Valve D Circuit
+0985,P0985 Short in Shift Solenoid Valve E Circuit
+0986,P0986 Open in Shift Solenoid Valve E Circuit
+1020,P1020 Valve Pause System Stuck Off
+1021,P1021 Valve Pause System Stuck On
+1025,P1025 Valve Pause System Sticking Off
+1026,P1026 Valve Pause System Sticking On
+1077,P1077 Intake Manifold Runner Control (IMRC) System Malfunction (Low rpm)
+1078,P1078 Intake Mainfold Runner Control (IMRC) System Malfunction (High rpm)
+1106,P1106 Barometric Pressure (BARO) Sensor Circuit Range/Performance Problem
+1107,P1107 Barometric Pressure (BARO) Sensor Circuit Low Voltage
+1108,P1108 Barometric Pressure (BARO) Sensor Circuit High Voltage
+1121,P1121 Throttle Position (TP) Sensor Lower Than Expected
+1122,P1122 Throttle Position (TP) Sensor Higher Than Expected
+1128,P1128 Manifold Absolute Pressure (MAP) Sensor Circuit Lower Than Expected
+1129,P1129 Manifold Absolute Pressure (MAP) Sensor Circuit Higher Than Expected
+1130,P1130 Demand for Changing Both Secondary Heated Oxygen Sensor (Secondary HO2S)
+1149,P1149 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Range/Performance Problem
+1149,P1149 Air/Fuel Ratio Sensor (Sensor 1) Circuit Lean Range
+1157,P1157 Air/Fuel Ratio (A/F) Sensor (Sensor 1) AFS Line High Voltage
+1157,P1157 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Circuit High Voltage
+1157,P1157 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Range/Performance Problem
+1158,P1158 Air/Fuel Ratio (A/F) Sensor (Sensor 1) AFS- Terminal Low Voltage
+1159,P1159 Air/Fuel Ratio (A/F) Sensor (Sensor 1) AFS+ Terminal Low Voltage
+1162,P1162 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Slow Response
+1163,P1163 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Slow Response
+1163,P1163 Air/Fuel Ratio Sensor (Sensor 1) Slow Response
+1164,P1164 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Range/Performance Problem
+1164,P1164 Air/Fuel Ratio (AF) Sensor (Sensor 1) Circuit Range/Performance
+1165,P1165 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Range/Performance Problem
+1165,P1165 Air/Fuel Ratio Sensor (Sensor 1) Circuit Range/Performance
+1166,P1166 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Heater System Electrical Problem
+1166,P1166 Heated Oxgen Sensor Sensor1 (Primary HO2S) Heater Circuit Malfunction
+1167,P1167 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Heater System Malfunction
+1167,P1167 Heated Oxygen Sensor Sensor1 (Primary LAF HO2S) Heater System Malfunction
+1168,P1168 Air/Fuel Ratio (A/F) Sensor (Sensor 1) LABEL Low Voltage
+1169,P1169 Air/Fuel Ratio (A/F) Sensor (Sensor 1) LABEL High Voltage
+1182,P1182 Fuel Temperature Sensor Circuit Low Voltage
+1183,P1183 Fuel Temperature Sensor Circuit High Voltage
+1253,P1253
+1259,P1259
+1297,P1297 Electric Load Detector (ELD) Circuit Low Voltage
+1298,P1298 Electric Load Detector (ELD) Circuit High Voltage
+1300,P1300 Random Misfire
+1324,P1324 Knock Sensor Power Source Circuit Low Voltage
+1336,P1336 Engine Speed (RPM) Fluctuation Sensor Intermittent Interruption
+1337,P1337 Engine Speed (RPM) Fluctuation Sensor No Signal
+1355,P1355 Front Ignition Coil Power Circuit Malfunction
+1359,P1359 Crankshaft Position (CKP)/Top Dead Center (TDC) Sensor Circuit Malfunction
+1361,P1361 Camshaft Position (CMP) Sensor A (Top Dead Center (TDC) Sensor) Intermittent Interruption
+1361,P1361 Top Dead Center (TDC) Sensor Intermittent Interruption
+1362,P1362 Camshaft Position (CMP) Sensor A (Top Dead Center (TDC) Sensor) No Signal
+1362,P1362 Top Dead Center (TDC) Sensor No Signal
+1366,P1366 Camshaft Position (CMP) Sensor B (Top Dead Center (TDC) Sensor) Intermittent Interruption
+1366,P1366 Top Dead Center (TDC) Sensor 2 Intermittent Interruption
+1367,P1367 Camshaft Position (CMP) Sensor B (Top Dead Center (TDC) Sensor) No Signal
+1367,P1367 Top Dear Center (TDC) Sensor 2 No Signal
+1381,P1381 Cylinder Position (CYP) Sensor Intermittent Interruption
+1382,P1382 Cylinder Position (CYP) Sensor No Signal
+1410,P1410 Air Pump Malfunction
+1415,P1415 Air Pump Electric Current Sensor Circuit Low Voltage
+1416,P1416 Air Pump Electric Current Sensor Circuit High Voltage
+1420,P1420 Nox Adsorptive Catalyst System Efficiency Below Threshold
+1438,P1438 Motor Drive Module (MDM) Overheating Signal Circuit
+1438,P1438 Motor Drive Module (MDM) Overheating
+1439,P1439 Motor Drive Module (MDM) Short Circuit Sensor Problem
+1439,P1439 Motor Drive Module (MDM) Short Circuit
+1440,P1440 IMA System Problem
+1445,P1445 Bypass Control Problem
+1448,P1448
+1449,P1449
+1449,P1449 Battery Cell Overheating
+1449,P1449 Battery Module Individual Voltage Input Deviation
+1449,P1449 Battery Module Deterioration
+1449,P1449 Battery Module Deviation
+1454,P1454 Fuel Tank Pressure (FTP) Sensor Range/Performance Problem
+1456,P1456 Evaporative Emissions (EVAP) Control System Leakage (Fuel Tank System)
+1457,P1457 Evaporative Emissions (EVAP) Control System Leakage (EVAP Canister System)
+1459,P1459 Evaporative Emission (EVAP) Purge Flow Switch Malfunction
+1491,P1491 Exhaust Gas Recirculation (EGR) Valve Insufficient Lift
+1486,P1486 Cooling System Malfunction
+1491,P1491 Exhaust Gas Recirculation (EGR) Valve Insufficient Lift
+1498,P1498 Exhaust Gas Recirculation (EGR) Valve Position Sensor Circuit High Voltage
+1505,P1505 Positive Crankcase Ventilation (PCV) Air Leakage
+1508,P1508
+1519,P1519
+1509,P1509 Idle Air Control Valve (IACV) Circuit Failure
+1522,P1522 Brake Booster Pressure Sensor Circuit Low Voltage
+1523,P1523 Brake Booster Pressure Sensor Circuit High Voltage
+1524,P1524 Brake Booster Pressure Sensor Range/Performance Problem
+1541,P1541 Climate Control Unit Signal Circuit Low Voltage
+1542,P1542 Climate Control Unit Signal Circuit High Voltage
+1565,P1565 Motor Commutation Signal Problem
+1568,P1568 Battery Module Individual Voltage Input Problem
+1568,P1568 Battery Module Temperature Signal Circuit Problem
+1568,P1568 Battery Cell Temperature Signal Circuit Problem
+1572,P1572 Motor Drive Module (MDM) Temperature Signal Circuit Low Input
+1572,P1572 Motor Drive Module (MDM) Temperature Signal Circuit High Input
+1576,P1576 Motor Drive Module (MDM) Voltge Signal Circuit Low Input
+1577,P1577 High Voltage Detection Signal Circuit Problem
+1580,P1580 Battery Current Circuit Problem
+1581,P1581 Motor Power Inverter (MPI) Module Current Signal Circuit Low Input
+1581,P1581 Motor Power Inverter (MPI) Module Current Signal Circuit High Input
+1581,P1581 Motor Power Inverter (MPI) Module Current Signal Circuit Problem
+1582,P1582 Motor Current U Phase Signal Circuit Low Input
+1582,P1582 Motor Current U Phase Signal Circuit High Input
+1583,P1583 Motor Current V Phase Signal Circuit Low Input
+1583,P1583 Motor Current V Phase Signal Circuit High Input
+1584,P1584 Motor Current W Phase Signal Circuit Low Input
+1584,P1584 Motor Current W Phase Signal Circuit High Input
+1585,P1585 Motor Current Signal Circuit Problem
+1586,P1586 Motor Power Inverter (MPI) Module Current Signal/Battery Current Signal Circuit Problem
+1607,P1607 Engine Control Module (ECM)/Powertrain Control Module (PCM) Internal Circuit Malfunction
+1630,P1630 Transmission Control Module
+1635,P1635 Battery Condition Monitor (BCM) Module Proble
+1639,P1639 MOTB Signal Circuit Malfunction
+1640,P1640 ACTTRQ Motor Torque Signal Circuit Low Input
+1641,P1641 ACTTRQ Motor Torque Signal Circuit High Input
+1642,P1642 QBATT Battery Signal Circuit Low Input
+1643,P1643 QBATT Battery Signal Circuit High Input
+1644,P1644 MOTFSA Signal Malfunction
+1645,P1645 MOTFSB Signal Malfunction
+1646,P1646 MOTSTB Signal Malfunction
+1647,P1647 Power Command Signal Circuit Low Input
+1647,P1647 Power Command Signal Circuit High Input
+1647,P1647 Engine Torque Signal Circuit Low Input
+1647,P1647 Engine Torque Signal Circuit High Input
+1647,P1647 Mode Signal Circuit 1 Low Input
+1647,P1647 Mode Signal Circuit 1 High Input
+1647,P1647 Mode Signal Circuit 2 Problem
+1647,P1647 Engine Speed Signal Circuit Problem
+1648,P1648 Battery Condition Monitor (BCM) Module Communication Signal Circuit Problem
+1648,P1648 Motor Control Module (MCM) Communication Signal Circuit Problem
+1655,P1655 CVT-FI TMA/TMB Signal Line Failure
+1656,P1656 Problem in PCM-toVTM-4 Control Unit Communications Circuit
+1660,P1660 A/T-FI Data Line Failure/TCM - ECM Halt
+1676,P1676
+1678,P1678
+1679,P1679 RSCD Signal Circuit Malfunction
+1681,P1681 A/T FI Signal A Cicuit Low Voltage
+1682,P1682 A/T FI Signal A Circuit High Voltage
+1683,P1683 Throttle Valve Default Position Spring Performance Problem
+1684,P1684 Throttle Valve Return Spring Performance Problem
+1686,P1686 A/T FI Signal B Circuit Low Voltage
+1687,P1687 A/T FI Signal B Circuit High Voltage
+1705,P1705 Short in Transmission Range Switch Circuit (More than one range position is on at the
+1706,P1706 Open in Transmission Range Switch Circuit
+1709,P1709 Problem Transmission Gear Selection Switch Circuit
+1730,P1730 Problem in Shift Control System:
+1731,P1731 Problem in Shift Control System:
+1732,P1732 Problem in Shift Control System:
+1733,P1733 Problem in Shift Control System:
+1734,P1734 Problem in Shift Control System:
+1738,P1738 Problem in 2nd Clutch Pressure Switch Circuit
+1739,P1739 Problem in 3rd Clutch Pressure Switch Circuit
+1740,P1740 Problem in 4th Clutch Pressure Switch Circuit
+1750,P1750 Mechanical Problem in Hydraulic Control System of A/T Clutch Pressure Control Solenoid
+1751,P1751 Mechanical Problem in Hydraulic Control System of Shift Solenoid Valve B and A/T Clutch
+1753,P1753 Problem in Torque Converter Clutch Solenoid Valve Circuit
+1751,P1751
+1768,P1768
+1773,P1773 Problem in A/T Clutch Pressure Control Solenoid Valve B Circuit
+1790,P1790 Throttle Position (TP) Sensor Circuit Malfunction
+1791,P1791 Vehicle Speed Sensor (VSS) Range/Performance Problem
+1792,P1792 Problem in Engine Coolant Temperature (ECT) Sensor Circuit
+1793,P1793 Manifold Absolute Pressure Sensor Circuit
+1870,P1870 Problem in CVT Speed Change Control Valve Assembly Circuit
+1873,P1873 Problem in CVT Pulley Pressure Control Valve Assembly Circuit
+1879,P1879 Problem in CVT Start Clutch Pressure Control Valve Assembly Circuit
+1882,P1882 Problem in Inhibitor Solenoid Circuit
+1884,P1884 Secondary Gear Speed Sensor 2 Circuit Malfunction
+1885,P1885 CVT Drive Pulley Speed Sensor Circuit
+1886,P1886 CVT Driven Pulley Speed Sensor Circuit
+1888,P1888 CVT Speed Sensor
+1889,P1889 Problem in CVT Speed Sensor 2 Circuit
+1890,P1890 Shift Control System
+1891,P1891 Problem in Start Clutch System
+1894,P1894 CVT Speed Change Control Valve Circuit
+1895,P1895 CVT Pulley Pressure Control Valve Circuit
+2101,P2101 Throttle Actuator System Malfunction
+2108,P2108 Throttle Actuator Control Module Problem
+2118,P2118 Throttle Actuator Current Range/Performance Problem
+2122,P2122 Accelerator Pedal Position (APP) Sensor 1 (Throttle Position Sensor D) Circuit Low Voltage
+2123,P2123 Accelerator Pedal Position (APP) Sensor 1 (Throttle Position Sensor D) Circuit High Voltage
+2127,P2127 Accelerator Pedal Position (APP) Sensor 2 (Throttle Position Sensor E) Circuit Low Voltage
+2128,P2128 Accelerator Pedal Position (APP) Sensor 2 (Throttle Position Sensor E) Circuit High Voltage
+2135,P2135 Throttle Position (TP) Sensor 1/2 Incorrect Voltage Correlation
+2138,P2138 Accelerator Pedal Position (APP) Sensor 1/2 (Throttle Position Sensor D/E) Incorrect Voltage
+2176,P2176 Throttle Actuator Control System Idle Position Not Learned
+2195,P2195 Air/Fuel Ratio (A/F) Sensor (Sensor 1) Signal Stuck Lean
+2197,"P2197 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) Signal Stuck Lean"
+2227,P2227 Barometric Pressure (BARO) Sensor Circuit Range/Performance Problem
+2228,P2228 Barometric Pressure (BARO) Sensor Circuit Low Voltage
+2229,P2229 Barometric Pressure (BARO) Sensor Circuit High Voltage
+2237,"P2237 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) IP Line High Voltage"
+2238,P2238 Air/Fuel Ratio (A/F) Sensor (Sensor 1) AFS+ Line Low Voltage
+2238,"P2238 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) IP Line Low Voltage"
+2240,"P2240 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) IP Line High Voltage"
+2241,"P2241 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) IP Line Low Voltage"
+2243,"P2243 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) VCENT Line High Voltage"
+2245,"P2245 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) VCENT Line Low Voltage"
+2247,"P2247 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) VCENT Line High Voltage"
+2249,"P2249 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) VCENT Line Low Voltage"
+2251,"P2251 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) VS Line High Voltage"
+2252,P2252 Air/Fuel Ratio (A/F) Sensor (Sensor 1) AFS- Line Low Voltage
+2254,"P2254 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) VS Line High Voltage"
+2255,"P2255 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) VS Line Low Voltage"
+2279,P2279 Intake Air System Leak
+2413,P2413 Exhaust Gas Recirculation (EGR) System Range/Performance Problem
+2422,P2422 Evaporative Emission (EVAP) System Vent Shut Valve Close Malfunction
+2552,P2552 Throttle Actuator Control Module Relay Malfunction
+2627,"P2627 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) LABEL Circuit Low Voltage"
+2628,"P2628 Rear Air/Fuel Ratio (A/F) Sensor (Bank 1, Sensor 1) LABEL Circuit High Voltage"
+2630,"P2630 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) LABEL Circuit Low Voltage"
+2631,"P2631 Front Air/Fuel Ratio (A/F) Sensor (Bank 2, Sensor 1) LABEL Circuit High Voltage"
+2646,P2646 VTEC Oil Pressure Switch Circuit Low Voltage
+2647,P2647 VTEC Oil Pressure Switch Circuit High Voltage
+2648,P2648 VTEC Solenoid Valve Circuit Low Voltage
+2649,P2649 VTEC Solenoid Valve Circuit High Voltage
+2769,P2769 Short in Torque Converter Clutch Solenoid Valve Circuit
+2770,P2770 Open in Torque Converter Clutch Solenoid Valve Circuit
