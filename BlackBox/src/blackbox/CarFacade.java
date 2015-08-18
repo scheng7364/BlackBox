@@ -6,7 +6,7 @@ import java.io.*;
 
 public class CarFacade extends Thread {
 
-	Honda myCar;
+	Car myCar;
 	//May need some Driver profile 
 
 	//A HashMap	
@@ -14,8 +14,8 @@ public class CarFacade extends Thread {
 	
 	boolean carStopped = false;
 	
-	public CarFacade() {
-		myCar = new Honda();
+	public CarFacade(Car carType) {
+		myCar = carType;
 		carDataItemMap = new HashMap<String,CarDataItem>();
 		//Create Map
 		createDataMap();
@@ -111,7 +111,7 @@ public class CarFacade extends Thread {
 	
 	// for debug only
 	public static void main(String [] args) {
-		CarFacade myCar = new CarFacade();
+		CarFacade myCar = new CarFacade(new Honda());
 		
 		myCar.start();
 		
