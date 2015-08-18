@@ -13,8 +13,8 @@ public class Sensors extends Observable {
 	
 	// Talk to car speed sensor
 	public double getCarSpeed() {
-		car1.setSpeedAVG(40.0);
-		car1.setSpeedSTD(20.0);
+		car1.setSpeedAVG(35.0);
+		car1.setSpeedSTD(10.0);
 			
 		return car1.getSpeed();
 	}
