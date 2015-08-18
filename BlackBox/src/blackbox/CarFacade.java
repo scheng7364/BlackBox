@@ -2,11 +2,13 @@ package blackbox;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.io.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class CarFacade extends Thread {
 
-	Honda myCar;
+	Car myCar;
+	OBD2Port obdPort;
 	//May need some Driver profile 
 
 	//A HashMap	
@@ -16,6 +18,7 @@ public class CarFacade extends Thread {
 	
 	public CarFacade() {
 		myCar = new Honda();
+		obdPort = new OBD2Port(this);
 		carDataItemMap = new HashMap<String,CarDataItem>();
 		//Create Map
 		createDataMap();
@@ -23,20 +26,20 @@ public class CarFacade extends Thread {
 
 	private void createDataMap() {
 		//1. Speed
-		addMapItem("Speed", new CarDataItem() {public double fetch(){return myCar.getSpeed();}});
+		addMapItem("Speed", new CarDataItem() {public Double fetch(){return myCar.getSpeed();}});
 		//2. RPM
-		addMapItem("RPM", new CarDataItem() {public double fetch(){return myCar.sysEngine.getRPM();}});
+		addMapItem("RPM", new CarDataItem() {public Double fetch(){return myCar.sysEngine.getRPM();}});
 		//3. Fuel Level
-		addMapItem("FuelLevel", new CarDataItem() {public double fetch(){return myCar.sysFuel.getFuelLevel();}});
+		addMapItem("FuelLevel", new CarDataItem() {public Double fetch(){return myCar.sysFuel.getFuelLevel();}});
 		//4. Internal Temperature
-		addMapItem("IntTemp", new CarDataItem() {public double fetch(){return myCar.sysCooling.getTemperature();}});
+		addMapItem("IntTemp", new CarDataItem() {public Double fetch(){return myCar.sysCooling.getTemperature();}});
 		//5. Oil Level
-		addMapItem("OilLevel", new CarDataItem() {public double fetch(){return myCar.sysEngine.getOilLevelSensor();}});
+		addMapItem("OilLevel", new CarDataItem() {public Double fetch(){return myCar.sysEngine.getOilLevelSensor();}});
 		//6. Tire Pressures
-		addMapItem("TirePressure_LF", new CarDataItem() {public double fetch(){return myCar.sysTires.getTirePressure();}});
-		addMapItem("TirePressure_LR", new CarDataItem() {public double fetch(){return myCar.sysTires.getTirePressure();}});
-		addMapItem("TirePressure_RF", new CarDataItem() {public double fetch(){return myCar.sysTires.getTirePressure();}});
-		addMapItem("TirePressure_RR", new CarDataItem() {public double fetch(){return myCar.sysTires.getTirePressure();}});		
+		addMapItem("TirePressure_LF", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});
+		addMapItem("TirePressure_LR", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});
+		addMapItem("TirePressure_RF", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});
+		addMapItem("TirePressure_RR", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});		
 		
 	}
 	
@@ -53,6 +56,15 @@ public class CarFacade extends Thread {
 		}
 	}
 	
+	public String getDataStr(String key) {
+		if(carDataItemMap.get(key)!=null) {
+			return carDataItemMap.get(key).getCurrDataStr();
+		} else {
+			System.out.println("Warning: No" + key + "Data is Retrieved!");
+			return "0";
+		}
+	}
+	
 	public void refreshDataMap() {
 		for(Map.Entry<String, CarDataItem> entry : carDataItemMap.entrySet()) {
 			//String key = entry.getKey();
@@ -66,7 +78,8 @@ public class CarFacade extends Thread {
 		for(Map.Entry<String, CarDataItem> entry : carDataItemMap.entrySet()) {
 			String key = entry.getKey();
 			CarDataItem item = entry.getValue();
-			System.out.println(key+ "=" + item.getCurrValue());
+			NumberFormat formatter = new DecimalFormat("#0.00"); 
+			System.out.println(key+ "=" + formatter.format(item.getCurrValue()));
 		}	
 	}
 	
@@ -75,13 +88,19 @@ public class CarFacade extends Thread {
 		carStopped = true;
 	}
 	
+	public void startCar() {
+		System.out.println("Car is Started!");
+		carStopped = false;
+	}
+	
 	@Override
 	public void run() {
 		try {
-			//for (;;){
-			while(carStopped==false) {
-				printDataMap(); // for debug only
-				refreshDataMap();
+			for (;;){
+				if(carStopped==false) {
+					printDataMap(); // for debug only
+					refreshDataMap();
+				}
 				sleep(500);
 			}
 		}
@@ -91,21 +110,37 @@ public class CarFacade extends Thread {
 	}
 
 	//inner class
-	abstract class CarDataItem  {
+	abstract class CarDataItemBase<T> {
+		public String name;
+		public String currDataStr;
+		//public String prevDataStr;
+		public CarDataItemBase(String name) {
+			this.name = name;
+		}
+		public CarDataItemBase(){
+			this("");
+		}
+		public abstract T fetch();
+		public String getCurrDataStr() {return currDataStr;}
+	}
+	
+	abstract class CarDataItem extends CarDataItemBase<Double> {
 		public String name;
 		private double currValue;
 		private double prevValue;
 		public CarDataItem(String name) {
-			this.name = name;
+			super(name);
 		}
 		public CarDataItem(){
 			this("");
 		}
-		public double fetch() {return currValue;}
-		public void updateItem() {prevValue=currValue;currValue = fetch();}
+		public void updateItem() {
+			prevValue=currValue;
+			currValue=fetch().doubleValue();
+			currDataStr=Double.toString(currValue);}
 		public double getPrevValue() {return prevValue;}
 		public double getCurrValue() {return currValue;}
-		public void print() {}
+		//public void print() {}
 	}
 			
 	
@@ -123,5 +158,14 @@ public class CarFacade extends Thread {
 		}
 		
 		myCar.stopCar();
+		
+		try {
+			sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		myCar.startCar();
 	}
 }
