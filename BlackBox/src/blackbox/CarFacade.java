@@ -14,7 +14,7 @@ public class CarFacade extends Thread {
 	//A HashMap	
 	HashMap<String, CarDataItem> carDataItemMap;
 	
-	boolean carStopped = false;
+	boolean carStopped = true;
 	
 	public CarFacade() {
 		myCar = new Honda();
