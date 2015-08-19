@@ -7,14 +7,15 @@ import java.text.NumberFormat;
 
 public class CarFacade extends Thread {
 
-	Car myCar;
-	OBD2Port obdPort;
+	private Car myCar;
+	private OBD2Port obdPort;
+	
 	//May need some Driver profile 
 
 	//A HashMap	
-	HashMap<String, CarDataItem> carDataItemMap;
-	
-	boolean carStopped = true;
+	private HashMap<String, CarDataItem> carDataItemMap;
+	private static int PERIOD = 1000;
+	private boolean carStopped = true;
 	
 	// To set the car Stopped status from outside
 	public boolean setCarStopped(boolean stoppedornot) {
@@ -33,11 +34,11 @@ public class CarFacade extends Thread {
 		//1. Speed
 		addMapItem("Speed", new CarDataItem() {public Double fetch(){return myCar.getSpeed();}});
 		//2. RPM
-		addMapItem("RPM", new CarDataItem() {public Double fetch(){return myCar.sysEngine.getRPM();}});
+		addMapItem("RPM", new CarDataItem() {public Double fetch(){return Math.floor(myCar.sysEngine.getRPM());}});
 		//3. Fuel Level
 		addMapItem("FuelLevel", new CarDataItem() {public Double fetch(){return myCar.sysFuel.getFuelLevel();}});
 		//4. Internal Temperature
-		addMapItem("IntTemp", new CarDataItem() {public Double fetch(){return myCar.sysCooling.getTemperature();}});
+		addMapItem("IntAirTemp", new CarDataItem() {public Double fetch(){return myCar.sysCooling.getTemperature();}});
 		//5. Oil Level
 		addMapItem("OilLevel", new CarDataItem() {public Double fetch(){return myCar.sysEngine.getOilLevelSensor();}});
 		//6. Tire Pressures
@@ -106,7 +107,7 @@ public class CarFacade extends Thread {
 					printDataMap(); // for debug only
 					refreshDataMap();
 				}
-				sleep(2000);
+				sleep(PERIOD);
 			}
 		}
 		catch (InterruptedException e) {
@@ -118,7 +119,6 @@ public class CarFacade extends Thread {
 	abstract class CarDataItemBase<T> {
 		public String name;
 		public String currDataStr;
-		//public String prevDataStr;
 		public CarDataItemBase(String name) {
 			this.name = name;
 		}
@@ -133,18 +133,18 @@ public class CarFacade extends Thread {
 		public String name;
 		private double currValue;
 		private double prevValue;
-		public CarDataItem(String name) {
-			super(name);
-		}
-		public CarDataItem(){
-			this("");
-		}
+		private double peakValue=0.0;
+		private double avgValue=0.0;
+		public CarDataItem(String name) {super(name);}
+		public CarDataItem(){this("");}
 		public void updateItem() {
 			prevValue=currValue;
 			currValue=fetch().doubleValue();
-			currDataStr=Double.toString(currValue);}
+			if(currValue>peakValue) peakValue = currValue;
+			}
 		public double getPrevValue() {return prevValue;}
 		public double getCurrValue() {return currValue;}
+		public String getCurrDataStr() {return Double.toString(currValue);}
 		//public void print() {}
 	}
 		
@@ -152,6 +152,11 @@ public class CarFacade extends Thread {
 	public Car getCar(){
 		return this.myCar;
 	}
+
+	public OBD2Port getObdPort() {
+		return obdPort;
+	}
+
 	
 	// for debug only
 /*	public static void main(String [] args) {
