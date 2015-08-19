@@ -63,6 +63,9 @@ public class Honda extends Car {
 		//tire system
 		this.sysTires.setTirePressureAVG(35);
 		this.sysTires.setTirePressureSTD(15);
+		this.sysTires.setBrandName("Honda Tire");
+		this.sysTires.setModelNumber("974 - 515");
+		this.sysTires.setServiceDate("07/21/2015");
 		
 	}
 	

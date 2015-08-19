@@ -19,35 +19,32 @@ public class DrawGraphics extends JPanel {
 	private JLabel xLabel, yLabel, lblPart;
 	private MouseEventAdapterA meaA;
 	private JComboBox selection;
-	private JButton go;
+	private JPanel panel = new JPanel();
 	private String xStr, yStr;
 	private int x, y;
 
-	DrawGraphics() {
+	public DrawGraphics() {
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(620, 400));
 		setLayout(null);
 
 		xLabel = new JLabel("");
 		xLabel.setBounds(10, 10, 150, 150);
+		add(xLabel);
+		
 		yLabel = new JLabel("");
 		yLabel.setBounds(10, 30, 150, 150);
+		add(yLabel);
+		
 		lblPart = new JLabel("");
 		lblPart.setBounds(10, 50, 150, 150);
+		add(lblPart);
 
 		selection = new JComboBox();
 		selection.setModel(new DefaultComboBoxModel(new String[] { "Choose the part", "Engine", "Tires" }));
 		selection.setBounds(497, 35, 123, 23);
-
-		go = new JButton("Go");
-		go.setBounds(557, 65, 55, 20);
-		
-		add(xLabel);
-		add(yLabel);
-		add(lblPart);
 		add(selection);
-		add(go);
-
+		
 		addMouseMotionListener(new MouseEventAdapterA());
 		addMouseListener(new MouseEventAdapterA());
 	}
@@ -97,7 +94,7 @@ public class DrawGraphics extends JPanel {
 			}
 		}
 	}
-
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -105,7 +102,7 @@ public class DrawGraphics extends JPanel {
 		Image background = new ImageIcon("image/background.jpg").getImage();
 		g.drawImage(background, 50, 10, this);
 
-		g.setColor(Color.ORANGE);
+		g.setColor(Color.GREEN);
 		g.fillOval(x, y, 25, 25);
 
 		Graphics2D g2d = (Graphics2D) g;
@@ -114,6 +111,10 @@ public class DrawGraphics extends JPanel {
 		g2d.setFont(new Font("", Font.BOLD, 13));
 		g2d.drawString(lblPart.getText(), x, y);
 
+	}
+	
+	public String getComboSelected() {
+		return selection.getSelectedItem().toString();
 	}
 
 }

@@ -16,6 +16,11 @@ public class CarFacade extends Thread {
 	
 	boolean carStopped = true;
 	
+	// To set the car Stopped status from outside
+	public boolean setCarStopped(boolean stoppedornot) {
+		return carStopped = stoppedornot;
+	}
+	
 	public CarFacade() {
 		myCar = new Honda();
 		obdPort = new OBD2Port(this);
@@ -101,7 +106,7 @@ public class CarFacade extends Thread {
 					printDataMap(); // for debug only
 					refreshDataMap();
 				}
-				sleep(500);
+				sleep(2000);
 			}
 		}
 		catch (InterruptedException e) {
@@ -142,10 +147,14 @@ public class CarFacade extends Thread {
 		public double getCurrValue() {return currValue;}
 		//public void print() {}
 	}
-			
+		
+	// Used for Part cards to get Car info
+	public Car getCar(){
+		return this.myCar;
+	}
 	
 	// for debug only
-	public static void main(String [] args) {
+/*	public static void main(String [] args) {
 		CarFacade myCar = new CarFacade();
 		
 		myCar.start();
@@ -167,5 +176,5 @@ public class CarFacade extends Thread {
 		}
 		
 		myCar.startCar();
-	}
+	}*/
 }

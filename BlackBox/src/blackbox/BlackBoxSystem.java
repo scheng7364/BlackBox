@@ -13,9 +13,9 @@ import javax.swing.border.Border;
 public  class BlackBoxSystem {
 
 	private JFrame guiFrame;
-	private CardLayout cards;
-	private JPanel buttonPanel;
-	private JPanel cardPanel;
+	protected CardLayout cards;
+	protected JPanel buttonPanel;
+	protected JPanel cardPanel;
 	private JPanel DiagCard;
 	private JTextField tfUsername;
 	private JPasswordField pfPW;
@@ -24,8 +24,14 @@ public  class BlackBoxSystem {
 	private JLabel lblWelcome;
 	private String name; // username to be displayed
 
+	protected JPanel RtmCard; // Card for real-time monitoring
+	protected JPanel firstCard;
+	
 	Connection connection1 = sqliteConnection.dbConnector();
 	private JTextField textField;
+	
+	TiresCard tc;
+	EngineCard ec;
 
 	/**
 	 * Create the application.
@@ -33,10 +39,8 @@ public  class BlackBoxSystem {
 	public BlackBoxSystem() {
 
 		JPanel welcomeCard; // Welcome page;
-		JPanel RtmCard; // Card for real-time monitoring
 		JPanel RateCard; // Card for rating;
-		JPanel firstCard;
-
+		
 		guiFrame = new JFrame();
 
 		guiFrame.setBounds(100, 100, 719, 510);
@@ -57,8 +61,14 @@ public  class BlackBoxSystem {
 		welcomeCard.setBackground(new Color(255, 255, 204));
 
 		firstCard = new JPanel();
+		/*firstCard.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				cards.show(cardPanel, "Real-Time Monitor");				
+			}
+		});*/
 		firstCard.setBackground(new Color(255, 255, 204));
-
+		
 		DiagCard = new JPanel();
 		DiagCard.setBackground(Color.WHITE);
 		DrawGraphics dg = new DrawGraphics();
@@ -68,10 +78,20 @@ public  class BlackBoxSystem {
 		JButton btnDiag = new JButton("Diagnose Fully");
 		dg.add(btnDiag);
 		btnDiag.setBounds(497, 0, 123, 23);
-
+		
 		RtmCard = new JPanel();
 		RtmCard.setBackground(new Color(230, 230, 250));
-
+		
+		JButton btnGo =  new JButton("Go");
+		dg.add(btnGo);
+		btnGo.setBounds(557, 65, 55, 20);
+		btnGo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//System.out.println(dg.getComboSelected());		
+				cards.show(cardPanel, dg.getComboSelected());
+			}
+		});
+		
 		RateCard = new JPanel();
 		RateCard.setBackground(new Color(248, 248, 255));
 
@@ -83,7 +103,7 @@ public  class BlackBoxSystem {
 		cards.show(cardPanel, "Welcome");
 		cardPanel.add(welcomeCard, "Welcome");
 		welcomeCard.setLayout(null);
-
+		
 		lblWelcome = new JLabel("Welcome to BlackBox\u2122 ");
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setBounds(48, 60, 530, 57);
@@ -109,16 +129,52 @@ public  class BlackBoxSystem {
 		welcomeCard.add(pfPW);
 
 		cardPanel.add(welcomeCard, "Welcome");
+		
 		cardPanel.add(RtmCard, "Real-Time Monitor");
 		RtmCard.setLayout(new BorderLayout(0, 0));
 	
 		RealTimeMonitor realTimeMonitor = new RealTimeMonitor();
 		RtmCard.add(realTimeMonitor);
 		
+		JLabel lblEngine = new JLabel("Engine");
+		lblEngine.setBounds(36, 219, 46, 14);
+		realTimeMonitor.add(lblEngine);
+		
+		JLabel lblCoolingSystem = new JLabel("Cooling System");
+		lblCoolingSystem.setBounds(36, 260, 130, 14);
+		realTimeMonitor.add(lblCoolingSystem);
+		
+		JLabel lblExhaustSystem = new JLabel("Exhaust System");
+		lblExhaustSystem.setBounds(342, 305, 100, 14);
+		realTimeMonitor.add(lblExhaustSystem);
+		
+		JLabel lblFuelSystem = new JLabel("Fuel System");
+		lblFuelSystem.setBounds(36, 305, 83, 14);
+		realTimeMonitor.add(lblFuelSystem);
+		
+		JLabel lblIgnitionSystem = new JLabel("Ignition System");
+		lblIgnitionSystem.setBounds(36, 353, 100, 14);
+		realTimeMonitor.add(lblIgnitionSystem);
+		
+		JLabel lblTires = new JLabel("Tires");
+		lblTires.setBounds(342, 219, 46, 14);
+		realTimeMonitor.add(lblTires);
+		
+		JLabel lblBrakingSystem = new JLabel("Braking System");
+		lblBrakingSystem.setBounds(342, 260, 100, 14);
+		realTimeMonitor.add(lblBrakingSystem);
+		
 		cardPanel.add(DiagCard, "Diagnose");
 		cardPanel.add(RateCard, "View Ratings");
 		cardPanel.add(firstCard, "First Page");
-
+		firstCard.setLayout(new BorderLayout(0, 0));
+		
+		tc = new TiresCard();
+		cardPanel.add(tc, "Tires");
+		
+		ec = new EngineCard();
+		cardPanel.add(ec, "Engine");
+		
 		// This panel will contain one button to enable you
 		// to switch thro' the cards
 		buttonPanel = new JPanel();
@@ -137,6 +193,7 @@ public  class BlackBoxSystem {
 				System.exit(0);
 			}
 		});
+		
 		btnExit.setActionCommand("close");
 		buttonPanel.add(btnExit);
 
@@ -199,7 +256,7 @@ public  class BlackBoxSystem {
 						lblFirst.setHorizontalAlignment(SwingConstants.CENTER);
 						lblFirst.setBounds(48, 60, 530, 57);
 						lblFirst.setFont(new Font("AngsanaUPC", Font.BOLD | Font.ITALIC, 53));
-						firstCard.add(lblFirst);
+						firstCard.add(lblFirst, BorderLayout.NORTH);	
 
 					} else {
 						JOptionPane.showMessageDialog(null,
@@ -241,6 +298,11 @@ public  class BlackBoxSystem {
 			public void actionPerformed(ActionEvent event) {
 				// navigate to the next component
 				cards.show(cardPanel, command);
+				
+				if(command.equals("Diagnose")){ // Clear the fields for next Diagnose
+					ec.clearEC();
+					tc.clearTC();
+				}
 			}
 		});
 

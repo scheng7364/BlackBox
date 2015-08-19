@@ -4,37 +4,49 @@ import java.util.Observable;
 
 public class Sensors extends Observable {
 
-	private Car car1 = new Car();
+	private BlackBoxTester bt;
+	private OBD2Port obd = new OBD2Port(bt.thisCar);
 
-	private static int count = 0;
-	
+	private double[] tires = new double[4];
+
 	public Sensors() {
 	}
-	
-	// Talk to car speed sensor
+
+	// To get car speed
 	public double getCarSpeed() {
-		car1.setSpeedAVG(35.0);
-		car1.setSpeedSTD(10.0);
-			
-		return car1.getSpeed();
+
+		return obd.readDoubleData("Speed");
 	}
-	
-	// Talk to tire pressure sensor
-	public String getCarTirePressure() {
-		String status = "Healthy";
-		
-		car1.setSysTires(new Tires(20.0, 40.0, "","",""));
-		
-	//	System.out.println(car1.sysTires.getTirePressure());
-		if (car1.sysTires.getTirePressure() >= 40) {
-			count++;
-		} else count = 0;
-			
-		if (count > 10) {	// if the tire pressure is > 20 for 20 sec, show warning
-			status = "Warning";
+
+	// To get Tires pressure
+	public double[] getTiresPressure() {
+
+		tires[0] = obd.readDoubleData("TirePressure_LF");
+		tires[1] = obd.readDoubleData("TirePressure_LR");
+		tires[2] = obd.readDoubleData("TirePressure_RF");
+		tires[3] = obd.readDoubleData("TirePressure_RR");
+
+		return tires;
+
+	}
+
+	// to get Car RPM
+	public double getCarRPM() {
+		return obd.readDoubleData("RPM");
+	}
+
+	public boolean ifHealthy() {
+
+		for (int i = 0; i < 4; i++) {
+			if (tires[i] >= 45) {
+				return false;
+			}
 		}
-		 
-		 return status;
+
+		if (this.getCarRPM() >= 5800) {
+			return false;
+		}
+
+		return true;
 	}
-	
 }

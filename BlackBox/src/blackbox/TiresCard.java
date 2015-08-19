@@ -15,8 +15,7 @@ public class TiresCard extends JPanel {
 	
 	private BlackBoxTester bt;
 	private Car myCar = bt.thisCar.getCar();
-	private RealTimeMonitor rtm;
-	private Sensors s = rtm.sensor.getSensor();
+	private Sensors s = bt.thisSensor;
 	
 	private JLabel pagename, lblBrandname, lblModel, lblServiceDate;
 	private JLabel brandname, model, serviceDate, text;
