@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 public class TiresCard extends JPanel {
 	
-	private BlackBoxTester bt;
+	private BlackBoxSystem bt;
 	private Car myCar = bt.thisCar.getCar();
 	private Sensors s = bt.thisSensor;
 	

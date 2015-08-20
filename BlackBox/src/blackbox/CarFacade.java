@@ -22,6 +22,9 @@ public class CarFacade extends Thread {
 		return carStopped = stoppedornot;
 	}
 	
+	public boolean getCarStopped(){
+		return this.carStopped;
+	}
 	public CarFacade() {
 		myCar = new Honda();
 		obdPort = new OBD2Port(this);
@@ -100,10 +103,11 @@ public class CarFacade extends Thread {
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		try {
 			for (;;){
 				if(carStopped==false) {
+					
 					printDataMap(); // for debug only
 					refreshDataMap();
 				}

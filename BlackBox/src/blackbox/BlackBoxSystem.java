@@ -11,6 +11,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 public  class BlackBoxSystem {
+	
+	public static CarFacade thisCar = new CarFacade(); 
+	public static Sensors thisSensor = new Sensors();
+	public static OBD2Port thisOBD = new OBD2Port(thisCar);
 
 	private JFrame guiFrame;
 	protected CardLayout cards;
@@ -33,6 +37,9 @@ public  class BlackBoxSystem {
 	TiresCard tc;
 	EngineCard ec;
 
+	private BlackBoxTester bt;
+	protected RealTimeMonitor realTimeMonitor;
+	
 	/**
 	 * Create the application.
 	 */
@@ -132,11 +139,11 @@ public  class BlackBoxSystem {
 		
 		cardPanel.add(RtmCard, "Real-Time Monitor");
 		RtmCard.setLayout(new BorderLayout(0, 0));
-	
-		RealTimeMonitor realTimeMonitor = new RealTimeMonitor();
-		RtmCard.add(realTimeMonitor);
 		
-		JLabel lblEngine = new JLabel("Engine");
+	//	realTimeMonitor = new RealTimeMonitor();
+	//	RtmCard.add(realTimeMonitor);
+		
+/*		JLabel lblEngine = new JLabel("Engine");
 		lblEngine.setBounds(36, 219, 46, 14);
 		realTimeMonitor.add(lblEngine);
 		
@@ -162,19 +169,20 @@ public  class BlackBoxSystem {
 		
 		JLabel lblBrakingSystem = new JLabel("Braking System");
 		lblBrakingSystem.setBounds(342, 260, 100, 14);
-		realTimeMonitor.add(lblBrakingSystem);
+		realTimeMonitor.add(lblBrakingSystem);*/
 		
 		cardPanel.add(DiagCard, "Diagnose");
 		cardPanel.add(RateCard, "View Ratings");
 		cardPanel.add(firstCard, "First Page");
-		firstCard.setLayout(new BorderLayout(0, 0));
-		
+		firstCard.setLayout(new BorderLayout());
+		firstCard.setBackground(new Color(240, 240, 240));
+				
 		tc = new TiresCard();
 		cardPanel.add(tc, "Tires");
 		
 		ec = new EngineCard();
 		cardPanel.add(ec, "Engine");
-		
+	
 		// This panel will contain one button to enable you
 		// to switch thro' the cards
 		buttonPanel = new JPanel();
@@ -185,6 +193,35 @@ public  class BlackBoxSystem {
 		addSwitch("Real-Time Monitor");
 		addSwitch("Diagnose");
 		addSwitch("View Ratings");
+		
+		// Car starts upon clicking the button
+		// It will automatically switch to Real-Time Monitor
+		JButton startEngine = new JButton("");
+		startEngine.setSize(200, 200);
+		ImageIcon image = new ImageIcon("image/EngineStart.png");
+		Image im = image.getImage();
+		Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(),
+				Image.SCALE_SMOOTH); // Scale the image to fit
+										// to the label
+		ImageIcon icon = new ImageIcon(scaledImage);
+		startEngine.setIcon(icon);
+		startEngine.setBackground(new Color(240, 240, 240));
+		firstCard.add(startEngine, BorderLayout.CENTER);
+		
+		startEngine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				thisCar.startCar();
+				thisCar.start();
+				
+				cards.show(cardPanel, "Real-Time Monitor");
+
+				realTimeMonitor = new RealTimeMonitor();
+				realTimeMonitor.startRun();
+				RtmCard.add(realTimeMonitor);
+			}
+			
+		});
 
 		// Add exit button to close the application
 		JButton btnExit = new JButton("Exit");
@@ -211,6 +248,16 @@ public  class BlackBoxSystem {
 					lblUser.setText("");
 					lblFirst.setText("");
 					lblWelcome.setText("Login As Another User");
+					
+					thisCar.stopCar(); // stop the current thread;
+					thisCar.stop();
+					
+					thisCar = new CarFacade();
+					thisSensor = new Sensors();
+					thisOBD = new OBD2Port(thisCar);
+					thisCar.setCarStopped(true);		
+				
+					realTimeMonitor.stopRun();
 				}
 			}
 		});
@@ -257,6 +304,7 @@ public  class BlackBoxSystem {
 						lblFirst.setBounds(48, 60, 530, 57);
 						lblFirst.setFont(new Font("AngsanaUPC", Font.BOLD | Font.ITALIC, 53));
 						firstCard.add(lblFirst, BorderLayout.NORTH);	
+										
 
 					} else {
 						JOptionPane.showMessageDialog(null,

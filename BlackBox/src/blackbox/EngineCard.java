@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class EngineCard extends JPanel {
 	
-	private BlackBoxTester bt;
+	private BlackBoxSystem bt;
 	private Car myCar = bt.thisCar.getCar();
 	private Sensors s = bt.thisSensor;
 	

@@ -4,9 +4,8 @@ import java.util.Observable;
 
 public class Sensors extends Observable {
 
-	private BlackBoxTester bt;
-	private OBD2Port obd = new OBD2Port(bt.thisCar);
-
+	private BlackBoxSystem bt;
+	
 	private double[] tires = new double[4];
 
 	public Sensors() {
@@ -15,26 +14,42 @@ public class Sensors extends Observable {
 	// To get car speed
 	public double getCarSpeed() {
 
-		return obd.readDoubleData("Speed");
+		return bt.thisOBD.readDoubleData("Speed");
 	}
 
 	// To get Tires pressure
 	public double[] getTiresPressure() {
 
-		tires[0] = obd.readDoubleData("TirePressure_LF");
-		tires[1] = obd.readDoubleData("TirePressure_LR");
-		tires[2] = obd.readDoubleData("TirePressure_RF");
-		tires[3] = obd.readDoubleData("TirePressure_RR");
+		tires[0] = bt.thisOBD.readDoubleData("TirePressure_LF");
+		tires[1] = bt.thisOBD.readDoubleData("TirePressure_LR");
+		tires[2] = bt.thisOBD.readDoubleData("TirePressure_RF");
+		tires[3] = bt.thisOBD.readDoubleData("TirePressure_RR");
 
 		return tires;
 
 	}
 
-	// to get Car RPM
+	// To get Car RPM (For Engine)
 	public double getCarRPM() {
-		return obd.readDoubleData("RPM");
+		return bt.thisOBD.readDoubleData("RPM");
 	}
 
+	// To get Car Oil Level (For Engine)
+	public double getCarOilLevel() {
+		return bt.thisOBD.readDoubleData("OilLevel");
+	}
+	
+	// To get Car Fuel Level (For Fuel System)
+	public double getCarFuelLevel() {
+		return bt.thisOBD.readDoubleData("FuelLevel");
+	}
+	
+	// To get Car Int Air Temp (For Cooling System) 
+	public double getCarIntAirTemp() {
+		return bt.thisOBD.readDoubleData("IntAirTemp");
+	}
+	
+	
 	public boolean ifHealthy() {
 
 		for (int i = 0; i < 4; i++) {

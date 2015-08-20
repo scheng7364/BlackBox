@@ -4,9 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class SensorsView implements Observer {
-	private BlackBoxTester bt;
-	//private Sensors sensor;
-	
+	private BlackBoxSystem bt;
 	private Sensors sensor = bt.thisSensor;
 	
 	public SensorsView(Sensors sensor) {
