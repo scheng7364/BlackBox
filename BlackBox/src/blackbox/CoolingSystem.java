@@ -210,4 +210,14 @@ public class CoolingSystem {
 		this.lastServiceDate = lastServiceDate;
 	}
 
+	public double getTemperatureAVG() {
+		return temperatureAVG;
+	}
+
+	public double getTemperatureSTD() {
+		return temperatureSTD;
+	}
+	
+	
+
 }

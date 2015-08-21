@@ -141,5 +141,14 @@ public class IgnitionSystem {
 	public void setLastServiceDate(String lastServiceDate) {
 		LastServiceDate = lastServiceDate;
 	}
+
+	public double getBatteryVoltageAVG() {
+		return BatteryVoltageAVG;
+	}
+
+	public double getBatteryVoltageSTD() {
+		return BatteryVoltageSTD;
+	}
+	
 	
 }

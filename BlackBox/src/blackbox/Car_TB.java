@@ -55,6 +55,8 @@ public class Car_TB {
 
 		System.out.println("Max Speed is "+0.95*(honda.getSpeedAVG()+honda.getSpeedSTD()));
 		System.out.println("Min Speed is "+0.95*(honda.getSpeedAVG()-honda.getSpeedSTD()));
+		MaxMinValues threshold = new MaxMinValues(honda);
+		System.out.println(threshold.toString());
 	}
 
 }

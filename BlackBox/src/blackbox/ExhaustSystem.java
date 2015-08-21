@@ -132,5 +132,16 @@ public class ExhaustSystem {
 	public void setLastServiceDate(String lastServiceDate) {
 		this.lastServiceDate = lastServiceDate;
 	}
+
+
+	public double getFirstOxygenSensorAVG() {
+		return firstOxygenSensorAVG;
+	}
+
+
+	public double getFirstOxygenSensorSTD() {
+		return firstOxygenSensorSTD;
+	}
+	
 	
 }

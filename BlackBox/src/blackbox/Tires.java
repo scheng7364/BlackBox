@@ -115,6 +115,14 @@ public class Tires extends Observable {
 	public void setServiceDate(String serviceDate) {
 		this.serviceDate = serviceDate;
 	}
+
+	public double getTirePressureAVG() {
+		return tirePressureAVG;
+	}
+
+	public double getTirePressureSTD() {
+		return tirePressureSTD;
+	}
 	
 	
 

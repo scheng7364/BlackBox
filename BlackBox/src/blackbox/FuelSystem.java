@@ -137,4 +137,14 @@ public class FuelSystem {
 		this.lastServiceDate = lastServiceDate;
 	}
 
+	public double getFuelLevelAVG() {
+		return FuelLevelAVG;
+	}
+
+	public double getFuelLevelSTD() {
+		return FuelLevelSTD;
+	}
+	
+	
+
 }

@@ -575,4 +575,36 @@ public class Engine {
 				this.CamShaftPositionSensorAVG;
 	}
 
+
+	public double getRPM_AVG() {
+		return RPM_AVG;
+	}
+
+
+	public double getRPM_STD() {
+		return RPM_STD;
+	}
+
+
+	public double getHorsePowerAVG() {
+		return HorsePowerAVG;
+	}
+
+
+	public double getHorsePowerSTD() {
+		return HorsePowerSTD;
+	}
+
+
+	public double getOilLevelSensorAVG() {
+		return OilLevelSensorAVG;
+	}
+
+
+	public double getOilLevelSensorSTD() {
+		return OilLevelSensorSTD;
+	}
+	
+	
+
 }
