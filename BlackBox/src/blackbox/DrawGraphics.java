@@ -15,28 +15,18 @@ import java.awt.event.MouseMotionListener;
 
 public class DrawGraphics extends JPanel {
 
-	// private Color color = Color.WHITE;
-	private JLabel xLabel, yLabel, lblPart;
-	private MouseEventAdapterA meaA;
+	private JLabel lblPart;
 	private JComboBox selection;
 	private JPanel panel = new JPanel();
-	private String xStr, yStr;
 	private int x, y;
-
+	
 	public DrawGraphics() {
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(620, 400));
 		setLayout(null);
-
-		xLabel = new JLabel("");
-		xLabel.setBounds(10, 10, 150, 150);
-		add(xLabel);
-		
-		yLabel = new JLabel("");
-		yLabel.setBounds(10, 30, 150, 150);
-		add(yLabel);
 		
 		lblPart = new JLabel("");
+		lblPart.setForeground(Color.WHITE);
 		lblPart.setBounds(10, 50, 150, 150);
 		add(lblPart);
 
@@ -54,15 +44,6 @@ public class DrawGraphics extends JPanel {
 
 			x = e.getX();
 			y = e.getY();
-
-			xStr = new String("<html><h2><font color=blue size=4>" + "X: ");
-			xStr = xStr + x + "</font></h2></html>";
-
-			yStr = new String("<html><h2><font color=green size=4>" + "Y: ");
-			yStr = yStr + y + "</font></h2></html>";
-
-			xLabel.setText(xStr);
-			yLabel.setText(yStr);
 
 			if ((x >= 224 && x <= 305) && (y >= 282 && y <= 367) || (x >= 477 && x <= 537) && (y >= 179 && y <= 265)) {
 				lblPart.setText("Tires");

@@ -19,20 +19,12 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class RealTimeMonitor extends JPanel {
-
-	private BlackBoxSystem bt;
-	private CarFacade myCar = bt.thisCar;
-	private Sensors sensor = bt.thisSensor;
-
-	private SensorsView view1 = new SensorsView(sensor);
+	private CarFacade myCar;
+	private Sensors sensor;
 
 	Timer tm;
 	private static int PERIOD = 1000;
 
-	/*
-	 * public static CarFacade myCar = new CarFacade();; public static Sensors
-	 * sensor = new Sensors();
-	 */
 	private JLabel lblSpeed = new JLabel("Current Speed:");
 	private JLabel lblUnit = new JLabel("Mph");
 	private JLabel lblTextSpeed = new JLabel();
@@ -41,8 +33,11 @@ public class RealTimeMonitor extends JPanel {
 	private JButton btnStart = new JButton("Restart");
 
 	// Constructor to add the GUI components to the window
-	public RealTimeMonitor() {
+	public RealTimeMonitor(CarFacade cf, Sensors s) {
 		super();
+		myCar = cf;
+		sensor = s;
+		
 		setLayout(null);
 
 		add(lblSpeed);
@@ -69,7 +64,7 @@ public class RealTimeMonitor extends JPanel {
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				bt.thisCar.setCarStopped(true);
+				myCar.setCarStopped(true);
 				tm.stop();
 
 				// Thread sleeps to simulate the car slowing-down period
@@ -88,8 +83,9 @@ public class RealTimeMonitor extends JPanel {
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				bt.thisCar.setCarStopped(false);
+				myCar.setCarStopped(false);
 				tm.start();
+			
 			}
 		});
 	}
@@ -98,29 +94,34 @@ public class RealTimeMonitor extends JPanel {
 
 		public void actionPerformed(ActionEvent evt) {
 
-			// SensorsView view1 = new SensorsView(sensor);
+			SensorsMonitor monitor = new SensorsMonitor(sensor);
 
-			DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for
-															// decimal
-															// numbers
+			// Set digits for decimal numbers
+			DecimalFormat one = new DecimalFormat("#0.0"); 
 
-			lblTextSpeed.setText(one.format(bt.thisSensor.getCarSpeed()));
+			lblTextSpeed.setText(one.format(sensor.getCarSpeed()));
 
-			lblWarning.setForeground(Color.GREEN);
-			lblWarning.setText("Healthy");
+			sensor.ifHealthy();
 
-			if (!sensor.ifHealthy()) {
+			// If sensor warning is true, RealTimeMonitor will show warning & stop the car
+			if (sensor.getWarning()) {
 				lblWarning.setForeground(Color.RED);
 				lblWarning.setText("Warning");
-
+			
+				myCar.setCarStopped(true);
+				tm.stop();
 			}
+			// If sensor warning is false, RealTimeMonitor will show healthy & car runs;			
+			else { 
+				lblWarning.setForeground(Color.GREEN);
+				lblWarning.setText("Healthy"); 
+				}
 		}
 	};
 
 	public void startRun() {
 
 		if (tm == null) {
-
 			tm = new Timer(PERIOD, timerListener); // Change every second;
 			tm.start();
 		}

@@ -3,27 +3,28 @@ package blackbox;
 import java.util.Observable;
 
 public class Sensors extends Observable {
-
-	private BlackBoxSystem bt;
+	private OBD2Port obd;
+	private boolean warning = false;
+	private boolean healthy = true;
 	
 	private double[] tires = new double[4];
 
-	public Sensors() {
+	public Sensors(OBD2Port obd2p) {
+		obd = obd2p;
 	}
 
 	// To get car speed
 	public double getCarSpeed() {
-
-		return bt.thisOBD.readDoubleData("Speed");
+		return obd.readDoubleData("Speed");
 	}
 
 	// To get Tires pressure
 	public double[] getTiresPressure() {
 
-		tires[0] = bt.thisOBD.readDoubleData("TirePressure_LF");
-		tires[1] = bt.thisOBD.readDoubleData("TirePressure_LR");
-		tires[2] = bt.thisOBD.readDoubleData("TirePressure_RF");
-		tires[3] = bt.thisOBD.readDoubleData("TirePressure_RR");
+		tires[0] = obd.readDoubleData("TirePressure_LF");
+		tires[1] = obd.readDoubleData("TirePressure_LR");
+		tires[2] = obd.readDoubleData("TirePressure_RF");
+		tires[3] = obd.readDoubleData("TirePressure_RR");
 
 		return tires;
 
@@ -31,36 +32,60 @@ public class Sensors extends Observable {
 
 	// To get Car RPM (For Engine)
 	public double getCarRPM() {
-		return bt.thisOBD.readDoubleData("RPM");
+		return obd.readDoubleData("RPM");
 	}
 
 	// To get Car Oil Level (For Engine)
 	public double getCarOilLevel() {
-		return bt.thisOBD.readDoubleData("OilLevel");
+		return obd.readDoubleData("OilLevel");
 	}
 	
 	// To get Car Fuel Level (For Fuel System)
 	public double getCarFuelLevel() {
-		return bt.thisOBD.readDoubleData("FuelLevel");
+		return obd.readDoubleData("FuelLevel");
 	}
 	
 	// To get Car Int Air Temp (For Cooling System) 
 	public double getCarIntAirTemp() {
-		return bt.thisOBD.readDoubleData("IntAirTemp");
+		return obd.readDoubleData("IntAirTemp");
 	}
 	
-	public boolean ifHealthy() {
+	// To check if Car is healthy
+	public void ifHealthy() {
+		
+		healthy = true;
 
 		for (int i = 0; i < 4; i++) {
-			if (tires[i] >= 45) {
-				return false;
+			if (tires[i] >= StandardValues.TIRE.getSV()) {
+				healthy = false;
 			}
 		}
 
-		if (this.getCarRPM() >= 5800) {
-			return false;
+		if (this.getCarRPM() >= StandardValues.RPM.getSV()) {
+			healthy = false;
 		}
 
-		return true;
+		if (this.getCarFuelLevel() < StandardValues.FL.getSV()) {
+			healthy = false;
+		}
+		
+		if (this.getCarOilLevel() < StandardValues.OL.getSV()) {
+			healthy = false;
+		}
+				
+		// Inform Sensors Monitor for the state change
+		setChanged();
+		notifyObservers(new Boolean(healthy));
+	}
+	
+	// If healthy becomes false, Sensors Monitor will set warning to true
+	public void setWarning(boolean ifwarning) {
+		
+		warning = ifwarning;
+		
+	}
+	
+	public boolean getWarning() {
+		return this.warning;
 	}
 }

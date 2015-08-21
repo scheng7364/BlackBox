@@ -12,18 +12,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class TiresCard extends JPanel {
-	
-	private BlackBoxSystem bt;
-	private Car myCar = bt.thisCar.getCar();
-	private Sensors s = bt.thisSensor;
+	private Car myCar;
+	private Sensors s;
 	
 	private JLabel pagename, lblBrandname, lblModel, lblServiceDate;
 	private JLabel brandname, model, serviceDate, text;
 	
 	private JLabel tireLF, tireLR, tireRF, tireRR;
 	
-	public TiresCard() {
+	public TiresCard(Car car, Sensors sensor) {
 		super();
+		myCar = car;
+		s = sensor;
 		setLayout(null);
 		
 		pagename = new JLabel("Tires");
@@ -76,22 +76,6 @@ public class TiresCard extends JPanel {
 		text = new JLabel(); 
 		text.setBounds(380, 150, 200, 100);
 		add(text);
-	
-		JButton td = new JButton("test");
-		td.setBounds(380, 10, 100, 24);
-		td.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					Thread.sleep(1500);
-					diagnoseTires();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				
-			}
-		});
-		add(td);
 	}
 	
 	public void diagnoseTires()
@@ -99,7 +83,7 @@ public class TiresCard extends JPanel {
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
 		
 		double[] tiresarray = new double[4];
-		tiresarray = bt.thisSensor.getTiresPressure();
+		tiresarray = s.getTiresPressure();
 		
 		tireLF.setText(one.format(tiresarray[0]));
 		tireLR.setText(one.format(tiresarray[1]));
@@ -108,7 +92,7 @@ public class TiresCard extends JPanel {
 		
 		text.setText("Normal");
 		for(int i = 0; i < 4; i++) {
-			if(tiresarray[i] >= 45) {
+			if(tiresarray[i] >= StandardValues.TIRE.getSV()) {
 				text.setText("High Tire Pressure!");
 			}
 		}

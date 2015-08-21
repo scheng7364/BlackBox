@@ -9,16 +9,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class EngineCard extends JPanel {
-	
-	private BlackBoxSystem bt;
-	private Car myCar = bt.thisCar.getCar();
-	private Sensors s = bt.thisSensor;
+	private Car myCar;
+	private Sensors s;
 	
 	private JLabel pagename, lblType;
 	private JLabel type, text1, text2;
 	
-	public EngineCard() {
+	public EngineCard(Car car, Sensors sensor) {
 		super();
+		myCar = car;
+		s = sensor;
+		
 		setLayout(null);
 		
 		pagename = new JLabel("Engine");
@@ -42,29 +43,14 @@ public class EngineCard extends JPanel {
 		text2.setBounds(380, 170, 200, 100);
 		add(text2);
 		
-		JButton td = new JButton("test");
-		td.setBounds(380, 10, 100, 24);
-		td.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				try {
-					Thread.sleep(1500);
-					diagnoseEngine();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				
-			}
-		});
-		add(td);
 	}
 	
 	public void diagnoseEngine()
 	{
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
-		text1.setText(one.format(bt.thisSensor.getCarRPM()));
+		text1.setText(one.format(s.getCarRPM()));
 		
-		if(s.getCarRPM() >= 5800) {
+		if(s.getCarRPM() >= StandardValues.RPM.getSV()) {
 			text2.setText("RPM is too High");
 		}
 		else

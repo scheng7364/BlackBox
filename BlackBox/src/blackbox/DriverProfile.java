@@ -41,7 +41,7 @@ public class DriverProfile {
 		this.lastName = lastName;
 	}
 
-	public double getCoef() {return style.getCoef();}
+	public double getCoeff() {return style.getCoef();}
 
 	public String getFirstName() {
 		return firstName;

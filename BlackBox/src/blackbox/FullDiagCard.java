@@ -10,35 +10,19 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-// Set Standard Values for Car items/parts
-enum StandardValues {
-	RPM(5500), // RPM
-	OL(85), // Oil Level
-	FL(60), // Fuel Level
-	TEMP(180), // Air Temperature
-	TIRE(40); // Tire Pressure
-
-	private final double standard;
-
-	StandardValues(double standval) {
-		this.standard = standval;
-	}
-
-	public double getSV() {
-		return standard;
-	}
-}
-
 public class FullDiagCard extends JPanel {
-	private BlackBoxSystem bt;
-	private Car myCar = bt.thisCar.getCar();
-	private Sensors s = bt.thisSensor;
-
+	private Car myCar;
+	private Sensors s;
+	
 	private JLabel rpmCV, olCV, flCV, TempCV, TireFLCV, TireFRCV, TireRLCV, TireRRCV;
 	private JLabel rpmSV, olSV, flSV, TempSV, TireSV;
 	private JLabel rpmStatus, olStatus, flStatus, TempStatus, TireFLStatus, TireFRStatus, TireRLStatus, TireRRStatus;
 
-	public FullDiagCard() {
+	public FullDiagCard(Car car, Sensors sensor) {
+		super();
+		myCar = car;
+		s = sensor;
+		
 		setLayout(null);
 
 		JLabel lblPart = new JLabel("Parts");
@@ -214,17 +198,17 @@ public class FullDiagCard extends JPanel {
 	}
 
 	public void diagnoseFully() {
-		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal
-														// numbers
+		// Set digits for decimal numbers
+		DecimalFormat one = new DecimalFormat("#0.0"); 
 
 		double[] tiresarray = new double[4];
-		tiresarray = bt.thisSensor.getTiresPressure();
+		tiresarray = s.getTiresPressure();
 
 		// Get current values of car
-		rpmCV.setText(one.format(bt.thisSensor.getCarRPM()));
-		olCV.setText(one.format(bt.thisSensor.getCarOilLevel()));
-		flCV.setText(one.format(bt.thisSensor.getCarFuelLevel()));
-		TempCV.setText(one.format(bt.thisSensor.getCarIntAirTemp()));
+		rpmCV.setText(one.format(s.getCarRPM()));
+		olCV.setText(one.format(s.getCarOilLevel()));
+		flCV.setText(one.format(s.getCarFuelLevel()));
+		TempCV.setText(one.format(s.getCarIntAirTemp()));
 		TireFLCV.setText(one.format(tiresarray[0]));
 		TireFRCV.setText(one.format(tiresarray[1]));
 		TireRLCV.setText(one.format(tiresarray[2]));

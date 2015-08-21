@@ -2,13 +2,26 @@ package blackbox;
 
 import java.awt.EventQueue;
 
-public class BlackBoxTester {
+//Set Standard Values for Car Diagnosing 
+enum StandardValues {
+	RPM(6100), // RPM
+	OL(50), // Oil Level
+	FL(40), // Fuel Level
+	TEMP(240), // Air Temperature
+	TIRE(50); // Tire Pressure
 
-	/*public static CarFacade thisCar = new CarFacade(); 
-	public static Sensors thisSensor = new Sensors();
-	public static OBD2Port thisOBD = new OBD2Port(thisCar);
-*/
-	
+	private final double standard;
+
+	StandardValues(double standval) {
+		this.standard = standval;
+	}
+
+	public double getSV() {
+		return standard;
+	}
+}
+
+public class BlackBoxTester {
 	public static void main(String[] args) {
 		/**
 		 * Launch GUI application.
@@ -18,7 +31,7 @@ public class BlackBoxTester {
 					try {
 						BlackBoxSystem window = new BlackBoxSystem();
 						// window.frame.setVisible(true);
-					
+											
 					} catch (Exception e) {
 					e.printStackTrace();
 					}

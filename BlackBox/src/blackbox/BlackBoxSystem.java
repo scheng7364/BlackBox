@@ -12,14 +12,16 @@ import javax.swing.border.Border;
 
 public class BlackBoxSystem {
 
-	public static CarFacade thisCar = new CarFacade();
-	public static Sensors thisSensor = new Sensors();
-	public static OBD2Port thisOBD = new OBD2Port(thisCar);
+	CarFacade thisCar = new CarFacade();
+	Car car = thisCar.getCar();
+	OBD2Port obd = new OBD2Port(thisCar);
+	Sensors s = new Sensors(obd);
+	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
 
 	private JFrame guiFrame;
-	protected CardLayout cards;
-	protected JPanel buttonPanel;
-	protected JPanel cardPanel;
+	private CardLayout cards;
+	private JPanel buttonPanel;
+	private JPanel cardPanel;
 	private JPanel DiagCard;
 	private JTextField tfUsername;
 	private JPasswordField pfPW;
@@ -28,8 +30,8 @@ public class BlackBoxSystem {
 	private JLabel lblWelcome;
 	private String name; // username to be displayed
 
-	protected JPanel RtmCard; // Card for real-time monitoring
-	protected JPanel firstCard;
+	private JPanel RtmCard; // Card for real-time monitoring
+	private JPanel firstCard;
 
 	Connection connection1 = sqliteConnection.dbConnector();
 	private JTextField textField;
@@ -37,8 +39,7 @@ public class BlackBoxSystem {
 	TiresCard tc;
 	EngineCard ec;
 
-	private BlackBoxTester bt;
-	protected RealTimeMonitor realTimeMonitor;
+	int x = 0, speed = 15;
 
 	/**
 	 * Create the application.
@@ -85,38 +86,29 @@ public class BlackBoxSystem {
 		JButton btnDiag = new JButton("Diagnose Fully");
 		btnDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FullDiagCard fdc = new FullDiagCard();
+
+				FullDiagCard fdc = new FullDiagCard(car, s);
 				cardPanel.add(fdc, "Full Diagnose");
 
-				JLabel label = new JLabel("");
-				label.setText("Diagnosing ...");
+				TransitionCard tsc = new TransitionCard();
+				cardPanel.add(tsc, "Trans");
 
-				DiagCard.add(label);
-
-				Thread aWorker = new Thread() {
+				Thread thread = new Thread() {
 
 					public void run() {
 						try {
-							Thread.sleep(1500);
+							cards.show(cardPanel, "Trans");
+							Thread.sleep(5000);
 							fdc.diagnoseFully();
 							cards.show(cardPanel, "Full Diagnose");
+
 						} catch (InterruptedException ex) {
 						}
 
-						// Report the result using invokeLater()
-
-						SwingUtilities.invokeLater(new Runnable() {
-
-							public void run() {
-								label.setText("");
-							}
-						});// End of SwingUtilities.invokeLater
 					}
-				};// anonymous-class for aWorker
+				};
 
-				aWorker.start(); // So we don’t hold up the event dispatch
-									// thread
-
+				thread.start();
 			}
 		});
 		dg.add(btnDiag);
@@ -176,45 +168,70 @@ public class BlackBoxSystem {
 		cardPanel.add(RtmCard, "Real-Time Monitor");
 		RtmCard.setLayout(new BorderLayout(0, 0));
 
-		/*
-		 * JLabel lblEngine = new JLabel("Engine"); lblEngine.setBounds(36, 219,
-		 * 46, 14); realTimeMonitor.add(lblEngine);
-		 * 
-		 * JLabel lblCoolingSystem = new JLabel("Cooling System");
-		 * lblCoolingSystem.setBounds(36, 260, 130, 14);
-		 * realTimeMonitor.add(lblCoolingSystem);
-		 * 
-		 * JLabel lblExhaustSystem = new JLabel("Exhaust System");
-		 * lblExhaustSystem.setBounds(342, 305, 100, 14);
-		 * realTimeMonitor.add(lblExhaustSystem);
-		 * 
-		 * JLabel lblFuelSystem = new JLabel("Fuel System");
-		 * lblFuelSystem.setBounds(36, 305, 83, 14);
-		 * realTimeMonitor.add(lblFuelSystem);
-		 * 
-		 * JLabel lblIgnitionSystem = new JLabel("Ignition System");
-		 * lblIgnitionSystem.setBounds(36, 353, 100, 14);
-		 * realTimeMonitor.add(lblIgnitionSystem);
-		 * 
-		 * JLabel lblTires = new JLabel("Tires"); lblTires.setBounds(342, 219,
-		 * 46, 14); realTimeMonitor.add(lblTires);
-		 * 
-		 * JLabel lblBrakingSystem = new JLabel("Braking System");
-		 * lblBrakingSystem.setBounds(342, 260, 100, 14);
-		 * realTimeMonitor.add(lblBrakingSystem);
-		 */
-
 		cardPanel.add(DiagCard, "Diagnose");
 		cardPanel.add(RateCard, "View Ratings");
 		cardPanel.add(firstCard, "First Page");
 		firstCard.setLayout(new BorderLayout());
 		firstCard.setBackground(new Color(240, 240, 240));
 
-		tc = new TiresCard();
+		tc = new TiresCard(car, s);
 		cardPanel.add(tc, "Tires");
 
-		ec = new EngineCard();
+		JButton tireTest = new JButton("Check");
+		tireTest.setBounds(380, 10, 100, 24);
+		tireTest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				TransitionCard tsc = new TransitionCard();
+				cardPanel.add(tsc, "Trans");
+
+				Thread thread = new Thread() {
+
+					public void run() {
+						try {
+							cards.show(cardPanel, "Trans");
+							Thread.sleep(1500);
+							tc.diagnoseTires();
+							cards.show(cardPanel, "Tires");
+
+						} catch (InterruptedException ex) {
+						}
+					}
+				};
+				thread.start();
+			}
+		});
+		tc.add(tireTest);
+
+		ec = new EngineCard(car, s);
 		cardPanel.add(ec, "Engine");
+
+		JButton engTest = new JButton("Check");
+		engTest.setBounds(380, 10, 100, 24);
+		engTest.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				TransitionCard tsc = new TransitionCard();
+				cardPanel.add(tsc, "Trans");
+
+				Thread thread = new Thread() {
+
+					public void run() {
+						try {
+							cards.show(cardPanel, "Trans");
+							Thread.sleep(1500);
+							ec.diagnoseEngine();
+							cards.show(cardPanel, "Engine");
+
+						} catch (InterruptedException ex) {
+						}
+					}
+				};
+
+				thread.start();
+			}
+		});
+		ec.add(engTest);
 
 		// This panel will contain one button to enable you
 		// to switch thro' the cards
@@ -233,14 +250,7 @@ public class BlackBoxSystem {
 		startEngine.setSize(200, 200);
 		ImageIcon image = new ImageIcon("image/EngineStart.png");
 		Image im = image.getImage();
-		Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(), Image.SCALE_SMOOTH); // Scale
-																														// the
-																														// image
-																														// to
-																														// fit
-																														// to
-																														// the
-																														// label
+		Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon icon = new ImageIcon(scaledImage);
 		startEngine.setIcon(icon);
 		startEngine.setBackground(new Color(240, 240, 240));
@@ -254,7 +264,7 @@ public class BlackBoxSystem {
 
 				cards.show(cardPanel, "Real-Time Monitor");
 
-				realTimeMonitor = new RealTimeMonitor();
+				realTimeMonitor = new RealTimeMonitor(thisCar, s);
 				realTimeMonitor.startRun();
 				RtmCard.add(realTimeMonitor);
 			}
@@ -291,8 +301,7 @@ public class BlackBoxSystem {
 					thisCar.stop();
 
 					thisCar = new CarFacade();
-					thisSensor = new Sensors();
-					thisOBD = new OBD2Port(thisCar);
+
 					thisCar.setCarStopped(true);
 
 					realTimeMonitor.stopRun();
@@ -401,4 +410,5 @@ public class BlackBoxSystem {
 		tfUsername.setText("");
 		pfPW.setText("");
 	}
+
 }
