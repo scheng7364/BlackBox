@@ -49,7 +49,12 @@ public class Car_TB {
 		}
 		GraphingData tirePlot = new GraphingData(myTire);
 		tirePlot.getPlot(myTire);
+		
+		honda.setSpeedAVG(50);
+		honda.setSpeedSTD(20);
 
+		System.out.println("Max Speed is "+0.95*(honda.getSpeedAVG()+honda.getSpeedSTD()));
+		System.out.println("Min Speed is "+0.95*(honda.getSpeedAVG()-honda.getSpeedSTD()));
 	}
 
 }

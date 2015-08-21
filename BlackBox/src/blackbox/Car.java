@@ -513,5 +513,25 @@ public class Car extends Observable {
 		this.sysTires = sysTires;
 	}
 
+	public double getSpeedAVG() {
+		return speedAVG;
+	}
 
+
+	public double getSpeedSTD() {
+		return speedSTD;
+	}
+
+
+	public double getAccelerationAVG() {
+		return accelerationAVG;
+	}
+
+
+	public double getAccelerationSTD() {
+		return accelerationSTD;
+	}
+
+	
+	
 }

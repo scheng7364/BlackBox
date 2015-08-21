@@ -80,7 +80,7 @@ public class DrawGraphics extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		Image background = new ImageIcon("image/background.jpg").getImage();
+		Image background = new ImageIcon("image/exterior.jpg").getImage();
 		g.drawImage(background, 50, 10, this);
 
 		g.setColor(Color.GREEN);
