@@ -104,7 +104,7 @@ public class RealTimeMonitor extends JPanel {
 															// decimal
 															// numbers
 
-			lblTextSpeed.setText(one.format(sensor.getCarSpeed()));
+			lblTextSpeed.setText(one.format(bt.thisSensor.getCarSpeed()));
 
 			lblWarning.setForeground(Color.GREEN);
 			lblWarning.setText("Healthy");

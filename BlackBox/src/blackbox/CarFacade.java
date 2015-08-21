@@ -58,7 +58,7 @@ public class CarFacade extends Thread {
 	
 	public double getDataValue(String key) {
 		if(carDataItemMap.get(key)!=null) {
-			return carDataItemMap.get(key).getCurrValue();
+			return carDataItemMap.get(key).getPrevValue();
 		} else {
 			System.out.println("Warning: No" + key + "Data is Retrieved!");
 			return 0.0;

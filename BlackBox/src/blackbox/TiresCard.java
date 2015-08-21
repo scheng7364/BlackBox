@@ -99,7 +99,7 @@ public class TiresCard extends JPanel {
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
 		
 		double[] tiresarray = new double[4];
-		tiresarray = s.getTiresPressure();
+		tiresarray = bt.thisSensor.getTiresPressure();
 		
 		tireLF.setText(one.format(tiresarray[0]));
 		tireLR.setText(one.format(tiresarray[1]));

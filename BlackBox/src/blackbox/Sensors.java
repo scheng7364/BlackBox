@@ -49,7 +49,6 @@ public class Sensors extends Observable {
 		return bt.thisOBD.readDoubleData("IntAirTemp");
 	}
 	
-	
 	public boolean ifHealthy() {
 
 		for (int i = 0; i < 4; i++) {

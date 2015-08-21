@@ -10,9 +10,9 @@ import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
 
-public  class BlackBoxSystem {
-	
-	public static CarFacade thisCar = new CarFacade(); 
+public class BlackBoxSystem {
+
+	public static CarFacade thisCar = new CarFacade();
 	public static Sensors thisSensor = new Sensors();
 	public static OBD2Port thisOBD = new OBD2Port(thisCar);
 
@@ -30,16 +30,16 @@ public  class BlackBoxSystem {
 
 	protected JPanel RtmCard; // Card for real-time monitoring
 	protected JPanel firstCard;
-	
+
 	Connection connection1 = sqliteConnection.dbConnector();
 	private JTextField textField;
-	
+
 	TiresCard tc;
 	EngineCard ec;
 
 	private BlackBoxTester bt;
 	protected RealTimeMonitor realTimeMonitor;
-	
+
 	/**
 	 * Create the application.
 	 */
@@ -47,7 +47,7 @@ public  class BlackBoxSystem {
 
 		JPanel welcomeCard; // Welcome page;
 		JPanel RateCard; // Card for rating;
-		
+
 		guiFrame = new JFrame();
 
 		guiFrame.setBounds(100, 100, 719, 510);
@@ -68,14 +68,14 @@ public  class BlackBoxSystem {
 		welcomeCard.setBackground(new Color(255, 255, 204));
 
 		firstCard = new JPanel();
-		/*firstCard.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				cards.show(cardPanel, "Real-Time Monitor");				
-			}
-		});*/
+		/*
+		 * firstCard.addMouseListener(new MouseAdapter() {
+		 * 
+		 * @Override public void mouseClicked(MouseEvent me) {
+		 * cards.show(cardPanel, "Real-Time Monitor"); } });
+		 */
 		firstCard.setBackground(new Color(255, 255, 204));
-		
+
 		DiagCard = new JPanel();
 		DiagCard.setBackground(Color.WHITE);
 		DrawGraphics dg = new DrawGraphics();
@@ -83,22 +83,58 @@ public  class BlackBoxSystem {
 		dg.setLayout(null);
 
 		JButton btnDiag = new JButton("Diagnose Fully");
+		btnDiag.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FullDiagCard fdc = new FullDiagCard();
+				cardPanel.add(fdc, "Full Diagnose");
+
+				JLabel label = new JLabel("");
+				label.setText("Diagnosing ...");
+
+				DiagCard.add(label);
+
+				Thread aWorker = new Thread() {
+
+					public void run() {
+						try {
+							Thread.sleep(1500);
+							fdc.diagnoseFully();
+							cards.show(cardPanel, "Full Diagnose");
+						} catch (InterruptedException ex) {
+						}
+
+						// Report the result using invokeLater()
+
+						SwingUtilities.invokeLater(new Runnable() {
+
+							public void run() {
+								label.setText("");
+							}
+						});// End of SwingUtilities.invokeLater
+					}
+				};// anonymous-class for aWorker
+
+				aWorker.start(); // So we don’t hold up the event dispatch
+									// thread
+
+			}
+		});
 		dg.add(btnDiag);
 		btnDiag.setBounds(497, 0, 123, 23);
-		
+
 		RtmCard = new JPanel();
 		RtmCard.setBackground(new Color(230, 230, 250));
-		
-		JButton btnGo =  new JButton("Go");
+
+		JButton btnGo = new JButton("Go");
 		dg.add(btnGo);
 		btnGo.setBounds(557, 65, 55, 20);
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//System.out.println(dg.getComboSelected());		
+				// System.out.println(dg.getComboSelected());
 				cards.show(cardPanel, dg.getComboSelected());
 			}
 		});
-		
+
 		RateCard = new JPanel();
 		RateCard.setBackground(new Color(248, 248, 255));
 
@@ -110,7 +146,7 @@ public  class BlackBoxSystem {
 		cards.show(cardPanel, "Welcome");
 		cardPanel.add(welcomeCard, "Welcome");
 		welcomeCard.setLayout(null);
-		
+
 		lblWelcome = new JLabel("Welcome to BlackBox\u2122 ");
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setBounds(48, 60, 530, 57);
@@ -136,53 +172,50 @@ public  class BlackBoxSystem {
 		welcomeCard.add(pfPW);
 
 		cardPanel.add(welcomeCard, "Welcome");
-		
+
 		cardPanel.add(RtmCard, "Real-Time Monitor");
 		RtmCard.setLayout(new BorderLayout(0, 0));
-		
-	//	realTimeMonitor = new RealTimeMonitor();
-	//	RtmCard.add(realTimeMonitor);
-		
-/*		JLabel lblEngine = new JLabel("Engine");
-		lblEngine.setBounds(36, 219, 46, 14);
-		realTimeMonitor.add(lblEngine);
-		
-		JLabel lblCoolingSystem = new JLabel("Cooling System");
-		lblCoolingSystem.setBounds(36, 260, 130, 14);
-		realTimeMonitor.add(lblCoolingSystem);
-		
-		JLabel lblExhaustSystem = new JLabel("Exhaust System");
-		lblExhaustSystem.setBounds(342, 305, 100, 14);
-		realTimeMonitor.add(lblExhaustSystem);
-		
-		JLabel lblFuelSystem = new JLabel("Fuel System");
-		lblFuelSystem.setBounds(36, 305, 83, 14);
-		realTimeMonitor.add(lblFuelSystem);
-		
-		JLabel lblIgnitionSystem = new JLabel("Ignition System");
-		lblIgnitionSystem.setBounds(36, 353, 100, 14);
-		realTimeMonitor.add(lblIgnitionSystem);
-		
-		JLabel lblTires = new JLabel("Tires");
-		lblTires.setBounds(342, 219, 46, 14);
-		realTimeMonitor.add(lblTires);
-		
-		JLabel lblBrakingSystem = new JLabel("Braking System");
-		lblBrakingSystem.setBounds(342, 260, 100, 14);
-		realTimeMonitor.add(lblBrakingSystem);*/
-		
+
+		/*
+		 * JLabel lblEngine = new JLabel("Engine"); lblEngine.setBounds(36, 219,
+		 * 46, 14); realTimeMonitor.add(lblEngine);
+		 * 
+		 * JLabel lblCoolingSystem = new JLabel("Cooling System");
+		 * lblCoolingSystem.setBounds(36, 260, 130, 14);
+		 * realTimeMonitor.add(lblCoolingSystem);
+		 * 
+		 * JLabel lblExhaustSystem = new JLabel("Exhaust System");
+		 * lblExhaustSystem.setBounds(342, 305, 100, 14);
+		 * realTimeMonitor.add(lblExhaustSystem);
+		 * 
+		 * JLabel lblFuelSystem = new JLabel("Fuel System");
+		 * lblFuelSystem.setBounds(36, 305, 83, 14);
+		 * realTimeMonitor.add(lblFuelSystem);
+		 * 
+		 * JLabel lblIgnitionSystem = new JLabel("Ignition System");
+		 * lblIgnitionSystem.setBounds(36, 353, 100, 14);
+		 * realTimeMonitor.add(lblIgnitionSystem);
+		 * 
+		 * JLabel lblTires = new JLabel("Tires"); lblTires.setBounds(342, 219,
+		 * 46, 14); realTimeMonitor.add(lblTires);
+		 * 
+		 * JLabel lblBrakingSystem = new JLabel("Braking System");
+		 * lblBrakingSystem.setBounds(342, 260, 100, 14);
+		 * realTimeMonitor.add(lblBrakingSystem);
+		 */
+
 		cardPanel.add(DiagCard, "Diagnose");
 		cardPanel.add(RateCard, "View Ratings");
 		cardPanel.add(firstCard, "First Page");
 		firstCard.setLayout(new BorderLayout());
 		firstCard.setBackground(new Color(240, 240, 240));
-				
+
 		tc = new TiresCard();
 		cardPanel.add(tc, "Tires");
-		
+
 		ec = new EngineCard();
 		cardPanel.add(ec, "Engine");
-	
+
 		// This panel will contain one button to enable you
 		// to switch thro' the cards
 		buttonPanel = new JPanel();
@@ -193,34 +226,39 @@ public  class BlackBoxSystem {
 		addSwitch("Real-Time Monitor");
 		addSwitch("Diagnose");
 		addSwitch("View Ratings");
-		
+
 		// Car starts upon clicking the button
 		// It will automatically switch to Real-Time Monitor
 		JButton startEngine = new JButton("");
 		startEngine.setSize(200, 200);
 		ImageIcon image = new ImageIcon("image/EngineStart.png");
 		Image im = image.getImage();
-		Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(),
-				Image.SCALE_SMOOTH); // Scale the image to fit
-										// to the label
+		Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(), Image.SCALE_SMOOTH); // Scale
+																														// the
+																														// image
+																														// to
+																														// fit
+																														// to
+																														// the
+																														// label
 		ImageIcon icon = new ImageIcon(scaledImage);
 		startEngine.setIcon(icon);
 		startEngine.setBackground(new Color(240, 240, 240));
 		firstCard.add(startEngine, BorderLayout.CENTER);
-		
+
 		startEngine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				thisCar.startCar();
 				thisCar.start();
-				
+
 				cards.show(cardPanel, "Real-Time Monitor");
 
 				realTimeMonitor = new RealTimeMonitor();
 				realTimeMonitor.startRun();
 				RtmCard.add(realTimeMonitor);
 			}
-			
+
 		});
 
 		// Add exit button to close the application
@@ -230,7 +268,7 @@ public  class BlackBoxSystem {
 				System.exit(0);
 			}
 		});
-		
+
 		btnExit.setActionCommand("close");
 		buttonPanel.add(btnExit);
 
@@ -248,15 +286,15 @@ public  class BlackBoxSystem {
 					lblUser.setText("");
 					lblFirst.setText("");
 					lblWelcome.setText("Login As Another User");
-					
+
 					thisCar.stopCar(); // stop the current thread;
 					thisCar.stop();
-					
+
 					thisCar = new CarFacade();
 					thisSensor = new Sensors();
 					thisOBD = new OBD2Port(thisCar);
-					thisCar.setCarStopped(true);		
-				
+					thisCar.setCarStopped(true);
+
 					realTimeMonitor.stopRun();
 				}
 			}
@@ -303,8 +341,7 @@ public  class BlackBoxSystem {
 						lblFirst.setHorizontalAlignment(SwingConstants.CENTER);
 						lblFirst.setBounds(48, 60, 530, 57);
 						lblFirst.setFont(new Font("AngsanaUPC", Font.BOLD | Font.ITALIC, 53));
-						firstCard.add(lblFirst, BorderLayout.NORTH);	
-										
+						firstCard.add(lblFirst, BorderLayout.NORTH);
 
 					} else {
 						JOptionPane.showMessageDialog(null,
@@ -346,8 +383,9 @@ public  class BlackBoxSystem {
 			public void actionPerformed(ActionEvent event) {
 				// navigate to the next component
 				cards.show(cardPanel, command);
-				
-				if(command.equals("Diagnose")){ // Clear the fields for next Diagnose
+
+				if (command.equals("Diagnose")) { // Clear the fields for next
+													// Diagnose
 					ec.clearEC();
 					tc.clearTC();
 				}

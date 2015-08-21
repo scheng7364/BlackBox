@@ -62,7 +62,7 @@ public class EngineCard extends JPanel {
 	public void diagnoseEngine()
 	{
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
-		text1.setText(one.format(s.getCarRPM()));
+		text1.setText(one.format(bt.thisSensor.getCarRPM()));
 		
 		if(s.getCarRPM() >= 5800) {
 			text2.setText("RPM is too High");
