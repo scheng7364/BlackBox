@@ -3,6 +3,7 @@
 	<name>BlackBox</name>
 	<comment></comment>
 	<projects>
+		<project>Assignment3_XXIAO</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
