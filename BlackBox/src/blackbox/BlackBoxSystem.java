@@ -374,8 +374,8 @@ public class BlackBoxSystem {
 						driveStyle = rs.getString("drivestyle");
 						
 						profile.setStyle(driveStyle);
-						System.out.println(driveStyle);
-						System.out.println(profile.getStyle());
+					//	System.out.println(driveStyle);
+					//	System.out.println(profile.getStyle());
 						
 						// clear the fields for reentering
 						clearUserInfo();
