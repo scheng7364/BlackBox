@@ -6,7 +6,7 @@ enum DrivingStyle {
 	AVERAGE(1.0),
 	MILD(0.8);
 	
-	private final double Coefficient;
+	private final double Coefficient;	
 	
 	DrivingStyle(double coef) {
 		this.Coefficient = coef;
@@ -35,16 +35,14 @@ public class DriverProfile {
 		this.gender = gender;
 	}
 
-	public DriverProfile(String firstName, String lastName) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
-
-	public DriverProfile(String username, DrivingStyle style) {
+	public DriverProfile(String username, String style) {
 		super();
 		this.username = username;
-		this.style = style;
+		this.style = DrivingStyle.valueOf(style);
+	}
+	
+	public DriverProfile() {
+		super();
 	}
 	
 	public double getCoeff() {return style.getCoef();}
@@ -89,6 +87,10 @@ public class DriverProfile {
 		this.style = style;
 	}
 
+	public void setStyle(String style) {
+		this.style = DrivingStyle.valueOf(style);
+	}
+	
 	public String getUsername() {
 		return username;
 	}
