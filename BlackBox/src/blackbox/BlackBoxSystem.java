@@ -14,13 +14,14 @@ public class BlackBoxSystem {
 	CarFacade thisCar = new CarFacade();
 	Car car = thisCar.getCar();
 	OBD2Port obd = new OBD2Port(thisCar);
-	Sensors s = new Sensors(obd, car);
+	DriverProfile profile = new DriverProfile();
+	Sensors s = new Sensors(obd, car, profile);
 	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
 	
 	CarFacade digCar = new CarFacade() ;
 	Car carDig = digCar.getCar();
 	OBD2Port obdDig = new OBD2Port(digCar);
-
+	
 	private JFrame guiFrame;
 	private CardLayout cards;
 	private JPanel buttonPanel;
@@ -32,6 +33,7 @@ public class BlackBoxSystem {
 	private JLabel lblFirst; // show welcome user after login
 	private JLabel lblWelcome;
 	private String name; // username to be displayed
+	private String driveStyle; // driving styles for different users
 
 	private JPanel RtmCard; // Card for real-time monitoring
 	private JPanel firstCard;
@@ -357,7 +359,7 @@ public class BlackBoxSystem {
 					String user = tfUsername.getText().trim();
 					String pw = pfPW.getText().trim();
 
-					String query = "select username,password from loginInfo where username ='" + user
+					String query = "select username,password,drivestyle from loginInfo where username ='" + user
 							+ "' and password = '" + pw + "'";
 					PreparedStatement pst = connection1.prepareStatement(query);
 
@@ -368,7 +370,13 @@ public class BlackBoxSystem {
 
 						name = rs.getString("username");
 						JOptionPane.showMessageDialog(null, "Login Successfully");
-
+						
+						driveStyle = rs.getString("drivestyle");
+						
+						profile.setStyle(driveStyle);
+						System.out.println(driveStyle);
+						System.out.println(profile.getStyle());
+						
 						// clear the fields for reentering
 						clearUserInfo();
 
@@ -438,5 +446,6 @@ public class BlackBoxSystem {
 		tfUsername.setText("");
 		pfPW.setText("");
 	}
+	
 
 }

@@ -45,7 +45,9 @@ public class DriverProfile {
 		super();
 	}
 	
-	public double getCoeff() {return style.getCoef();}
+	public double getCoeff() {
+		
+		return style.getCoef();}
 
 	public String getFirstName() {
 		return firstName;
@@ -80,6 +82,7 @@ public class DriverProfile {
 	}
 
 	public DrivingStyle getStyle() {
+		System.out.println(style);
 		return style;
 	}
 
@@ -88,6 +91,7 @@ public class DriverProfile {
 	}
 
 	public void setStyle(String style) {
+		System.out.println(style);
 		this.style = DrivingStyle.valueOf(style);
 	}
 	

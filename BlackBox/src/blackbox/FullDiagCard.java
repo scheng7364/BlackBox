@@ -200,6 +200,9 @@ public class FullDiagCard extends JPanel {
 	}
 
 	public void diagnoseFully() {
+		
+		MaxMinValues threshold = new MaxMinValues(myCar);
+		
 		// Set digits for decimal numbers
 		DecimalFormat one = new DecimalFormat("#0.0"); 
 		
@@ -221,8 +224,6 @@ public class FullDiagCard extends JPanel {
 		TireFRAvg.setText(one.format(avgTFR));
 		TireRLAvg.setText(one.format(avgTRL));
 		TireRRAvg.setText(one.format(avgTRR));
-
-		MaxMinValues threshold = new MaxMinValues(myCar);
 		
 		// Set threshold values
 		rpmSV.setText((one.format(threshold.getMinRPM())) + " - " + (one.format(threshold.getMaxRPM())));
@@ -231,6 +232,8 @@ public class FullDiagCard extends JPanel {
 		TempSV.setText((one.format(threshold.getMinTemperature())) + " - " + (one.format(threshold.getMaxTemperature())));
 		TireSV.setText((one.format(threshold.getMinTirePressure())) + " - " + (one.format(threshold.getMaxTirePressure())));
 
+		System.out.println((one.format(threshold.getMinRPM())));
+		
 		// Results of Diagnosing
 		if (avgRPM >= threshold.getMaxRPM()) { rpmStatus.setText("Too High"); }
 		else if (avgRPM < threshold.getMinRPM()) { rpmStatus.setText("Low"); }

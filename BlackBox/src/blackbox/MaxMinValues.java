@@ -51,19 +51,18 @@ public class MaxMinValues {
 	private double maxTirePressure;
 	private double minTirePressure;//Critical, can cause damage to continue at min
 	
-
 	/**
 	 * These values would usually be found after ample research, but we decided to 
 	 * make the values 90% of the range, just to show some interesting results
 	 */
 	public MaxMinValues(Car myCar) {
 		
-		int percentOut = 100; //gives percentage that range is outside of max / min value
+		int percentOut = 20; //gives percentage that range is outside of max / min value
 		
-		maxSpeed=(1-percentOut/200)*(myCar.getSpeedAVG() + myCar.getSpeedSTD());
-		minSpeed=(1+percentOut/200)*(myCar.getSpeedAVG() - myCar.getSpeedSTD());
-		maxAcceleration=(1-percentOut/200)*(myCar.getAccelerationAVG() + myCar.getAccelerationSTD());
-		minAcceleration=(1+percentOut/200)*(myCar.getAccelerationAVG() - myCar.getAccelerationSTD());
+		maxSpeed=(1-percentOut/200.0)*(myCar.getSpeedAVG() + myCar.getSpeedSTD());
+		minSpeed=(1+percentOut/200.0)*(myCar.getSpeedAVG() - myCar.getSpeedSTD());
+		maxAcceleration=(1-percentOut/200.0)*(myCar.getAccelerationAVG() + myCar.getAccelerationSTD());
+		minAcceleration=(1+percentOut/200.0)*(myCar.getAccelerationAVG() - myCar.getAccelerationSTD());
 		maxYah=0;  // for future implementations (not used in our code)
 		minYah=0;  // for future implementations (not used in our code)
 		maxPitch=0;  // for future implementations (not used in our code)
@@ -72,45 +71,45 @@ public class MaxMinValues {
 		//values for engine
 		maxAirFlowMeter=0;  // for future implementations (not used in our code)
 		minAirFlowMeter=0;  // for future implementations (not used in our code)
-		maxHorsePower=(1-percentOut/200)*(myCar.getSysEngine().getHorsePowerAVG() + 
+		maxHorsePower=(1-percentOut/200.0)*(myCar.getSysEngine().getHorsePowerAVG() + 
 				myCar.getSysEngine().getHorsePowerSTD());
-		minHorsePower=(1+percentOut/200)*(myCar.getSysEngine().getHorsePowerAVG() - 
+		minHorsePower=(1+percentOut/200.0)*(myCar.getSysEngine().getHorsePowerAVG() - 
 				myCar.getSysEngine().getHorsePowerSTD());
-		maxRPM=(1-percentOut/200)*(myCar.getSysEngine().getRPM_AVG() + 
+		maxRPM=(1-percentOut/200.0)*(myCar.getSysEngine().getRPM_AVG() + 
 				myCar.getSysEngine().getRPM_STD());
-		minRPM=(1+percentOut/200)*(myCar.getSysEngine().getRPM_AVG() - 
+		minRPM=(1+percentOut/200.0)*(myCar.getSysEngine().getRPM_AVG() - 
 				myCar.getSysEngine().getRPM_STD());
 		maxACCompressorClutch=0;  // for future implementations (not used in our code)
 		minACCompressorClutch=0;  // for future implementations (not used in our code)
 		maxIdleRPM=0;  // for future implementations (not used in our code)
 		minIdleRPM=0;  // for future implementations (not used in our code)
-		maxOilLevelSensor= (1-percentOut/200)*(myCar.getSysEngine().getOilLevelSensorAVG() + 
+		maxOilLevelSensor= (1-percentOut/200.0)*(myCar.getSysEngine().getOilLevelSensorAVG() + 
 				myCar.getSysEngine().getOilLevelSensorSTD()); 
-		minOilLevelSensor= (1+percentOut/200)*(myCar.getSysEngine().getOilLevelSensorAVG() - 
+		minOilLevelSensor= (1+percentOut/200.0)*(myCar.getSysEngine().getOilLevelSensorAVG() - 
 				myCar.getSysEngine().getOilLevelSensorSTD()); ; 		
 		
 		//Cooling system
-		maxTemperature=(1-percentOut/200)*(myCar.getSysCooling().getTemperatureAVG() + 
+		maxTemperature=(1-percentOut/200.0)*(myCar.getSysCooling().getTemperatureAVG() + 
 				myCar.getSysCooling().getTemperatureSTD());
-		minTemperature=(1+percentOut/200)*(myCar.getSysCooling().getTemperatureAVG() - 
+		minTemperature=(1+percentOut/200.0)*(myCar.getSysCooling().getTemperatureAVG() - 
 				myCar.getSysCooling().getTemperatureSTD());
 		
 		//exhaust system
-		maxFirstOxygenSensor=(1-percentOut/200)*(myCar.getSysExhaust().getFirstOxygenSensorAVG() + 
+		maxFirstOxygenSensor=(1-percentOut/200.0)*(myCar.getSysExhaust().getFirstOxygenSensorAVG() + 
 				myCar.getSysExhaust().getFirstOxygenSensorSTD());
-		minFirstOxygenSensor=(1+percentOut/200)*(myCar.getSysExhaust().getFirstOxygenSensorAVG() - 
+		minFirstOxygenSensor=(1+percentOut/200.0)*(myCar.getSysExhaust().getFirstOxygenSensorAVG() - 
 				myCar.getSysExhaust().getFirstOxygenSensorSTD());
 		
 		//fuel system
-		maxFuelLevel=(1-percentOut/200)*(myCar.getSysFuel().getFuelLevelAVG() + 
+		maxFuelLevel=(1-percentOut/200.0)*(myCar.getSysFuel().getFuelLevelAVG() + 
 				myCar.getSysFuel().getFuelLevelSTD());
-		minFuelLevel=(1+percentOut/200)*(myCar.getSysFuel().getFuelLevelAVG() - 
+		minFuelLevel=(1+percentOut/200.0)*(myCar.getSysFuel().getFuelLevelAVG() - 
 				myCar.getSysFuel().getFuelLevelSTD());
 		
 		//tire system
-		maxTirePressure=(1-percentOut/200)*(myCar.getSysTires().getTirePressureAVG() + 
+		maxTirePressure=(1-percentOut/200.0)*(myCar.getSysTires().getTirePressureAVG() + 
 				myCar.getSysTires().getTirePressureSTD());
-		minTirePressure=(1+percentOut/200)*(myCar.getSysTires().getTirePressureAVG() - 
+		minTirePressure=(1+percentOut/200.0)*(myCar.getSysTires().getTirePressureAVG() - 
 				myCar.getSysTires().getTirePressureSTD());
 	}
 

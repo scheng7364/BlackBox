@@ -7,6 +7,7 @@ import blackbox.CarClasses.Car;
 public class Sensors extends Observable {
 	private OBD2Port obd;
 	private Car myCar;
+	private DriverProfile myProfile;
 	private boolean warning = false;
 	private boolean healthy = true;
 	//This Car should be passed to Sensors as Constructor (bcz only one car)
@@ -14,24 +15,36 @@ public class Sensors extends Observable {
 								//pass in car types.  This seems to go for many classes.
 	
 	private double[] tires = new double[4];
+	private double coeff = 1.0;
 
-	public Sensors(OBD2Port obd2p, Car car) {
+	public Sensors(OBD2Port obd2p, Car car, DriverProfile profile) {
 		obd = obd2p;
 		myCar = car;
+		myProfile = profile;
+	//	coeff = this.myProfile.getCoeff();
 	}
 
+	public double getDriverCoeff() {
+		coeff = this.myProfile.getCoeff();
+		System.out.println(coeff);
+		return 	coeff;
+	}
+	
 	// To get car speed
 	public double getCarSpeed() {
-		return obd.readDoubleData("Speed");
+		coeff = this.getDriverCoeff();
+		return (coeff * obd.readDoubleData("Speed"));
 	}
 
 	// To get Tires pressure
 	public double[] getTiresPressure() {
 
-		tires[0] = obd.readDoubleData("TirePressure_LF");
-		tires[1] = obd.readDoubleData("TirePressure_LR");
-		tires[2] = obd.readDoubleData("TirePressure_RF");
-		tires[3] = obd.readDoubleData("TirePressure_RR");
+		coeff = this.getDriverCoeff();
+		
+		tires[0] = (coeff * obd.readDoubleData("TirePressure_LF"));
+		tires[1] = (coeff * obd.readDoubleData("TirePressure_LR"));
+		tires[2] = (coeff * obd.readDoubleData("TirePressure_RF"));
+		tires[3] = (coeff * obd.readDoubleData("TirePressure_RR"));
 
 		return tires;
 
@@ -39,27 +52,31 @@ public class Sensors extends Observable {
 
 	// To get Car RPM (For Engine)
 	public double getCarRPM() {
-		return obd.readDoubleData("RPM");
+		coeff = this.getDriverCoeff();
+		return (coeff * obd.readDoubleData("RPM"));
 	}
 
 	// To get Car Oil Level (For Engine)
 	public double getCarOilLevel() {
-		return obd.readDoubleData("OilLevel");
+		coeff = this.getDriverCoeff();
+		return (coeff * obd.readDoubleData("OilLevel"));
 	}
 	
 	// To get Car Fuel Level (For Fuel System)
 	public double getCarFuelLevel() {
-		return obd.readDoubleData("FuelLevel");
+		coeff = this.getDriverCoeff();
+		return (coeff * obd.readDoubleData("FuelLevel"));
 	}
 	
 	// To get Car Int Air Temp (For Cooling System) 
 	public double getCarIntAirTemp() {
-		return obd.readDoubleData("IntAirTemp");
+		coeff = this.getDriverCoeff();
+		return (coeff * obd.readDoubleData("IntAirTemp"));
 	}
 	
 	// To check if Car is healthy
 	public void ifHealthy() {
-		
+
 		MaxMinValues threshold = new MaxMinValues(myCar);
 		healthy = true;
 
