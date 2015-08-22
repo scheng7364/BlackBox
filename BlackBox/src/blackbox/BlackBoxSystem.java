@@ -36,7 +36,7 @@ public class BlackBoxSystem {
 	private String driveStyle; // driving styles for different users
 
 	private JPanel RtmCard; // Card for real-time monitoring
-	private JPanel firstCard;
+	private JPanel firstCard; // Card for start-engine button
 
 	Connection connection1 = sqliteConnection.dbConnector();
 	private JTextField textField;
@@ -50,7 +50,7 @@ public class BlackBoxSystem {
 	public BlackBoxSystem() {
 
 		JPanel welcomeCard; // Welcome page;
-		JPanel RateCard; // Card for rating;
+		JPanel LogSheetCard; // Card for rating;
 
 		guiFrame = new JFrame();
 
@@ -209,8 +209,8 @@ public class BlackBoxSystem {
 			}
 		});
 
-		RateCard = new JPanel();
-		RateCard.setBackground(new Color(248, 248, 255));
+		LogSheetCard = new JPanel();
+		LogSheetCard.setBackground(new Color(248, 248, 255));
 
 		// Create Panels for switching
 		cards = new CardLayout();
@@ -243,22 +243,7 @@ public class BlackBoxSystem {
 		pfPW = new JPasswordField();
 		pfPW.setEchoChar('*');
 		pfPW.setBounds(304, 194, 129, 20);
-		welcomeCard.add(pfPW);
-
-		/*BufferedImage bi = null;
-		try {
-			bi = ImageIO.read(new File("image/exterior.jpg"));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	
-		ImageIcon biIcon = new ImageIcon(bi);
-		JLabel label = new JLabel(biIcon);
-		label.setBounds(0, 0, 600, 400);
-		System.out.println(guiFrame.getContentPane().getWidth());
-		welcomeCard.add(label);*/
-	
+		welcomeCard.add(pfPW);	
 		
 		cardPanel.add(welcomeCard, "Welcome");
 
@@ -266,7 +251,7 @@ public class BlackBoxSystem {
 		RtmCard.setLayout(new BorderLayout(0, 0));
 
 		cardPanel.add(DiagCard, "Diagnose");
-		cardPanel.add(RateCard, "View Ratings");
+		cardPanel.add(LogSheetCard, "Log Sheets");
 		cardPanel.add(firstCard, "First Page");
 		firstCard.setLayout(new BorderLayout());
 		firstCard.setBackground(new Color(240, 240, 240));
@@ -280,7 +265,7 @@ public class BlackBoxSystem {
 		// Add switch buttons for user to choose
 		addSwitch("Real-Time Monitor");
 		addSwitch("Diagnose");
-		addSwitch("View Ratings");
+		addSwitch("Log Sheets");
 
 		// Car starts upon clicking the button
 		// It will automatically switch to Real-Time Monitor
