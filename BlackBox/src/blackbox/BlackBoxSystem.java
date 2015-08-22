@@ -211,6 +211,25 @@ public class BlackBoxSystem {
 
 		LogSheetCard = new JPanel();
 		LogSheetCard.setBackground(new Color(248, 248, 255));
+		
+		JComboBox cbSelectbyName = new JComboBox();
+		cbSelectbyName.setModel(new DefaultComboBoxModel(new String[] {"View by Users"}));
+		cbSelectbyName.setBounds(22, 11, 105, 20);
+		LogSheetCard.add(cbSelectbyName);
+		
+		JComboBox cbSelectedbyStatus = new JComboBox();
+		cbSelectedbyStatus.setModel(new DefaultComboBoxModel(new String[] {"View by Report Status"}));
+		cbSelectedbyStatus.setBounds(152, 11, 137, 20);
+		LogSheetCard.add(cbSelectedbyStatus);
+		
+		JTable logTable = new JTable();
+		logTable.setBounds(21, 42, 590, 139);
+		LogSheetCard.add(logTable);
+		
+		JPanel logPanel = new JPanel();
+		logPanel.setBounds(21, 195, 590, 220);
+		LogSheetCard.add(logPanel);
+
 
 		// Create Panels for switching
 		cards = new CardLayout();
@@ -359,6 +378,7 @@ public class BlackBoxSystem {
 						driveStyle = rs.getString("drivestyle");
 						
 						profile.setStyle(driveStyle);
+						profile.setUsername(name);
 					//	System.out.println(driveStyle);
 					//	System.out.println(profile.getStyle());
 						
