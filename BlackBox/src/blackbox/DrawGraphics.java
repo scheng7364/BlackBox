@@ -42,11 +42,14 @@ public class DrawGraphics extends JPanel {
 			x = e.getX();
 			y = e.getY();
 
-			if ((x >= 224 && x <= 305) && (y >= 282 && y <= 367) || (x >= 477 && x <= 537) && (y >= 179 && y <= 265)) {
+			if ((x >= 235 && x <= 300) && (y >= 280 && y <= 360) || (x >= 465 && x <= 515) && (y >= 210 && y <= 280)) {
 				lblPart.setText("Tires");
 			
-			} else if ((x >= 257 && x <= 303) && (y >= 211 && y <= 248)) {
+			} else if ((x >= 130 && x <= 250) && (y >= 215 && y <= 280)) {
 				lblPart.setText("Engine");
+				
+			} else if ((x >= 90 && x <= 155) && (y >= 280 && y <= 315)) {
+				lblPart.setText("Temperature");
 			}
 
 			else {
@@ -60,11 +63,14 @@ public class DrawGraphics extends JPanel {
 		public void mouseClicked(MouseEvent e) {
 			String text = new String(lblPart.getText());
 			
-			if ((x >= 224 && x <= 305) && (y >= 282 && y <= 367) || (x >= 477 && x <= 537) && (y >= 179 && y <= 265)) {
+			if ((x >= 235 && x <= 300) && (y >= 280 && y <= 360) || (x >= 465 && x <= 515) && (y >= 210 && y <= 280)) {
 				selection.setSelectedItem(text);
 				repaint();
 
-			} else if ((x >= 257 && x <= 303) && (y >= 211 && y <= 248)) {
+			} else if ((x >= 130 && x <= 250) && (y >= 215 && y <= 280)) {
+				selection.setSelectedItem(text);
+				
+			} else if ((x >= 90 && x <= 155) && (y >= 280 && y <= 315)) {
 				selection.setSelectedItem(text);
 
 			} else {
@@ -79,16 +85,24 @@ public class DrawGraphics extends JPanel {
 		super.paintComponent(g);
 
 		// Show the full car image
-		Image background = new ImageIcon("image/background.jpg").getImage();
+		Image background = new ImageIcon("image/exterior.jpg").getImage();
 		g.drawImage(background, 75, 100, this);
 
 		// Show the car part image upon mouse over & mouse clicked
-		if ((x >= 224 && x <= 305) && (y >= 282 && y <= 367) || (x >= 477 && x <= 537) && (y >= 179 && y <= 265)) {
-			Image tires = new ImageIcon("image/tires.jpg").getImage();
-			g.drawImage(tires, 100, 40, this);
-		} else if ((x >= 257 && x <= 303) && (y >= 211 && y <= 248)) {
-			Image engine = new ImageIcon("image/engine.jpg").getImage();
-			g.drawImage(engine, 100, 10, this);
+		if ((x >= 235 && x <= 300) && (y >= 280 && y <= 360) || (x >= 465 && x <= 515) && (y >= 210 && y <= 280)) {
+			Image tires = new ImageIcon("image/TireImage.jpg").getImage();
+			g.drawImage(tires, 75, 100, this);
+		} else if ((x >= 130 && x <= 250) && (y >= 215 && y <= 280)) {
+			Image engine = new ImageIcon("image/Driveline-Powertrain.jpg").getImage();
+			g.drawImage(engine, 75, 100, this);
+		} else if ((x >= 90 && x <= 155) && (y >= 280 && y <= 315)) {
+			Image engine = new ImageIcon("image/climate-control.jpg").getImage();
+			g.drawImage(engine, 75, 100, this);
+		} else if ((x >= 220 && x <= 450) && (y >= 117 && y <= 205)) {
+			Image engine = new ImageIcon("image/full-car.jpg").getImage();
+			g.drawImage(engine, 75, 100, this);
+			
+			
 		}
 		
 		g.setColor(Color.GREEN);
