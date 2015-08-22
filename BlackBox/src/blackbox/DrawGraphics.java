@@ -41,8 +41,6 @@ public class DrawGraphics extends JPanel {
 
 			x = e.getX();
 			y = e.getY();
-			System.out.println(x);
-			System.out.println(y);
 
 			if ((x >= 235 && x <= 300) && (y >= 280 && y <= 360) || (x >= 465 && x <= 515) && (y >= 210 && y <= 280)) {
 				lblPart.setText("Tires");
