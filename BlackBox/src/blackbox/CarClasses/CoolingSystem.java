@@ -217,6 +217,15 @@ public class CoolingSystem {
 	public double getTemperatureSTD() {
 		return temperatureSTD;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CoolingSystem [temperatureAVG=" + temperatureAVG + ", temperatureSTD=" + temperatureSTD
+				+ ", lastServiceDate=" + lastServiceDate + "]";
+	}
 	
 	
 

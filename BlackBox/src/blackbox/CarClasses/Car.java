@@ -534,6 +534,19 @@ public class Car extends Observable {
 		return accelerationSTD;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Car [speedAVG=" + speedAVG + ", speedSTD=" + speedSTD + ", accelerationAVG=" + accelerationAVG
+				+ ", accelerationSTD=" + accelerationSTD + ", make=" + make + ", model=" + model + ", year=" + year
+				+ ", sysCooling=" + sysCooling + ", sysExhaust=" + sysExhaust + ", sysFuel=" + sysFuel + ", sysBrake="
+				+ sysBrake + ", sysIgnition=" + sysIgnition + ", sysSteering=" + sysSteering + ", sysEngine="
+				+ sysEngine + ", sysTires=" + sysTires + "]";
+	}
+
 	
 	
 }

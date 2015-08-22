@@ -604,6 +604,17 @@ public class Engine {
 	public double getOilLevelSensorSTD() {
 		return OilLevelSensorSTD;
 	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Engine [type=" + type + ", RPM_AVG=" + RPM_AVG + ", RPM_STD=" + RPM_STD + ", OilLevelSensorAVG="
+				+ OilLevelSensorAVG + ", OilLevelSensorSTD=" + OilLevelSensorSTD + ", OilPressureSensorAVG="
+				+ OilPressureSensorAVG + ", OilPressureSensorSTD=" + OilPressureSensorSTD + "]";
+	}
 	
 	
 
