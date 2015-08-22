@@ -10,6 +10,8 @@ import java.util.Random;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import blackbox.CarClasses.Car;
+
 public class BlackBoxSystem {
 
 	CarFacade thisCar = new CarFacade();

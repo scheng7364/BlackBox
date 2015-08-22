@@ -3,6 +3,8 @@
  */
 package blackbox;
 
+import blackbox.CarClasses.Car;
+
 /**
  * @author KC
  *

@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import blackbox.CarClasses.Car;
+
 public class FullDiagCard extends JPanel {
 	private Car myCar;
 	private Sensors s;

@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import blackbox.CarClasses.Car;
+
 public class EngineCard extends JPanel {
 	private Car myCar;
 	private Sensors s;

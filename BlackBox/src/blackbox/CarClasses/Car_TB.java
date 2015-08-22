@@ -1,7 +1,10 @@
 /**
  * 
  */
-package blackbox;
+package blackbox.CarClasses;
+
+import blackbox.GraphingData;
+import blackbox.MaxMinValues;
 
 /**
  * @author kevinchilds

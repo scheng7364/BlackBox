@@ -1,7 +1,7 @@
 /**
  * 
  */
-package blackbox;
+package blackbox.CarClasses;
 
 import java.util.Random;
 

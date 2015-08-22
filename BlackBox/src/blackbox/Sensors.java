@@ -2,6 +2,9 @@ package blackbox;
 
 import java.util.Observable;
 
+import blackbox.CarClasses.Car;
+import blackbox.CarClasses.Honda;
+
 public class Sensors extends Observable {
 	private OBD2Port obd;
 	private boolean warning = false;
