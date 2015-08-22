@@ -82,7 +82,7 @@ public class DriverProfile {
 	}
 
 	public DrivingStyle getStyle() {
-		System.out.println(style);
+	//	System.out.println(style);
 		return style;
 	}
 
@@ -91,7 +91,7 @@ public class DriverProfile {
 	}
 
 	public void setStyle(String style) {
-		System.out.println(style);
+	//	System.out.println(style);
 		this.style = DrivingStyle.valueOf(style);
 	}
 	

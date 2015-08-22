@@ -22,7 +22,7 @@ public class CarFacade extends Thread {
 	private boolean carStopped = true;
 	private double average = 0.0;
 	
-	int counter = 1; // Counter value to count number of periods it updates the data
+	int counter = 0; // Counter value to count number of periods it updates the data
 	
 	// To set the car Stopped status from outside
 	public boolean setCarStopped(boolean stoppedornot) {
@@ -84,7 +84,8 @@ public class CarFacade extends Thread {
 	public double getAvgDataValue(String key) {
 		double value = 0;
 		if(carDataItemMap.get(key)!=null) {
-			value = carDataItemMap.get(key).getSum()/(counter);
+			if(counter != 0) { 
+			value = carDataItemMap.get(key).getSum()/(counter); }
 		//	System.out.println(value);
 		//	System.out.println(counter);
 			return (value);
@@ -109,7 +110,8 @@ public class CarFacade extends Thread {
 			CarDataItem item = entry.getValue();
 			NumberFormat formatter = new DecimalFormat("#0.00"); 
 			System.out.println(key+ "curr =" + formatter.format(item.getCurrValue()));
-			System.out.println(key+ " avg =" + formatter.format(item.getSum()/counter));
+			if(counter != 0) { 
+			System.out.println(key+ " avg =" + formatter.format(item.getSum()/counter));}
 		//	System.out.println(counter);
 		}	
 	}
