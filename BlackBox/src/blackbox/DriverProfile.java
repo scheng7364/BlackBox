@@ -30,7 +30,7 @@ public class DriverProfile {
 
 	public DriverProfile(String user, DrivingStyle style, Gender gender) {
 		super();
-		this.username = user;
+		this.setUsername(user);
 		this.style = style;
 		this.gender = gender;
 	}
@@ -41,6 +41,12 @@ public class DriverProfile {
 		this.lastName = lastName;
 	}
 
+	public DriverProfile(String username, DrivingStyle style) {
+		super();
+		this.username = username;
+		this.style = style;
+	}
+	
 	public double getCoeff() {return style.getCoef();}
 
 	public String getFirstName() {
@@ -81,6 +87,14 @@ public class DriverProfile {
 
 	public void setStyle(DrivingStyle style) {
 		this.style = style;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 }
