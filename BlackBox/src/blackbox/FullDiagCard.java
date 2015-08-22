@@ -16,7 +16,7 @@ public class FullDiagCard extends JPanel {
 //	private Sensors s;
 	private OBD2Port obd;
 	
-	private JLabel rpmCV, olCV, flCV, TempCV, TireFLCV, TireFRCV, TireRLCV, TireRRCV;
+	private JLabel rpmAvg, olAvg, flAvg, TempAvg, TireFLAvg, TireFRAvg, TireRLAvg, TireRRAvg;
 	private JLabel rpmSV, olSV, flSV, TempSV, TireSV;
 	private JLabel rpmStatus, olStatus, flStatus, TempStatus, TireFLStatus, TireFRStatus, TireRLStatus, TireRRStatus;
 
@@ -32,14 +32,14 @@ public class FullDiagCard extends JPanel {
 		lblPart.setBounds(124, 48, 46, 14);
 		add(lblPart);
 
-		JLabel lblCV = new JLabel("Current Values");
-		lblCV.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCV.setBounds(243, 48, 92, 14);
-		add(lblCV);
+		JLabel lblAvg = new JLabel("Average Values");
+		lblAvg.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblAvg.setBounds(243, 48, 92, 14);
+		add(lblAvg);
 
 		JLabel lblSV = new JLabel("Standard Values");
 		lblSV.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblSV.setBounds(392, 48, 103, 14);
+		lblSV.setBounds(372, 48, 103, 14);
 		add(lblSV);
 
 		JLabel lblStatus = new JLabel("Status");
@@ -113,88 +113,88 @@ public class FullDiagCard extends JPanel {
 		lblRearRight.setBounds(23, 336, 70, 14);
 		add(lblRearRight);
 
-		rpmCV = new JLabel("");
-		rpmCV.setBounds(243, 91, 46, 14);
-		add(rpmCV);
+		rpmAvg = new JLabel("");
+		rpmAvg.setBounds(243, 91, 46, 14);
+		add(rpmAvg);
 
-		olCV = new JLabel("");
-		olCV.setBounds(243, 131, 46, 14);
-		add(olCV);
+		olAvg = new JLabel("");
+		olAvg.setBounds(243, 131, 46, 14);
+		add(olAvg);
 
-		flCV = new JLabel("");
-		flCV.setBounds(243, 171, 46, 14);
-		add(flCV);
+		flAvg = new JLabel("");
+		flAvg.setBounds(243, 171, 46, 14);
+		add(flAvg);
 
-		TempCV = new JLabel("");
-		TempCV.setBounds(243, 211, 46, 14);
-		add(TempCV);
+		TempAvg = new JLabel("");
+		TempAvg.setBounds(243, 211, 46, 14);
+		add(TempAvg);
 
-		TireFLCV = new JLabel("");
-		TireFLCV.setBounds(243, 276, 46, 14);
-		add(TireFLCV);
+		TireFLAvg = new JLabel("");
+		TireFLAvg.setBounds(243, 276, 46, 14);
+		add(TireFLAvg);
 
-		TireFRCV = new JLabel("");
-		TireFRCV.setBounds(243, 296, 46, 14);
-		add(TireFRCV);
+		TireFRAvg = new JLabel("");
+		TireFRAvg.setBounds(243, 296, 46, 14);
+		add(TireFRAvg);
 
-		TireRLCV = new JLabel("");
-		TireRLCV.setBounds(243, 316, 46, 14);
-		add(TireRLCV);
+		TireRLAvg = new JLabel("");
+		TireRLAvg.setBounds(243, 316, 46, 14);
+		add(TireRLAvg);
 
-		TireRRCV = new JLabel("");
-		TireRRCV.setBounds(243, 336, 46, 14);
-		add(TireRRCV);
+		TireRRAvg = new JLabel("");
+		TireRRAvg.setBounds(243, 336, 46, 14);
+		add(TireRRAvg);
 
 		rpmSV = new JLabel("");
-		rpmSV.setBounds(392, 91, 46, 14);
+		rpmSV.setBounds(372, 91, 150, 14);
 		add(rpmSV);
 
 		olSV = new JLabel("");
-		olSV.setBounds(392, 131, 46, 14);
+		olSV.setBounds(372, 131, 150, 14);
 		add(olSV);
 
 		flSV = new JLabel("");
-		flSV.setBounds(392, 171, 46, 14);
+		flSV.setBounds(372, 171, 150, 14);
 		add(flSV);
 
 		TempSV = new JLabel("");
-		TempSV.setBounds(392, 211, 46, 14);
+		TempSV.setBounds(372, 211, 150, 14);
 		add(TempSV);
 
 		TireSV = new JLabel("");
-		TireSV.setBounds(392, 296, 46, 14);
+		TireSV.setBounds(372, 296, 150, 14);
 		add(TireSV);
 
 		rpmStatus = new JLabel("");
-		rpmStatus.setBounds(521, 91, 80, 14);
+		rpmStatus.setBounds(521, 91, 120, 14);
 		add(rpmStatus);
 
 		olStatus = new JLabel("");
-		olStatus.setBounds(521, 131, 80, 14);
+		olStatus.setBounds(521, 131, 120, 14);
 		add(olStatus);
 
 		flStatus = new JLabel("");
-		flStatus.setBounds(521, 171, 80, 14);
+		flStatus.setBounds(521, 171, 120, 14);
 		add(flStatus);
 
 		TempStatus = new JLabel("");
-		TempStatus.setBounds(521, 211, 80, 14);
+		TempStatus.setBounds(521, 211, 120, 14);
 		add(TempStatus);
 
 		TireFLStatus = new JLabel("");
-		TireFLStatus.setBounds(521, 276, 80, 14);
+		TireFLStatus.setBounds(521, 276, 120, 14);
 		add(TireFLStatus);
 
 		TireFRStatus = new JLabel("");
-		TireFRStatus.setBounds(521, 296, 80, 14);
+		TireFRStatus.setBounds(521, 296, 120, 14);
 		add(TireFRStatus);
 
 		TireRLStatus = new JLabel("");
-		TireRLStatus.setBounds(521, 316, 80, 14);
+		TireRLStatus.setBounds(521, 316, 120, 14);
 		add(TireRLStatus);
 
 		TireRRStatus = new JLabel("");
-		TireRRStatus.setBounds(521, 336, 80, 14);
+		TireRRStatus.setBounds(521, 336, 120, 14);
 		add(TireRRStatus);
 
 	}
@@ -203,84 +203,76 @@ public class FullDiagCard extends JPanel {
 		// Set digits for decimal numbers
 		DecimalFormat one = new DecimalFormat("#0.0"); 
 		
-		double rpm = obd.readDoubleData("RPM");
-		double oil = obd.readDoubleData("OilLevel");
-		double fuel = obd.readDoubleData("FuelLevel");
-		double temp = obd.readDoubleData("IntAirTemp");
-		double tFL = obd.readDoubleData("TirePressure_LF");
-		double tFR = obd.readDoubleData("TirePressure_RF");
-		double tRL = obd.readDoubleData("TirePressure_LR");
-		double tRR = obd.readDoubleData("TirePressure_RR");
-
+		double avgRPM = obd.readAvgDoubleData("RPM");
+		double avgOil = obd.readAvgDoubleData("OilLevel");
+		double avgFuel = obd.readAvgDoubleData("FuelLevel");
+		double avgTemp = obd.readAvgDoubleData("IntAirTemp");
+		double avgTFL = obd.readAvgDoubleData("TirePressure_LF");
+		double avgTFR = obd.readAvgDoubleData("TirePressure_RF");
+		double avgTRL = obd.readAvgDoubleData("TirePressure_LR");
+		double avgTRR = obd.readAvgDoubleData("TirePressure_RR");
 		
 		// Get current values of car
-		rpmCV.setText(one.format(rpm));
-		olCV.setText(one.format(oil));
-		flCV.setText(one.format(fuel));
-		TempCV.setText(one.format(temp));
-		TireFLCV.setText(one.format(tFL));
-		TireFRCV.setText(one.format(tFR));
-		TireRLCV.setText(one.format(tRL));
-		TireRRCV.setText(one.format(tRR));
+		rpmAvg.setText(one.format(avgRPM));
+		olAvg.setText(one.format(avgOil));
+		flAvg.setText(one.format(avgFuel));
+		TempAvg.setText(one.format(avgTemp));
+		TireFLAvg.setText(one.format(avgTFL));
+		TireFRAvg.setText(one.format(avgTFR));
+		TireRLAvg.setText(one.format(avgTRL));
+		TireRRAvg.setText(one.format(avgTRR));
 
+		MaxMinValues threshold = new MaxMinValues(myCar);
+		
 		// Set threshold values
-		rpmSV.setText(one.format(StandardValues.RPM.getSV()));
-		olSV.setText(one.format(StandardValues.OL.getSV()));
-		flSV.setText(one.format(StandardValues.FL.getSV()));
-		TempSV.setText(one.format(StandardValues.TEMP.getSV()));
-		TireSV.setText(one.format(StandardValues.TIRE.getSV()));
+		rpmSV.setText((one.format(threshold.getMinRPM())) + " - " + (one.format(threshold.getMaxRPM())));
+		olSV.setText((one.format(threshold.getMinOilLevelSensor())) + " - " + (one.format(threshold.getMaxOilLevelSensor())));
+		flSV.setText("Min: " + (one.format(threshold.getMinFuelLevel())));
+		TempSV.setText((one.format(threshold.getMinTemperature())) + " - " + (one.format(threshold.getMaxTemperature())));
+		TireSV.setText((one.format(threshold.getMinTirePressure())) + " - " + (one.format(threshold.getMaxTirePressure())));
 
-		// Results of the diagnose
-		if (rpm > StandardValues.RPM.getSV()) {
-			rpmStatus.setText("Too High");
-		}
+		// Results of Diagnosing
+		if (avgRPM >= threshold.getMaxRPM()) { rpmStatus.setText("Too High"); }
+		else if (avgRPM < threshold.getMinRPM()) { rpmStatus.setText("Low"); }
+		else {rpmStatus.setText("Normal");}
+		
+		if (avgOil >= threshold.getMaxOilLevelSensor()) { olStatus.setText("Too High"); }
+		else if (avgOil < threshold.getMinOilLevelSensor()) { olStatus.setText("Low"); }
+		else {olStatus.setText("Normal");}
 
-		if (oil < StandardValues.OL.getSV()) {
-			olStatus.setText("Too Low");
-		}
+		if (avgFuel < threshold.getMinFuelLevel()) { flStatus.setText("Low"); }
+		else {flStatus.setText("Normal");}
+		
+		if (avgTemp >= threshold.getMaxTemperature()) { TempStatus.setText("Too High"); }
+		else if (avgTemp < threshold.getMinTemperature()) { TempStatus.setText("Low"); }
+		else {TempStatus.setText("Normal");}
+		
+		if (avgTFL >= threshold.getMaxTirePressure()) { TireFLStatus.setText("Too High"); }
+		else if (avgTFL < threshold.getMinTirePressure()) { TireFLStatus.setText("Low"); }
+		else {TireFLStatus.setText("Normal");}
+		
+		if (avgTFR >= threshold.getMaxTirePressure()) { TireFRStatus.setText("Too High"); }
+		else if (avgTFR < threshold.getMinTirePressure()) { TireFRStatus.setText("Low"); }
+		else {TireFRStatus.setText("Normal");}
+	
+		if (avgTRL >= threshold.getMaxTirePressure()) { TireRLStatus.setText("Too High"); }
+		else if (avgTRL < threshold.getMinTirePressure()) { TireRLStatus.setText("Low"); }
+		else {TireRLStatus.setText("Normal");}
 
-		if (fuel < StandardValues.FL.getSV()) {
-			flStatus.setText("Low");
-		}
-
-		if (temp > StandardValues.TEMP.getSV()) {
-			TempStatus.setText("Too High");
-		}
-
-		if (tFL > StandardValues.TIRE.getSV()) {
-			TireFLStatus.setText("High");
-		} else {
-			TireFLStatus.setText("Normal");
-		}
-
-		if (tFR > StandardValues.TIRE.getSV()) {
-			TireFRStatus.setText("High");
-		} else {
-			TireFRStatus.setText("Normal");
-		}
-
-		if (tRL > StandardValues.TIRE.getSV()) {
-			TireRLStatus.setText("High");
-		} else {
-			TireRLStatus.setText("Normal");
-		}
-
-		if (tRR > StandardValues.TIRE.getSV()) {
-			TireRRStatus.setText("High");
-		} else {
-			TireRRStatus.setText("Normal");
-		}
+		if (avgTRR >= threshold.getMaxTirePressure()) { TireRRStatus.setText("Too High"); }
+		else if (avgTRR < threshold.getMinTirePressure()) { TireRRStatus.setText("Low"); }
+		else {TireRRStatus.setText("Normal");}
 	}
 
 	public void clearFDC() {
-		rpmCV.setText("");
-		olCV.setText("");
-		flCV.setText("");
-		TempCV.setText("");
-		TireFLCV.setText("");
-		TireFRCV.setText("");
-		TireRLCV.setText("");
-		TireRRCV.setText("");
+		rpmAvg.setText("");
+		olAvg.setText("");
+		flAvg.setText("");
+		TempAvg.setText("");
+		TireFLAvg.setText("");
+		TireFRAvg.setText("");
+		TireRLAvg.setText("");
+		TireRRAvg.setText("");
 		rpmStatus.setText("");
 		olStatus.setText("");
 		flStatus.setText("");

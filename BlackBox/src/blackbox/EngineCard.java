@@ -1,11 +1,8 @@
 package blackbox;
 import blackbox.CarClasses.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,7 +12,7 @@ public class EngineCard extends JPanel {
 	private OBD2Port obd;
 	
 	private JLabel pagename, lblType;
-	private JLabel type, text1, text2;
+	private JLabel type, rpmAvg, rpmStatus;
 	
 	public EngineCard(Car car, OBD2Port obd2) {
 		super();
@@ -37,37 +34,29 @@ public class EngineCard extends JPanel {
 		type.setText(myCar.sysEngine.getType());
 		add(type);
 	
-		text1 = new JLabel(); 
-		text1.setBounds(380, 150, 200, 100);
-		add(text1);
+		rpmAvg = new JLabel(); 
+		rpmAvg.setBounds(380, 81, 100, 40);
+		add(rpmAvg);
 		
-		text2 = new JLabel(); 
-		text2.setBounds(380, 170, 200, 100);
-		add(text2);
+		rpmStatus = new JLabel(); 
+		rpmStatus.setBounds(380, 131, 200, 40);
+		add(rpmStatus);
 		
 	}
 	
 	public void diagnoseEngine()
 	{
+		MaxMinValues threshold = new MaxMinValues(myCar);
+		
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
 		
-		double rpm = obd.readDoubleData("RPM");
+		double avgRPM = obd.readAvgDoubleData("RPM");
 		
-		text1.setText(one.format(rpm));
+		if (avgRPM >= threshold.getMaxRPM()) { rpmStatus.setText("Too High"); }
+		else if (avgRPM < threshold.getMinRPM()) { rpmStatus.setText("Low"); }
+		else {rpmStatus.setText("Normal");}
 		
-		if(rpm >= StandardValues.RPM.getSV()) {
-			text2.setText("RPM is too High");
-		}
-		else
-		{
-			text2.setText("Normal");
-		}
-	
-		}
-	
-	public void clearEC()
-	{
-		text1.setText("");
-		text2.setText("");
+		rpmAvg.setText(one.format(avgRPM));
 	}
+	
 }

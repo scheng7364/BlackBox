@@ -58,7 +58,7 @@ public class Honda extends Car {
 		
 		//fuel system
 		this.sysFuel.setFuelLevelAVG(50);
-		this.sysFuel.setFuelLevelSTD(50);
+		this.sysFuel.setFuelLevelSTD(30);
 		
 		//tire system
 		this.sysTires.setTirePressureAVG(35);

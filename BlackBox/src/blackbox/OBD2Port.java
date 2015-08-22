@@ -5,7 +5,7 @@ package blackbox;
  */
 public class OBD2Port {
 
-	private DriverProfile driver = new DriverProfile(null, null, DrivingStyle.AVERAGE, Gender.UNKNOWN);
+	private DriverProfile driver = new DriverProfile(null, DrivingStyle.AVERAGE, Gender.UNKNOWN);
 	
 	CarFacade myCar;
 	
@@ -22,4 +22,7 @@ public class OBD2Port {
 		return myCar.getDataStr(name);
 	}
 	
+	public double readAvgDoubleData(String name) {
+		return myCar.getAvgDataValue(name) * driver.getCoeff();
+	}
 }

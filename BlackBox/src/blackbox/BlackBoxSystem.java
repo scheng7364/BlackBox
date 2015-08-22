@@ -3,15 +3,9 @@ import  blackbox.CarClasses.Car;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Random;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -20,7 +14,7 @@ public class BlackBoxSystem {
 	CarFacade thisCar = new CarFacade();
 	Car car = thisCar.getCar();
 	OBD2Port obd = new OBD2Port(thisCar);
-	Sensors s = new Sensors(obd);
+	Sensors s = new Sensors(obd, car);
 	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
 	
 	CarFacade digCar = new CarFacade() ;
@@ -107,8 +101,8 @@ public class BlackBoxSystem {
 							digCar.start();
 							Thread.sleep(6000);
 							fdc.diagnoseFully();
-							cards.show(cardPanel, "Full Diagnose");
 							digCar.stop();
+							cards.show(cardPanel, "Full Diagnose");
 
 						} catch (InterruptedException ex) {
 						}
@@ -131,7 +125,85 @@ public class BlackBoxSystem {
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// System.out.println(dg.getComboSelected());
+				tc = new TiresCard(carDig, obdDig);
+				cardPanel.add(tc, "Tires");
+
+				JButton tireTest = new JButton("Check");
+				tireTest.setBounds(380, 10, 100, 24);
+				tireTest.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						digCar = new CarFacade() ;
+						carDig = digCar.getCar();
+						obdDig = new OBD2Port(digCar);
+						
+						tc = new TiresCard(carDig, obdDig);
+						cardPanel.add(tc, "Tires");
+						
+						TransitionCard tsc = new TransitionCard();
+						cardPanel.add(tsc, "Trans");
+
+						Thread thread = new Thread() {
+
+							public void run() {
+								try {
+									digCar.setCarStopped(false);
+									digCar.start();
+									cards.show(cardPanel, "Trans");
+									Thread.sleep(2000);
+									tc.diagnoseTires();
+									digCar.stop();
+									cards.show(cardPanel, "Tires");
+
+								} catch (InterruptedException ex) {
+								}
+							}
+						};
+						thread.start();
+					}
+				});
+				tc.add(tireTest);
+				
+				ec = new EngineCard(carDig, obdDig);
+				cardPanel.add(ec, "Engine");
+
+				JButton engTest = new JButton("Check");
+				engTest.setBounds(380, 10, 100, 24);
+				engTest.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+				
+						digCar = new CarFacade() ;
+						carDig = digCar.getCar();
+						obdDig = new OBD2Port(digCar);
+						
+						ec = new EngineCard(carDig, obdDig);
+						cardPanel.add(ec, "Engine");
+
+						TransitionCard tsc = new TransitionCard();
+						cardPanel.add(tsc, "Trans");
+
+						Thread thread = new Thread() {
+
+							public void run() {
+								try {
+									digCar.setCarStopped(false);
+									digCar.start();
+									cards.show(cardPanel, "Trans");
+									Thread.sleep(3000);
+									ec.diagnoseEngine();
+									digCar.stop();
+									cards.show(cardPanel, "Engine");
+								} catch (InterruptedException ex) {
+								}
+							}
+						};
+
+						thread.start();
+					}
+				});
+				ec.add(engTest);
+				
 				cards.show(cardPanel, dg.getComboSelected());
+				
 			}
 		});
 
@@ -197,84 +269,6 @@ public class BlackBoxSystem {
 		firstCard.setLayout(new BorderLayout());
 		firstCard.setBackground(new Color(240, 240, 240));
 
-		tc = new TiresCard(carDig, obdDig);
-		cardPanel.add(tc, "Tires");
-
-		JButton tireTest = new JButton("Check");
-		tireTest.setBounds(380, 10, 100, 24);
-		tireTest.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				digCar = new CarFacade() ;
-				carDig = digCar.getCar();
-				obdDig = new OBD2Port(digCar);
-				
-				tc = new TiresCard(carDig, obdDig);
-				cardPanel.add(tc, "Tires");
-				
-				TransitionCard tsc = new TransitionCard();
-				cardPanel.add(tsc, "Trans");
-
-				Thread thread = new Thread() {
-
-					public void run() {
-						try {
-							digCar.setCarStopped(false);
-							digCar.start();
-							cards.show(cardPanel, "Trans");
-							Thread.sleep(2000);
-							tc.diagnoseTires();
-							cards.show(cardPanel, "Tires");
-							digCar.stop();
-
-						} catch (InterruptedException ex) {
-						}
-					}
-				};
-				thread.start();
-			}
-		});
-		tc.add(tireTest);
-		
-		ec = new EngineCard(carDig, obdDig);
-		cardPanel.add(ec, "Engine");
-
-		JButton engTest = new JButton("Check");
-		engTest.setBounds(380, 10, 100, 24);
-		engTest.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-		
-				digCar = new CarFacade() ;
-				carDig = digCar.getCar();
-				obdDig = new OBD2Port(digCar);
-				
-				ec = new EngineCard(carDig, obdDig);
-				cardPanel.add(ec, "Engine");
-
-				TransitionCard tsc = new TransitionCard();
-				cardPanel.add(tsc, "Trans");
-
-				Thread thread = new Thread() {
-
-					public void run() {
-						try {
-							digCar.setCarStopped(false);
-							digCar.start();
-							cards.show(cardPanel, "Trans");
-							Thread.sleep(2000);
-							ec.diagnoseEngine();
-							cards.show(cardPanel, "Engine");
-							digCar.stop();
-
-						} catch (InterruptedException ex) {
-						}
-					}
-				};
-
-				thread.start();
-			}
-		});
-		ec.add(engTest);
-
 		// This panel will contain one button to enable you
 		// to switch thro' the cards
 		buttonPanel = new JPanel();
@@ -304,11 +298,11 @@ public class BlackBoxSystem {
 				thisCar.startCar();
 				thisCar.start();
 
-				cards.show(cardPanel, "Real-Time Monitor");
-
 				realTimeMonitor = new RealTimeMonitor(thisCar, s);
 				realTimeMonitor.startRun();
 				RtmCard.add(realTimeMonitor);
+				
+				cards.show(cardPanel, "Real-Time Monitor");
 			}
 
 		});
@@ -345,8 +339,6 @@ public class BlackBoxSystem {
 					thisCar = new CarFacade();
 
 					thisCar.setCarStopped(true);
-
-					realTimeMonitor.stopRun();
 				}
 			}
 		});
@@ -434,12 +426,6 @@ public class BlackBoxSystem {
 			public void actionPerformed(ActionEvent event) {
 				// navigate to the next component
 				cards.show(cardPanel, command);
-
-				if (command.equals("Diagnose")) { // Clear the fields for next
-													// Diagnose
-					ec.clearEC();
-					tc.clearTC();
-				}
 			}
 		});
 

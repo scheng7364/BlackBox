@@ -20,6 +20,9 @@ public class CarFacade extends Thread {
 	private HashMap<String, CarDataItem> carDataItemMap;
 	private static int PERIOD = 1000;
 	private boolean carStopped = true;
+	private double average = 0.0;
+	
+	int counter = 1; // Counter value to count number of periods it updates the data
 	
 	// To set the car Stopped status from outside
 	public boolean setCarStopped(boolean stoppedornot) {
@@ -78,6 +81,19 @@ public class CarFacade extends Thread {
 		}
 	}
 	
+	public double getAvgDataValue(String key) {
+		double value = 0;
+		if(carDataItemMap.get(key)!=null) {
+			value = carDataItemMap.get(key).getSum()/(counter);
+		//	System.out.println(value);
+		//	System.out.println(counter);
+			return (value);
+		} else {
+			System.out.println("Warning: No" + key + "Data is Retrieved!");
+			return 0.0;
+		}
+	}
+	
 	public void refreshDataMap() {
 		for(Map.Entry<String, CarDataItem> entry : carDataItemMap.entrySet()) {
 			//String key = entry.getKey();
@@ -92,10 +108,12 @@ public class CarFacade extends Thread {
 			String key = entry.getKey();
 			CarDataItem item = entry.getValue();
 			NumberFormat formatter = new DecimalFormat("#0.00"); 
-			System.out.println(key+ "=" + formatter.format(item.getCurrValue()));
+			System.out.println(key+ "curr =" + formatter.format(item.getCurrValue()));
+			System.out.println(key+ " avg =" + formatter.format(item.getSum()/counter));
+		//	System.out.println(counter);
 		}	
 	}
-	
+		
 	public void stopCar() {
 		System.out.println("Car is Stopped!");
 		carStopped = true;
@@ -108,12 +126,13 @@ public class CarFacade extends Thread {
 	
 	@Override
 	public synchronized void run() {
+	
 		try {
 			for (;;){
-				if(carStopped==false) {
-					refreshDataMap();
+				if(carStopped==false) {		
 					printDataMap(); // for debug only
-					
+					refreshDataMap();	
+					counter++;
 				}
 				sleep(PERIOD);
 			}
@@ -141,18 +160,29 @@ public class CarFacade extends Thread {
 		public String name;
 		private double currValue;
 		private double prevValue;
-		private double peakValue=0.0;
-		private double avgValue=0.0;
+		private double peakValue = 0.0;
+		private double sumValue = 0.0;
+		private double temp = prevValue;
 		public CarDataItem(String name) {super(name);}
 		public CarDataItem(){this("");}
 		public void updateItem() {
-			prevValue=currValue;
+			
+			prevValue=currValue; 
+			
 			currValue=fetch().doubleValue();
+			
 			if(currValue>peakValue) peakValue = currValue;
 			}
 		public double getPrevValue() {return prevValue;}
 		public double getCurrValue() {return currValue;}
 		public String getCurrDataStr() {return Double.toString(currValue);}
+		
+		public double getSum() {
+			
+			sumValue =  (temp + currValue); // Generate average value (Estimation)
+			temp = sumValue;
+			
+			return sumValue; }
 		//public void print() {}
 	}
 		
@@ -167,7 +197,7 @@ public class CarFacade extends Thread {
 
 	
 	// for debug only
-/*	public static void main(String [] args) {
+	/*public static void main(String [] args) {
 		CarFacade myCar = new CarFacade();
 		
 		myCar.start();
@@ -179,9 +209,9 @@ public class CarFacade extends Thread {
 			e.printStackTrace();
 		}
 		
-		myCar.stopCar();
+		myCar.stopCar();*/
 		
-		try {
+	/*	try {
 			sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -189,5 +219,5 @@ public class CarFacade extends Thread {
 		}
 		
 		myCar.startCar();
-	}*/
+	} */
 }

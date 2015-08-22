@@ -21,16 +21,16 @@ enum Gender {
 
 public class DriverProfile {
 	
+	private String username;
 	private String firstName;
 	private String lastName;
 	private Gender gender = Gender.UNKNOWN;
 	private double ratingScore = 0;
 	private DrivingStyle style = DrivingStyle.AVERAGE;
 
-	public DriverProfile(String firstName, String lastName, DrivingStyle style, Gender gender) {
+	public DriverProfile(String user, DrivingStyle style, Gender gender) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.username = user;
 		this.style = style;
 		this.gender = gender;
 	}

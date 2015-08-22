@@ -1,14 +1,8 @@
 package blackbox;
 import blackbox.CarClasses.*;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -18,9 +12,9 @@ public class TiresCard extends JPanel {
 	private OBD2Port obd;
 	
 	private JLabel pagename, lblBrandname, lblModel, lblServiceDate;
-	private JLabel brandname, model, serviceDate, text;
+	private JLabel brandname, model, serviceDate, TireFLStatus, TireFRStatus, TireRLStatus, TireRRStatus;
 	
-	private JLabel tireLF, tireLR, tireRF, tireRR;
+	private JLabel TireFLAvg, TireFRAvg, TireRLAvg, TireRRAvg;
 	
 	public TiresCard(Car car, OBD2Port obd2) {
 		super();
@@ -59,54 +53,82 @@ public class TiresCard extends JPanel {
 		serviceDate.setText(myCar.sysTires.getServiceDate());
 		add(serviceDate);
 				
-		tireLF = new JLabel(); 
-		tireLF.setBounds(380, 50, 50, 14);
-		add(tireLF);
+		TireFLAvg = new JLabel(); 
+		TireFLAvg.setBounds(380, 50, 50, 14);
+		add(TireFLAvg);
 
-		tireLR = new JLabel(); 
-		tireLR.setBounds(380, 70, 50, 14);
-		add(tireLR);
+		TireFRAvg = new JLabel(); 
+		TireFRAvg.setBounds(380, 70, 50, 14);
+		add(TireFRAvg);
 
-		tireRF = new JLabel(); 
-		tireRF.setBounds(380, 90, 50, 14);
-		add(tireRF);
+		TireRLAvg = new JLabel(); 
+		TireRLAvg.setBounds(380, 90, 50, 14);
+		add(TireRLAvg);
 
-		tireRR = new JLabel(); 
-		tireRR.setBounds(380, 110, 50, 14);
-		add(tireRR);
+		TireRRAvg = new JLabel(); 
+		TireRRAvg.setBounds(380, 110, 50, 14);
+		add(TireRRAvg);
 		
-		text = new JLabel(); 
-		text.setBounds(380, 150, 200, 100);
-		add(text);
+		TireFLStatus = new JLabel(); 
+		TireFLStatus.setBounds(420, 50, 200, 14);
+		add(TireFLStatus);
+		
+		TireFRStatus = new JLabel(); 
+		TireFRStatus.setBounds(420, 70, 200, 14);
+		add(TireFRStatus);
+		
+		TireRLStatus = new JLabel(); 
+		TireRLStatus.setBounds(420, 90, 200, 14);
+		add(TireRLStatus);
+		
+		TireRRStatus = new JLabel(); 
+		TireRRStatus.setBounds(420, 110, 200, 14);
+		add(TireRRStatus);
+
 	}
 	
 	public void diagnoseTires()
 	{
+		MaxMinValues threshold = new MaxMinValues(myCar);
+		
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
 			
-		double tFL = obd.readDoubleData("TirePressure_LF");
-		double tFR = obd.readDoubleData("TirePressure_RF");
-		double tRL = obd.readDoubleData("TirePressure_LR");
-		double tRR = obd.readDoubleData("TirePressure_RR");
+		double avgTFL = obd.readAvgDoubleData("TirePressure_LF");
+		double avgTFR = obd.readAvgDoubleData("TirePressure_RF");
+		double avgTRL = obd.readAvgDoubleData("TirePressure_LR");
+		double avgTRR = obd.readAvgDoubleData("TirePressure_RR");
 		
-		tireLF.setText(one.format(tFL));
-		tireLR.setText(one.format(tRL));
-		tireRF.setText(one.format(tFR));
-		tireRR.setText(one.format(tRR));
+		TireFLAvg.setText(one.format(avgTFL));
+		TireFRAvg.setText(one.format(avgTFL));
+		TireRLAvg.setText(one.format(avgTRL));
+		TireRRAvg.setText(one.format(avgTRR));
 		
-		text.setText("Normal");
-		if(tFL >= StandardValues.TIRE.getSV()) {
-				text.setText("High Tire Pressure!");
-			}
+		if (avgTFL >= threshold.getMaxTirePressure()) { TireFLStatus.setText("Too High"); }
+		else if (avgTFL < threshold.getMinTirePressure()) { TireFLStatus.setText("Low"); }
+		else {TireFLStatus.setText("Normal");}
+		
+		if (avgTFR >= threshold.getMaxTirePressure()) { TireFRStatus.setText("Too High"); }
+		else if (avgTFR < threshold.getMinTirePressure()) { TireFRStatus.setText("Low"); }
+		else {TireFRStatus.setText("Normal");}
+	
+		if (avgTRL >= threshold.getMaxTirePressure()) { TireRLStatus.setText("Too High"); }
+		else if (avgTRL < threshold.getMinTirePressure()) { TireRLStatus.setText("Low"); }
+		else {TireRLStatus.setText("Normal");}
+
+		if (avgTRR >= threshold.getMaxTirePressure()) { TireRRStatus.setText("Too High"); }
+		else if (avgTRR < threshold.getMinTirePressure()) { TireRRStatus.setText("Low"); }
+		else {TireRRStatus.setText("Normal");}
 		}
 	
 	public void clearTC()
 	{
-		tireLF.setText("");
-		tireLR.setText("");
-		tireRF.setText("");
-		tireRR.setText("");
-		text.setText("");
-
+		TireFLAvg.setText("");
+		TireFRAvg.setText("");
+		TireRLAvg.setText("");
+		TireRRAvg.setText("");
+		TireFLStatus.setText("");
+		TireFRStatus.setText("");
+		TireRLStatus.setText("");
+		TireRRStatus.setText("");
 	}
 }

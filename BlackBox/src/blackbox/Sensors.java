@@ -3,19 +3,21 @@ package blackbox;
 import java.util.Observable;
 
 import blackbox.CarClasses.Car;
-import blackbox.CarClasses.Honda;
 
 public class Sensors extends Observable {
 	private OBD2Port obd;
+	private Car myCar;
 	private boolean warning = false;
 	private boolean healthy = true;
-	Car myCar = new Honda();  	//if we decide to go with more than one car type we should
+	//This Car should be passed to Sensors as Constructor (bcz only one car)
+	//Car myCar = new Honda();  	//if we decide to go with more than one car type we should
 								//pass in car types.  This seems to go for many classes.
 	
 	private double[] tires = new double[4];
 
-	public Sensors(OBD2Port obd2p) {
+	public Sensors(OBD2Port obd2p, Car car) {
 		obd = obd2p;
+		myCar = car;
 	}
 
 	// To get car speed
@@ -57,30 +59,37 @@ public class Sensors extends Observable {
 	
 	// To check if Car is healthy
 	public void ifHealthy() {
+		
 		MaxMinValues threshold = new MaxMinValues(myCar);
 		healthy = true;
 
-		for (int i = 0; i < 4; i++) {
-			if (tires[i] >= threshold.getMaxTirePressure() || 
-					tires[i] <= threshold.getMinTirePressure()) {
-				healthy = false;
-			}
-		}
-
-		if (this.getCarRPM() >= threshold.getMaxRPM() ||
-				this.getCarRPM() <= threshold.getMinRPM()) {
-			healthy = false;
-		}
-
-		if (this.getCarFuelLevel() < threshold.getMinFuelLevel()) {
+		double currRPM = this.getCarRPM();
+		double currOil = this.getCarOilLevel();
+		double currFuel = this.getCarFuelLevel();
+		double[] currTire = this.getTiresPressure();
+		
+		if (currRPM >= threshold.getMaxRPM() ||
+				currRPM < threshold.getMinRPM()) {
 			healthy = false;
 		}
 		
-		if (this.getCarOilLevel() < threshold.getMinOilLevelSensor() ||
-				this.getCarOilLevel() > threshold.getMaxOilLevelSensor()) {
+		for (int i = 0; i < 4; i++) {
+			if (currTire[i] >= threshold.getMaxTirePressure() || 
+					currTire[i] < threshold.getMinTirePressure()) {
+				healthy = false;
+				break;
+			}
+		}
+
+		if (currFuel < threshold.getMinFuelLevel()) {
 			healthy = false;
 		}
-				
+		
+		if (currOil < threshold.getMinOilLevelSensor() ||
+				currOil >= threshold.getMaxOilLevelSensor()) {
+			healthy = false;
+		}
+						
 		// Inform Sensors Monitor for the state change
 		setChanged();
 		notifyObservers(new Boolean(healthy));
@@ -94,6 +103,6 @@ public class Sensors extends Observable {
 	}
 	
 	public boolean getWarning() {
-		return this.warning;
+		return warning;
 	}
 }

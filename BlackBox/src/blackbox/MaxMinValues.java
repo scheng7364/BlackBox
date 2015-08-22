@@ -58,7 +58,7 @@ public class MaxMinValues {
 	 */
 	public MaxMinValues(Car myCar) {
 		
-		int percentOut = 10; //gives percentage that range is outside of max / min value
+		int percentOut = 100; //gives percentage that range is outside of max / min value
 		
 		maxSpeed=(1-percentOut/200)*(myCar.getSpeedAVG() + myCar.getSpeedSTD());
 		minSpeed=(1+percentOut/200)*(myCar.getSpeedAVG() - myCar.getSpeedSTD());
@@ -84,9 +84,10 @@ public class MaxMinValues {
 		minACCompressorClutch=0;  // for future implementations (not used in our code)
 		maxIdleRPM=0;  // for future implementations (not used in our code)
 		minIdleRPM=0;  // for future implementations (not used in our code)
-		maxOilLevelSensor=0;  // for future implementations (not used in our code)
-		minOilLevelSensor=0;  // for future implementations (not used in our code)
-		
+		maxOilLevelSensor= (1-percentOut/200)*(myCar.getSysEngine().getOilLevelSensorAVG() + 
+				myCar.getSysEngine().getOilLevelSensorSTD()); 
+		minOilLevelSensor= (1+percentOut/200)*(myCar.getSysEngine().getOilLevelSensorAVG() - 
+				myCar.getSysEngine().getOilLevelSensorSTD()); ; 		
 		
 		//Cooling system
 		maxTemperature=(1-percentOut/200)*(myCar.getSysCooling().getTemperatureAVG() + 

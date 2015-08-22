@@ -7,11 +7,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 public class DrawGraphics extends JPanel {
 
@@ -99,7 +96,7 @@ public class DrawGraphics extends JPanel {
 
 		Graphics2D g2d = (Graphics2D) g;
 		
-		g2d.setColor(Color.YELLOW);
+		g2d.setColor(Color.RED);
 		g2d.setFont(new Font("", Font.BOLD, 13));
 		g2d.drawString(lblPart.getText(), x, y);
 
