@@ -1,4 +1,5 @@
 package blackbox;
+import blackbox.CarClasses.*;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,21 +12,20 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import blackbox.CarClasses.Car;
-
 public class TiresCard extends JPanel {
 	private Car myCar;
-	private Sensors s;
+//	private Sensors s;
+	private OBD2Port obd;
 	
 	private JLabel pagename, lblBrandname, lblModel, lblServiceDate;
 	private JLabel brandname, model, serviceDate, text;
 	
 	private JLabel tireLF, tireLR, tireRF, tireRR;
 	
-	public TiresCard(Car car, Sensors sensor) {
+	public TiresCard(Car car, OBD2Port obd2) {
 		super();
 		myCar = car;
-		s = sensor;
+		obd = obd2;
 		setLayout(null);
 		
 		pagename = new JLabel("Tires");
@@ -83,22 +83,22 @@ public class TiresCard extends JPanel {
 	public void diagnoseTires()
 	{
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
+			
+		double tFL = obd.readDoubleData("TirePressure_LF");
+		double tFR = obd.readDoubleData("TirePressure_RF");
+		double tRL = obd.readDoubleData("TirePressure_LR");
+		double tRR = obd.readDoubleData("TirePressure_RR");
 		
-		double[] tiresarray = new double[4];
-		tiresarray = s.getTiresPressure();
-		
-		tireLF.setText(one.format(tiresarray[0]));
-		tireLR.setText(one.format(tiresarray[1]));
-		tireRF.setText(one.format(tiresarray[2]));
-		tireRR.setText(one.format(tiresarray[3]));
+		tireLF.setText(one.format(tFL));
+		tireLR.setText(one.format(tRL));
+		tireRF.setText(one.format(tFR));
+		tireRR.setText(one.format(tRR));
 		
 		text.setText("Normal");
-		for(int i = 0; i < 4; i++) {
-			if(tiresarray[i] >= StandardValues.TIRE.getSV()) {
+		if(tFL >= StandardValues.TIRE.getSV()) {
 				text.setText("High Tire Pressure!");
 			}
 		}
-	}
 	
 	public void clearTC()
 	{

@@ -26,8 +26,8 @@ public class DrawGraphics extends JPanel {
 		setLayout(null);
 		
 		lblPart = new JLabel("");
-		lblPart.setForeground(Color.WHITE);
-		lblPart.setBounds(10, 50, 150, 150);
+		lblPart.setForeground(Color.BLUE);
+		lblPart.setBounds(10, 20, 150, 150);
 		add(lblPart);
 
 		selection = new JComboBox();
@@ -65,6 +65,7 @@ public class DrawGraphics extends JPanel {
 			
 			if ((x >= 224 && x <= 305) && (y >= 282 && y <= 367) || (x >= 477 && x <= 537) && (y >= 179 && y <= 265)) {
 				selection.setSelectedItem(text);
+				repaint();
 
 			} else if ((x >= 257 && x <= 303) && (y >= 211 && y <= 248)) {
 				selection.setSelectedItem(text);
@@ -80,9 +81,19 @@ public class DrawGraphics extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		Image background = new ImageIcon("image/exterior.jpg").getImage();
+		// Show the full car image
+		Image background = new ImageIcon("image/background.jpg").getImage();
 		g.drawImage(background, 75, 100, this);
 
+		// Show the car part image upon mouse over & mouse clicked
+		if ((x >= 224 && x <= 305) && (y >= 282 && y <= 367) || (x >= 477 && x <= 537) && (y >= 179 && y <= 265)) {
+			Image tires = new ImageIcon("image/tires.jpg").getImage();
+			g.drawImage(tires, 100, 40, this);
+		} else if ((x >= 257 && x <= 303) && (y >= 211 && y <= 248)) {
+			Image engine = new ImageIcon("image/engine.jpg").getImage();
+			g.drawImage(engine, 100, 10, this);
+		}
+		
 		g.setColor(Color.GREEN);
 		g.fillOval(x, y, 25, 25);
 

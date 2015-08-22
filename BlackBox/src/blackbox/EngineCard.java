@@ -1,4 +1,5 @@
 package blackbox;
+import blackbox.CarClasses.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,19 +9,18 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import blackbox.CarClasses.Car;
-
 public class EngineCard extends JPanel {
 	private Car myCar;
-	private Sensors s;
+//	private Sensors s;
+	private OBD2Port obd;
 	
 	private JLabel pagename, lblType;
 	private JLabel type, text1, text2;
 	
-	public EngineCard(Car car, Sensors sensor) {
+	public EngineCard(Car car, OBD2Port obd2) {
 		super();
 		myCar = car;
-		s = sensor;
+		obd = obd2;
 		
 		setLayout(null);
 		
@@ -50,9 +50,12 @@ public class EngineCard extends JPanel {
 	public void diagnoseEngine()
 	{
 		DecimalFormat one = new DecimalFormat("#0.0"); // Set digits for decimal numbers
-		text1.setText(one.format(s.getCarRPM()));
 		
-		if(s.getCarRPM() >= StandardValues.RPM.getSV()) {
+		double rpm = obd.readDoubleData("RPM");
+		
+		text1.setText(one.format(rpm));
+		
+		if(rpm >= StandardValues.RPM.getSV()) {
 			text2.setText("RPM is too High");
 		}
 		else

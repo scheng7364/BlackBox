@@ -1,4 +1,5 @@
 package blackbox;
+import blackbox.CarClasses.*;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -10,20 +11,19 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import blackbox.CarClasses.Car;
-
 public class FullDiagCard extends JPanel {
 	private Car myCar;
-	private Sensors s;
+//	private Sensors s;
+	private OBD2Port obd;
 	
 	private JLabel rpmCV, olCV, flCV, TempCV, TireFLCV, TireFRCV, TireRLCV, TireRRCV;
 	private JLabel rpmSV, olSV, flSV, TempSV, TireSV;
 	private JLabel rpmStatus, olStatus, flStatus, TempStatus, TireFLStatus, TireFRStatus, TireRLStatus, TireRRStatus;
 
-	public FullDiagCard(Car car, Sensors sensor) {
+	public FullDiagCard(Car car, OBD2Port obd2) {
 		super();
 		myCar = car;
-		s = sensor;
+		obd = obd2;
 		
 		setLayout(null);
 
@@ -202,19 +202,26 @@ public class FullDiagCard extends JPanel {
 	public void diagnoseFully() {
 		// Set digits for decimal numbers
 		DecimalFormat one = new DecimalFormat("#0.0"); 
+		
+		double rpm = obd.readDoubleData("RPM");
+		double oil = obd.readDoubleData("OilLevel");
+		double fuel = obd.readDoubleData("FuelLevel");
+		double temp = obd.readDoubleData("IntAirTemp");
+		double tFL = obd.readDoubleData("TirePressure_LF");
+		double tFR = obd.readDoubleData("TirePressure_RF");
+		double tRL = obd.readDoubleData("TirePressure_LR");
+		double tRR = obd.readDoubleData("TirePressure_RR");
 
-		double[] tiresarray = new double[4];
-		tiresarray = s.getTiresPressure();
-
+		
 		// Get current values of car
-		rpmCV.setText(one.format(s.getCarRPM()));
-		olCV.setText(one.format(s.getCarOilLevel()));
-		flCV.setText(one.format(s.getCarFuelLevel()));
-		TempCV.setText(one.format(s.getCarIntAirTemp()));
-		TireFLCV.setText(one.format(tiresarray[0]));
-		TireFRCV.setText(one.format(tiresarray[1]));
-		TireRLCV.setText(one.format(tiresarray[2]));
-		TireRRCV.setText(one.format(tiresarray[3]));
+		rpmCV.setText(one.format(rpm));
+		olCV.setText(one.format(oil));
+		flCV.setText(one.format(fuel));
+		TempCV.setText(one.format(temp));
+		TireFLCV.setText(one.format(tFL));
+		TireFRCV.setText(one.format(tFR));
+		TireRLCV.setText(one.format(tRL));
+		TireRRCV.setText(one.format(tRR));
 
 		// Set threshold values
 		rpmSV.setText(one.format(StandardValues.RPM.getSV()));
@@ -224,41 +231,41 @@ public class FullDiagCard extends JPanel {
 		TireSV.setText(one.format(StandardValues.TIRE.getSV()));
 
 		// Results of the diagnose
-		if (s.getCarRPM() > StandardValues.RPM.getSV()) {
+		if (rpm > StandardValues.RPM.getSV()) {
 			rpmStatus.setText("Too High");
 		}
 
-		if (s.getCarOilLevel() < StandardValues.OL.getSV()) {
+		if (oil < StandardValues.OL.getSV()) {
 			olStatus.setText("Too Low");
 		}
 
-		if (s.getCarFuelLevel() < StandardValues.FL.getSV()) {
+		if (fuel < StandardValues.FL.getSV()) {
 			flStatus.setText("Low");
 		}
 
-		if (s.getCarIntAirTemp() > StandardValues.TEMP.getSV()) {
+		if (temp > StandardValues.TEMP.getSV()) {
 			TempStatus.setText("Too High");
 		}
 
-		if (tiresarray[0] > StandardValues.TIRE.getSV()) {
+		if (tFL > StandardValues.TIRE.getSV()) {
 			TireFLStatus.setText("High");
 		} else {
 			TireFLStatus.setText("Normal");
 		}
 
-		if (tiresarray[1] > StandardValues.TIRE.getSV()) {
+		if (tFR > StandardValues.TIRE.getSV()) {
 			TireFRStatus.setText("High");
 		} else {
 			TireFRStatus.setText("Normal");
 		}
 
-		if (tiresarray[2] > StandardValues.TIRE.getSV()) {
+		if (tRL > StandardValues.TIRE.getSV()) {
 			TireRLStatus.setText("High");
 		} else {
 			TireRLStatus.setText("Normal");
 		}
 
-		if (tiresarray[3] > StandardValues.TIRE.getSV()) {
+		if (tRR > StandardValues.TIRE.getSV()) {
 			TireRRStatus.setText("High");
 		} else {
 			TireRRStatus.setText("Normal");

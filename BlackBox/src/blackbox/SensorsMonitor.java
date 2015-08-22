@@ -18,7 +18,7 @@ public class SensorsMonitor implements Observer {
 			// Updates the changes
 			boolean healthy = (Boolean) ifHealthy;
 			
-			// If healthy = false, set warning
+			// If healthy = false, set warning to true
 			if(healthy) {
 				sensor.setWarning(false);
 			}

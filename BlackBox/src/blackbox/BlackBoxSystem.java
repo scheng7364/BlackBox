@@ -1,16 +1,19 @@
 package blackbox;
+import  blackbox.CarClasses.Car;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-
-import blackbox.CarClasses.Car;
 
 public class BlackBoxSystem {
 
@@ -19,6 +22,10 @@ public class BlackBoxSystem {
 	OBD2Port obd = new OBD2Port(thisCar);
 	Sensors s = new Sensors(obd);
 	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
+	
+	CarFacade digCar = new CarFacade() ;
+	Car carDig = digCar.getCar();
+	OBD2Port obdDig = new OBD2Port(digCar);
 
 	private JFrame guiFrame;
 	private CardLayout cards;
@@ -40,8 +47,6 @@ public class BlackBoxSystem {
 
 	TiresCard tc;
 	EngineCard ec;
-
-	int x = 0, speed = 15;
 
 	/**
 	 * Create the application.
@@ -66,17 +71,11 @@ public class BlackBoxSystem {
 
 		// creating a border to highlight the JPanel areas
 		Border outline = BorderFactory.createLineBorder(Color.black);
-
-		welcomeCard = new JPanel();
+		
+		welcomeCard = new JPanel();	
 		welcomeCard.setBackground(new Color(255, 255, 204));
 
 		firstCard = new JPanel();
-		/*
-		 * firstCard.addMouseListener(new MouseAdapter() {
-		 * 
-		 * @Override public void mouseClicked(MouseEvent me) {
-		 * cards.show(cardPanel, "Real-Time Monitor"); } });
-		 */
 		firstCard.setBackground(new Color(255, 255, 204));
 
 		DiagCard = new JPanel();
@@ -89,7 +88,11 @@ public class BlackBoxSystem {
 		btnDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				FullDiagCard fdc = new FullDiagCard(car, s);
+				digCar = new CarFacade();
+				carDig = digCar.getCar();
+				obdDig = new OBD2Port(digCar);
+				
+				FullDiagCard fdc = new FullDiagCard(carDig, obdDig);
 				cardPanel.add(fdc, "Full Diagnose");
 
 				TransitionCard tsc = new TransitionCard();
@@ -100,9 +103,12 @@ public class BlackBoxSystem {
 					public void run() {
 						try {
 							cards.show(cardPanel, "Trans");
-							Thread.sleep(5000);
+							digCar.setCarStopped(false);
+							digCar.start();
+							Thread.sleep(6000);
 							fdc.diagnoseFully();
 							cards.show(cardPanel, "Full Diagnose");
+							digCar.stop();
 
 						} catch (InterruptedException ex) {
 						}
@@ -165,6 +171,21 @@ public class BlackBoxSystem {
 		pfPW.setBounds(304, 194, 129, 20);
 		welcomeCard.add(pfPW);
 
+		/*BufferedImage bi = null;
+		try {
+			bi = ImageIO.read(new File("image/exterior.jpg"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	
+		ImageIcon biIcon = new ImageIcon(bi);
+		JLabel label = new JLabel(biIcon);
+		label.setBounds(0, 0, 600, 400);
+		System.out.println(guiFrame.getContentPane().getWidth());
+		welcomeCard.add(label);*/
+	
+		
 		cardPanel.add(welcomeCard, "Welcome");
 
 		cardPanel.add(RtmCard, "Real-Time Monitor");
@@ -176,14 +197,20 @@ public class BlackBoxSystem {
 		firstCard.setLayout(new BorderLayout());
 		firstCard.setBackground(new Color(240, 240, 240));
 
-		tc = new TiresCard(car, s);
+		tc = new TiresCard(carDig, obdDig);
 		cardPanel.add(tc, "Tires");
 
 		JButton tireTest = new JButton("Check");
 		tireTest.setBounds(380, 10, 100, 24);
 		tireTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				digCar = new CarFacade() ;
+				carDig = digCar.getCar();
+				obdDig = new OBD2Port(digCar);
+				
+				tc = new TiresCard(carDig, obdDig);
+				cardPanel.add(tc, "Tires");
+				
 				TransitionCard tsc = new TransitionCard();
 				cardPanel.add(tsc, "Trans");
 
@@ -191,10 +218,13 @@ public class BlackBoxSystem {
 
 					public void run() {
 						try {
+							digCar.setCarStopped(false);
+							digCar.start();
 							cards.show(cardPanel, "Trans");
-							Thread.sleep(1500);
+							Thread.sleep(2000);
 							tc.diagnoseTires();
 							cards.show(cardPanel, "Tires");
+							digCar.stop();
 
 						} catch (InterruptedException ex) {
 						}
@@ -204,14 +234,21 @@ public class BlackBoxSystem {
 			}
 		});
 		tc.add(tireTest);
-
-		ec = new EngineCard(car, s);
+		
+		ec = new EngineCard(carDig, obdDig);
 		cardPanel.add(ec, "Engine");
 
 		JButton engTest = new JButton("Check");
 		engTest.setBounds(380, 10, 100, 24);
 		engTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+		
+				digCar = new CarFacade() ;
+				carDig = digCar.getCar();
+				obdDig = new OBD2Port(digCar);
+				
+				ec = new EngineCard(carDig, obdDig);
+				cardPanel.add(ec, "Engine");
 
 				TransitionCard tsc = new TransitionCard();
 				cardPanel.add(tsc, "Trans");
@@ -220,10 +257,13 @@ public class BlackBoxSystem {
 
 					public void run() {
 						try {
+							digCar.setCarStopped(false);
+							digCar.start();
 							cards.show(cardPanel, "Trans");
-							Thread.sleep(1500);
+							Thread.sleep(2000);
 							ec.diagnoseEngine();
 							cards.show(cardPanel, "Engine");
+							digCar.stop();
 
 						} catch (InterruptedException ex) {
 						}
