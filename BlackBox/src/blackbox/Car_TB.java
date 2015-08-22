@@ -5,7 +5,7 @@ package blackbox;
 
 /**
  * @author kevinchilds
- *
+ *  //Purely for test purposes only.  Can be deleted at any time.
  */
 public class Car_TB {
 

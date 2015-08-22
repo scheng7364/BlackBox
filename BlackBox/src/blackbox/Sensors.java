@@ -6,6 +6,8 @@ public class Sensors extends Observable {
 	private OBD2Port obd;
 	private boolean warning = false;
 	private boolean healthy = true;
+	Car myCar = new Honda();  	//if we decide to go with more than one car type we should
+								//pass in car types.  This seems to go for many classes.
 	
 	private double[] tires = new double[4];
 
@@ -52,24 +54,27 @@ public class Sensors extends Observable {
 	
 	// To check if Car is healthy
 	public void ifHealthy() {
-		
+		MaxMinValues threshold = new MaxMinValues(myCar);
 		healthy = true;
 
 		for (int i = 0; i < 4; i++) {
-			if (tires[i] >= StandardValues.TIRE.getSV()) {
+			if (tires[i] >= threshold.getMaxTirePressure() || 
+					tires[i] <= threshold.getMinTirePressure()) {
 				healthy = false;
 			}
 		}
 
-		if (this.getCarRPM() >= StandardValues.RPM.getSV()) {
+		if (this.getCarRPM() >= threshold.getMaxRPM() ||
+				this.getCarRPM() <= threshold.getMinRPM()) {
 			healthy = false;
 		}
 
-		if (this.getCarFuelLevel() < StandardValues.FL.getSV()) {
+		if (this.getCarFuelLevel() < threshold.getMinFuelLevel()) {
 			healthy = false;
 		}
 		
-		if (this.getCarOilLevel() < StandardValues.OL.getSV()) {
+		if (this.getCarOilLevel() < threshold.getMinOilLevelSensor() ||
+				this.getCarOilLevel() > threshold.getMaxOilLevelSensor()) {
 			healthy = false;
 		}
 				
