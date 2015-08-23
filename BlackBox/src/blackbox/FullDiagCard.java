@@ -47,7 +47,7 @@ public class FullDiagCard extends JPanel {
 		lblStatus.setBounds(521, 48, 46, 14);
 		add(lblStatus);
 
-		JLabel lblReport = new JLabel("Diagnose Report");
+		JLabel lblReport = new JLabel("Diagnostic Report");
 		lblReport.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblReport.setBounds(233, 11, 151, 26);
 		add(lblReport);

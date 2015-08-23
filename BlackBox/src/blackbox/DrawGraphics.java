@@ -13,29 +13,141 @@ import java.awt.event.MouseEvent;
 public class DrawGraphics extends JPanel {
 
 	private JLabel lblPart;
+	private JLabel lblTireMake;
+	private JLabel lblTireModel;
+	private JLabel lblTireFL;
+	private JLabel lblTireFR;
+	private JLabel lblTireRL;
+	private JLabel lblTireRR;
+	private JLabel lblTemperature;	
+	private JLabel lblEngineType;
+	private JLabel lblHorsePower;
+	private JLabel lblRPM;
+	private JLabel lblOilLevel;
 	private JComboBox selection;
 	private JPanel panel = new JPanel();
 	private int x, y;
-	
+
 	public DrawGraphics() {
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(620, 400));
 		setLayout(null);
 		
+		//lblPart.setFont(new Font("Tahoma", Font.BOLD, 45));
 		lblPart = new JLabel("");
 		lblPart.setForeground(Color.BLUE);
-		lblPart.setBounds(10, 20, 150, 150);
+		lblPart.setBounds(400, 400, 300, 150);
 		add(lblPart);
+		
+//////////////////////////////////tires//////////////////////////////////
+		
+		lblTireMake = new JLabel("Tire Make: ");
+		lblTireMake.setForeground(Color.BLUE);
+		lblTireMake.setBounds(5, 0, 150, 150);
+		add(lblTireMake);
+		
+		lblTireModel = new JLabel("Tire Model: ");
+		lblTireModel.setForeground(Color.BLUE);
+		lblTireModel.setBounds(250, 0, 150, 150);
+		add(lblTireModel);
+		
+		lblTireFL = new JLabel("Front Left Tire: ");
+		lblTireFL.setForeground(Color.BLUE);
+		lblTireFL.setBounds(5, 25, 150, 150);
+		add(lblTireFL);
+		
+		lblTireFR = new JLabel("Front Right Tire: ");
+		lblTireFR.setForeground(Color.BLUE);
+		lblTireFR.setBounds(5, 50, 150, 150);
+		add(lblTireFR);
+		
+		lblTireRL = new JLabel("Rear Left Tire: ");
+		lblTireRL.setForeground(Color.BLUE);
+		lblTireRL.setBounds(5, 75, 150, 150);
+		add(lblTireRL);
+		
+		lblTireRR = new JLabel("Rear Right Tire: ");
+		lblTireRR.setForeground(Color.BLUE);
+		lblTireRR.setBounds(5, 100, 150, 150);
+		add(lblTireRR);
+		
+		tireOff();
+		
+//////////////////////////////////Temperature//////////////////////////////////
+		
+		lblTemperature = new JLabel("Temperature: ");
+		lblTemperature.setForeground(Color.BLUE);
+		lblTemperature.setBounds(5, 0, 150, 150);
+		add(lblTemperature);
+		
+		temperatureOff();
 
-		selection = new JComboBox();
-		selection.setModel(new DefaultComboBoxModel(new String[] { "Choose the part", "Engine", "Tires" }));
-		selection.setBounds(497, 35, 123, 23);
-		add(selection);
+//////////////////////////////////Engine//////////////////////////////////
+		
+		lblEngineType = new JLabel("Engine Type: ");
+		lblEngineType.setForeground(Color.BLUE);
+		lblEngineType.setBounds(5, 0, 150, 150);
+		add(lblEngineType);
+		
+		lblHorsePower = new JLabel("Horsepower: ");
+		lblHorsePower.setForeground(Color.BLUE);
+		lblHorsePower.setBounds(5, 25, 150, 150);
+		add(lblHorsePower);
+		lblRPM = new JLabel("Engine RPM: ");
+		lblRPM.setForeground(Color.BLUE);
+		lblRPM.setBounds(5, 50, 150, 150);
+		add(lblRPM);
+		
+		engineOff();
+		
+		//selection = new JComboBox();
+		//selection.setModel(new DefaultComboBoxModel(new String[] { "Choose the part", "Engine", "Tires" }));
+		//selection.setBounds(497, 35, 123, 23);
+		//add(selection);
 		
 		addMouseMotionListener(new MouseEventAdapterA());
 		addMouseListener(new MouseEventAdapterA());
 	}
 
+	public void tireOn(){
+		lblTireFL.setVisible(true);
+		lblTireFR.setVisible(true);
+		lblTireRL.setVisible(true);
+		lblTireRR.setVisible(true);
+		lblTireMake.setVisible(true);
+		lblTireModel.setVisible(true);
+	}
+	
+	public void tireOff(){
+		lblTireFL.setVisible(false);
+		lblTireFR.setVisible(false);
+		lblTireRL.setVisible(false);
+		lblTireRR.setVisible(false);
+		lblTireMake.setVisible(false);
+		lblTireModel.setVisible(false);
+	}
+	
+	public void temperatureOn(){
+		lblTemperature.setVisible(true);
+	}
+	
+	public void temperatureOff(){
+		lblTemperature.setVisible(false);
+	}
+	
+	public void engineOn(){
+		lblEngineType.setVisible(true);
+		lblHorsePower.setVisible(true);
+		lblRPM.setVisible(true);
+
+	}
+	
+	public void engineOff(){
+		lblEngineType.setVisible(false);
+		lblHorsePower.setVisible(false);
+		lblRPM.setVisible(false);
+	}
+	
 	class MouseEventAdapterA extends MouseAdapter {
 		public void mouseMoved(MouseEvent e) {
 
@@ -50,6 +162,8 @@ public class DrawGraphics extends JPanel {
 				
 			} else if ((x >= 90 && x <= 155) && (y >= 280 && y <= 315)) {
 				lblPart.setText("Temperature");
+			} else if ((x >= 220 && x <= 450) && (y >= 117 && y <= 205)) {
+				lblPart.setText("Full Diagnosis");
 			}
 
 			else {
@@ -64,17 +178,32 @@ public class DrawGraphics extends JPanel {
 			String text = new String(lblPart.getText());
 			
 			if ((x >= 235 && x <= 300) && (y >= 280 && y <= 360) || (x >= 465 && x <= 515) && (y >= 210 && y <= 280)) {
-				selection.setSelectedItem(text);
+				//selection.setSelectedItem(text);
+				tireOn();
+				temperatureOff();
+				engineOff();
 				repaint();
 
 			} else if ((x >= 130 && x <= 250) && (y >= 215 && y <= 280)) {
-				selection.setSelectedItem(text);
+				//selection.setSelectedItem(text);
+				temperatureOff();
+				engineOn();
+				tireOff();
 				
 			} else if ((x >= 90 && x <= 155) && (y >= 280 && y <= 315)) {
-				selection.setSelectedItem(text);
+				//selection.setSelectedItem(text);
+				temperatureOn();
+				engineOff();
+				tireOff();
 
+			} else if ((x >= 220 && x <= 450) && (y >= 117 && y <= 205)) {
+				temperatureOff();
+				engineOff();
+				tireOff();
+				
+			
 			} else {
-				selection.setSelectedItem(text);
+				//selection.setSelectedItem(text);
 
 			}
 		}
@@ -101,8 +230,6 @@ public class DrawGraphics extends JPanel {
 		} else if ((x >= 220 && x <= 450) && (y >= 117 && y <= 205)) {
 			Image engine = new ImageIcon("image/full-car.jpg").getImage();
 			g.drawImage(engine, 75, 100, this);
-			
-			
 		}
 		
 		g.setColor(Color.GREEN);

@@ -127,7 +127,7 @@ public class BlackBoxSystem {
 		RtmCard.setBackground(new Color(230, 230, 250));
 
 		JButton btnGo = new JButton("Go");
-		dg.add(btnGo);
+		//dg.add(btnGo);
 		btnGo.setBounds(557, 65, 55, 20);
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
