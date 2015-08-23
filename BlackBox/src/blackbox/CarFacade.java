@@ -32,12 +32,17 @@ public class CarFacade extends Thread {
 	public boolean getCarStopped(){
 		return this.carStopped;
 	}
-	public CarFacade() {
-		myCar = new Honda();
+	public CarFacade(Car newCar) {
+		myCar = newCar;
+		//myCar = new Honda();
 		obdPort = new OBD2Port(this);
 		carDataItemMap = new HashMap<String,CarDataItem>();
 		//Create Map
 		createDataMap();
+	}
+
+	public void setMyCar(Car myCar) {
+		this.myCar = myCar;
 	}
 
 	private void createDataMap() {
@@ -185,7 +190,7 @@ public class CarFacade extends Thread {
 			temp = sumValue;
 			
 			return sumValue; }
-		//public void print() {}
+		public void reset() {currValue=prevValue=peakValue=sumValue=0.0;}
 	}
 		
 	// Used for Part cards to get Car info
@@ -197,6 +202,15 @@ public class CarFacade extends Thread {
 		return obdPort;
 	}
 
+	
+	public void resetMap() {
+		for(Map.Entry<String, CarDataItem> entry : carDataItemMap.entrySet()) {
+			//String key = entry.getKey();
+			CarDataItem item = entry.getValue();
+			item.reset();
+		}	
+		counter=0;
+	}
 	
 	// for debug only
 	/*public static void main(String [] args) {

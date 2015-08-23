@@ -1,26 +1,31 @@
 package blackbox;
 import  blackbox.CarClasses.Car;
+import blackbox.CarClasses.Honda;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 
 public class BlackBoxSystem {
 
-	CarFacade thisCar = new CarFacade();
-	Car car = thisCar.getCar();
-	OBD2Port obd = new OBD2Port(thisCar);
+	Car car = new Honda();
+	CarFacade thisCar = new CarFacade(car);
+	
+	//OBD2Port obd = new OBD2Port(thisCar);
+	OBD2Port obd = thisCar.getObdPort();
 	DriverProfile profile = new DriverProfile();
 	Sensors s = new Sensors(obd, car, profile);
 	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
 	
-	CarFacade digCar = new CarFacade() ;
+	CarFacade digCar = new CarFacade(car) ;
 	Car carDig = digCar.getCar();
-	OBD2Port obdDig = new OBD2Port(digCar);
+	OBD2Port obdDig = digCar.getObdPort();
+	//OBD2Port obdDig = new OBD2Port(digCar);
 	
 	private JFrame guiFrame;
 	private CardLayout cards;
@@ -84,7 +89,7 @@ public class BlackBoxSystem {
 		btnDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				digCar = new CarFacade();
+				digCar = new CarFacade(car);
 				carDig = digCar.getCar();
 				obdDig = new OBD2Port(digCar);
 				
@@ -134,9 +139,9 @@ public class BlackBoxSystem {
 				tireTest.setBounds(380, 10, 100, 24);
 				tireTest.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						digCar = new CarFacade() ;
+						//digCar = new CarFacade() ;
 						carDig = digCar.getCar();
-						obdDig = new OBD2Port(digCar);
+						obdDig = digCar.getObdPort();
 						
 						tc = new TiresCard(carDig, obdDig);
 						cardPanel.add(tc, "Tires");
@@ -173,7 +178,7 @@ public class BlackBoxSystem {
 				engTest.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 				
-						digCar = new CarFacade() ;
+						digCar = new CarFacade(car) ;
 						carDig = digCar.getCar();
 						obdDig = new OBD2Port(digCar);
 						
@@ -342,7 +347,7 @@ public class BlackBoxSystem {
 					thisCar.stopCar(); // stop the current thread;
 					thisCar.stop();
 
-					thisCar = new CarFacade();
+					thisCar = new CarFacade(car);
 
 					thisCar.setCarStopped(true);
 				}
