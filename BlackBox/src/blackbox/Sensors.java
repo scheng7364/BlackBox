@@ -26,7 +26,7 @@ public class Sensors extends Observable {
 
 	public double getDriverCoeff() {
 		coeff = this.myProfile.getCoeff();
-		System.out.println(coeff);
+		System.out.println("From Sensors: " + coeff);
 		return 	coeff;
 	}
 	

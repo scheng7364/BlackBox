@@ -21,6 +21,8 @@ public class CarFacade extends Thread {
 	private static int PERIOD = 1000;
 	private boolean carStopped = true;
 	private double average = 0.0;
+	private int ID = 0;
+	private static int instanceCount = 0;
 	
 	int counter = 0; // Counter value to count number of periods it updates the data
 	
@@ -39,6 +41,9 @@ public class CarFacade extends Thread {
 		carDataItemMap = new HashMap<String,CarDataItem>();
 		//Create Map
 		createDataMap();
+		instanceCount += 1;
+		ID = instanceCount;
+		System.out.println("Creating CarFacade ID = " + ID);
 	}
 
 	public void setMyCar(Car myCar) {
@@ -114,7 +119,7 @@ public class CarFacade extends Thread {
 			String key = entry.getKey();
 			CarDataItem item = entry.getValue();
 			NumberFormat formatter = new DecimalFormat("#0.00"); 
-			System.out.println(key+ "curr =" + formatter.format(item.getCurrValue()));
+			System.out.println("CarFacade ID"+ID+ ": " + key+ "curr =" + formatter.format(item.getCurrValue()));
 			if(counter != 0) { 
 			System.out.println(key+ " avg =" + formatter.format(item.getSum()/counter));}
 		//	System.out.println(counter);

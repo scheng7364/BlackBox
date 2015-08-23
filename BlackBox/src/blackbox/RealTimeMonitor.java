@@ -16,6 +16,7 @@ public class RealTimeMonitor extends JPanel {
 	private Sensors sensor;
 
 	Timer tm;
+	boolean timerPause=true;
 	private static int PERIOD = 1000;
 
 	private JLabel lblSpeed = new JLabel("Current Speed:");
@@ -58,8 +59,8 @@ public class RealTimeMonitor extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				myCar.setCarStopped(true);
-				tm.stop();
-
+				//tm.stop();
+				timerPause=true;
 				// Thread sleeps to simulate the car slowing-down period
 				try {
 					Thread.sleep(1000);
@@ -77,21 +78,26 @@ public class RealTimeMonitor extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				myCar.setCarStopped(false);
-				tm.start();
-			
+				//tm.start();
+				timerPause=false;
 			}
 		});
+		
+		tm = new Timer(PERIOD, timerListener); // Change every second;
+		tm.start();
 	}
 
 	ActionListener timerListener = new ActionListener() {
 
 		public void actionPerformed(ActionEvent evt) {
 
-			SensorsMonitor monitor = new SensorsMonitor(sensor);
+			//SensorsMonitor monitor = new SensorsMonitor(sensor);
 
 			// Set digits for decimal numbers
 			DecimalFormat one = new DecimalFormat("#0.0"); 
 
+			if(!timerPause) {
+			
 			lblTextSpeed.setText(one.format(sensor.getCarSpeed()));
 
 			sensor.ifHealthy();
@@ -109,15 +115,18 @@ public class RealTimeMonitor extends JPanel {
 				lblWarning.setForeground(Color.GREEN);
 				lblWarning.setText("Healthy"); 
 				}
+			}
 		}
 	};
 
 	public void startRun() {
 
-		if (tm == null) {
-			tm = new Timer(PERIOD, timerListener); // Change every second;
-			tm.start();
-		}
+		//if (tm == null) {
+			//tm = new Timer(PERIOD, timerListener); // Change every second;
+			//tm.start();
+		//}
+		timerPause=false;
+		
 	}
 
 	public void stopRun() {

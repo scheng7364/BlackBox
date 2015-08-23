@@ -89,9 +89,9 @@ public class BlackBoxSystem {
 		btnDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				digCar = new CarFacade(car);
+				//digCar = new CarFacade(car);
 				carDig = digCar.getCar();
-				obdDig = new OBD2Port(digCar);
+				//obdDig = new OBD2Port(digCar);
 				
 				FullDiagCard fdc = new FullDiagCard(carDig, obdDig);
 				cardPanel.add(fdc, "Full Diagnose");
@@ -303,15 +303,17 @@ public class BlackBoxSystem {
 		startEngine.setBackground(new Color(240, 240, 240));
 		firstCard.add(startEngine, BorderLayout.CENTER);
 
+		thisCar.start();//Start a new thread for CarFacade
+		RtmCard.add(realTimeMonitor);
 		startEngine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				thisCar.startCar();
-				thisCar.start();
+				//thisCar.start();
 
-				realTimeMonitor = new RealTimeMonitor(thisCar, s);
+				//realTimeMonitor = new RealTimeMonitor(thisCar, s);
 				realTimeMonitor.startRun();
-				RtmCard.add(realTimeMonitor);
+				//RtmCard.add(realTimeMonitor);
 				
 				cards.show(cardPanel, "Real-Time Monitor");
 			}
@@ -345,9 +347,9 @@ public class BlackBoxSystem {
 					lblWelcome.setText("Login As Another User");
 
 					thisCar.stopCar(); // stop the current thread;
-					thisCar.stop();
+					//thisCar.stop();
 
-					thisCar = new CarFacade(car);
+					//thisCar = new CarFacade(car);
 
 					thisCar.setCarStopped(true);
 				}
