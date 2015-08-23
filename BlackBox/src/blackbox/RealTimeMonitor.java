@@ -3,9 +3,12 @@ package blackbox;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,8 +23,25 @@ public class RealTimeMonitor extends JPanel {
 	private static int PERIOD = 1000;
 
 	private JLabel lblSpeed = new JLabel("Current Speed:");
-	private JLabel lblUnit = new JLabel("Mph");
+	private JLabel lblUnitSpeed = new JLabel("MPH");
 	private JLabel lblTextSpeed = new JLabel();
+	
+	private JLabel lblRPM = new JLabel("Current RPM:");
+	private JLabel lblUnitRPM = new JLabel("RPM");
+	private JLabel lblTextRPM = new JLabel();
+	
+	private JLabel lblTemperature = new JLabel("Current Temperature:");
+	private JLabel lblUnitTemperature = new JLabel("Celcius");
+	private JLabel lblTextTemperature = new JLabel();
+	
+	private JLabel lblOil = new JLabel("Current Oil Level:");
+	private JLabel lblUnitOil = new JLabel("Quarts");
+	private JLabel lblTextOil = new JLabel();
+	
+	private JLabel lblFuel = new JLabel("Current Temperature:");
+	private JLabel lblUnitFuel = new JLabel("Gallons");
+	private JLabel lblTextFuel = new JLabel();
+	
 	private JLabel lblWarning = new JLabel();
 	private JButton btnStop = new JButton("Stop");
 	private JButton btnStart = new JButton("Restart");
@@ -37,21 +57,68 @@ public class RealTimeMonitor extends JPanel {
 		add(lblSpeed);
 
 		lblTextSpeed.setFont(new Font("Tahoma", Font.BOLD, 45));
-		lblTextSpeed.setBounds(40, 20, 150, 150);
+		lblTextSpeed.setBounds(35, 0, 150, 150);
+		lblTextSpeed.setForeground(Color.WHITE);
 		lblTextSpeed.setText("0.0");
 		add(lblTextSpeed);
 
-		lblUnit.setFont(new Font("Tahoma", Font.BOLD, 40));
-		lblUnit.setBounds(180, 20, 150, 150);
-		add(lblUnit);
+		lblUnitSpeed.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblUnitSpeed.setBounds(200, 15, 400, 150);
+		lblUnitSpeed.setForeground(Color.WHITE);
+		add(lblUnitSpeed);
 
-		btnStop.setBounds(518, 11, 89, 23);
+		lblTextRPM.setFont(new Font("Tahoma", Font.BOLD, 45));
+		lblTextRPM.setBounds(35, 130, 300, 150);
+		lblTextRPM.setForeground(Color.WHITE);
+		lblTextRPM.setText("0.0");
+		add(lblTextRPM);
+
+		lblUnitRPM.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblUnitRPM.setBounds(200, 145, 300, 150);
+		lblUnitRPM.setForeground(Color.WHITE);
+		add(lblUnitRPM);
+		
+		lblTextTemperature.setFont(new Font("Tahoma", Font.BOLD, 45));
+		lblTextTemperature.setBounds(35, 260, 300, 150);
+		lblTextTemperature.setForeground(Color.WHITE);
+		lblTextTemperature.setText("0.0");
+		add(lblTextTemperature);
+
+		lblUnitTemperature.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblUnitTemperature.setBounds(175, 275, 400, 150);
+		lblUnitTemperature.setForeground(Color.WHITE);
+		add(lblUnitTemperature);
+		
+		lblTextOil.setFont(new Font("Tahoma", Font.BOLD, 45));
+		lblTextOil.setBounds(330, 130, 300, 150);
+		lblTextOil.setForeground(Color.WHITE);
+		lblTextOil.setText("0.0");
+		add(lblTextOil);
+
+		lblUnitOil.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblUnitOil.setBounds(475, 145, 400, 150);
+		lblUnitOil.setForeground(Color.WHITE);
+		add(lblUnitOil);
+		
+		lblTextFuel.setFont(new Font("Tahoma", Font.BOLD, 45));
+		lblTextFuel.setBounds(330, 260, 300, 150);
+		lblTextFuel.setForeground(Color.WHITE);
+		lblTextFuel.setText("0.0");
+		add(lblTextFuel);
+
+		lblUnitFuel.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblUnitFuel.setBounds(470, 275, 400, 150);
+		lblUnitFuel.setForeground(Color.WHITE);
+		add(lblUnitFuel);
+		
+		btnStop.setBounds(450, 400, 90, 23);
 		add(btnStop);
 
-		btnStart.setBounds(418, 11, 89, 23);
+		btnStart.setBounds(350, 400, 90, 23);
 		add(btnStart);
 
-		lblWarning.setBounds(400, 119, 100, 14);
+		lblWarning.setBounds(350, 0, 300, 150);
+		lblWarning.setFont(new Font("Tahoma", Font.BOLD, 45));
 		add(lblWarning);
 
 		// Stop button to stop the real time monitoring function
@@ -69,7 +136,11 @@ public class RealTimeMonitor extends JPanel {
 
 				}
 				lblTextSpeed.setText("0.0");
-
+				lblTextRPM.setText("0.0");
+				lblTextTemperature.setText("0.0");
+				lblTextOil.setText("0.0");
+				lblTextFuel.setText("0.0");
+				
 			}
 		});
 
@@ -98,7 +169,11 @@ public class RealTimeMonitor extends JPanel {
 
 			if(!timerPause) {
 			
-			lblTextSpeed.setText(one.format(sensor.getCarSpeed()));
+				lblTextSpeed.setText(one.format(sensor.getCarSpeed()));
+				lblTextRPM.setText(one.format(sensor.getCarRPM()));
+				lblTextTemperature.setText(one.format(sensor.getCarIntAirTemp()));
+				lblTextOil.setText(one.format(sensor.getCarOilLevel()));
+				lblTextFuel.setText(one.format(sensor.getCarFuelLevel()));
 
 			sensor.ifHealthy();
 
@@ -138,7 +213,15 @@ public class RealTimeMonitor extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		g.drawOval(20, 20, 150, 150);
+		//g.drawOval(20, 20, 150, 150);
+		Image meter = new ImageIcon("image/Meter.jpg").getImage();
+		g.drawImage(meter, 5, 5, this);
+		g.drawImage(meter, 5, 135, this);
+		g.drawImage(meter, 5, 265, this);
+		
+		g.drawImage(meter, 300, 5, this);
+		g.drawImage(meter, 300, 135, this);
+		g.drawImage(meter, 300, 265, this);
 
 	}
 
