@@ -94,7 +94,7 @@ public class Sensors extends Observable {
 		double currFuel = this.getCarFuelLevel();
 		double[] currTire = this.getTiresPressure();
 		
-		if(currSpeed == 0 || this.getStarting()) this.setStarting(true);
+		if(currSpeed == 0) this.setStarting(true);
 		else this.setStarting(false);
 		
 		System.out.println("starting? " + starting);

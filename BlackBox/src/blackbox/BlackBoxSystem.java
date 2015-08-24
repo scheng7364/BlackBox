@@ -20,7 +20,7 @@ public class BlackBoxSystem {
 	OBD2Port obd = thisCar.getObdPort();
 	DriverProfile profile = new DriverProfile();
 	Sensors s = new Sensors(obd, car, profile);
-	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);//, monitor);
+	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
 	
 	CarFacade digCar = new CarFacade(car) ;
 	Car carDig = digCar.getCar();
@@ -309,16 +309,10 @@ public class BlackBoxSystem {
 			public void actionPerformed(ActionEvent e) {
 
 				thisCar.startCar();
-				//thisCar.start();
-
 				cards.show(cardPanel, "Real-Time Monitor");
 				s.setStarting(true);
 			
-				//realTimeMonitor = new RealTimeMonitor(thisCar, s);
 				realTimeMonitor.startRun();
-				//RtmCard.add(realTimeMonitor);
-				
-				
 			}
 
 		});
@@ -355,6 +349,7 @@ public class BlackBoxSystem {
 					//thisCar = new CarFacade(car);
 
 					thisCar.setCarStopped(true);
+					thisCar.resetMap();
 				}
 			}
 		});

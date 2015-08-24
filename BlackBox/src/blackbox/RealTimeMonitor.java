@@ -123,7 +123,7 @@ public class RealTimeMonitor extends JPanel implements Observer {
 
 		lblWarning.setBounds(350, 0, 300, 150);
 		lblWarning.setForeground(Color.WHITE);
-//		lblWarning.setText("Starting");
+		lblWarning.setText("Stopped");
 		lblWarning.setFont(new Font("Tahoma", Font.BOLD, 45));
 		add(lblWarning);
 
@@ -134,6 +134,8 @@ public class RealTimeMonitor extends JPanel implements Observer {
 				myCar.setCarStopped(true);
 				//tm.stop();
 				timerPause = true;
+				myCar.resetMap();
+				
 				// Thread sleeps to simulate the car slowing-down period
 				try {
 					Thread.sleep(1000);
@@ -155,14 +157,11 @@ public class RealTimeMonitor extends JPanel implements Observer {
 		// Restart button to start the real time monitoring function
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sensor.setStarting(true);
-			
+				
 				myCar.setCarStopped(false);
 				// tm.start();
 				timerPause = false;
-				
-				
-
+			
 			}
 		});
 
@@ -233,7 +232,6 @@ public class RealTimeMonitor extends JPanel implements Observer {
 		if(sensor.getStarting()) {
 			lblWarning.setForeground(Color.WHITE);
 			lblWarning.setText("Starting");
-			sensor.setStarting(false);
 		}
 		
 		// If car is in healthy condition
