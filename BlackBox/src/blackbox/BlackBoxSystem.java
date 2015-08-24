@@ -1,6 +1,8 @@
 package blackbox;
-import  blackbox.CarClasses.Car;
+
+import blackbox.CarClasses.Car;
 import blackbox.CarClasses.Honda;
+import net.proteanit.sql.DbUtils;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,23 +12,24 @@ import java.sql.ResultSet;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
 
 public class BlackBoxSystem {
 
 	Car car = new Honda();
 	CarFacade thisCar = new CarFacade(car);
-	
-	//OBD2Port obd = new OBD2Port(thisCar);
+
+	// OBD2Port obd = new OBD2Port(thisCar);
 	OBD2Port obd = thisCar.getObdPort();
 	DriverProfile profile = new DriverProfile();
 	Sensors s = new Sensors(obd, car, profile);
 	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
-	
-	CarFacade digCar = new CarFacade(car) ;
+
+	CarFacade digCar = new CarFacade(car);
 	Car carDig = digCar.getCar();
 	OBD2Port obdDig = digCar.getObdPort();
-	//OBD2Port obdDig = new OBD2Port(digCar);
-	
+	// OBD2Port obdDig = new OBD2Port(digCar);
+
 	private JFrame guiFrame;
 	private CardLayout cards;
 	private JPanel buttonPanel;
@@ -39,15 +42,17 @@ public class BlackBoxSystem {
 	private JLabel lblWelcome;
 	private String name; // username to be displayed
 	private String driveStyle; // driving styles for different users
-
+	private JLabel lblShowText; // in Log Sheet card;
 	private JPanel RtmCard; // Card for real-time monitoring
 	private JPanel firstCard; // Card for start-engine button
 
-	Connection connection1 = sqliteConnection.dbConnector();
 	private JTextField textField;
+	private JTable logTable;
 
 	TiresCard tc;
 	EngineCard ec;
+
+	Connection connection1 = sqliteConnection.dbConnector();
 
 	/**
 	 * Create the application.
@@ -72,8 +77,8 @@ public class BlackBoxSystem {
 
 		// creating a border to highlight the JPanel areas
 		Border outline = BorderFactory.createLineBorder(Color.black);
-		
-		welcomeCard = new JPanel();	
+
+		welcomeCard = new JPanel();
 		welcomeCard.setBackground(new Color(255, 255, 204));
 
 		firstCard = new JPanel();
@@ -89,10 +94,10 @@ public class BlackBoxSystem {
 		btnDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				//digCar = new CarFacade(car);
+				// digCar = new CarFacade(car);
 				carDig = digCar.getCar();
-				//obdDig = new OBD2Port(digCar);
-				
+				// obdDig = new OBD2Port(digCar);
+
 				FullDiagCard fdc = new FullDiagCard(carDig, obdDig);
 				cardPanel.add(fdc, "Full Diagnose");
 
@@ -106,7 +111,7 @@ public class BlackBoxSystem {
 							cards.show(cardPanel, "Trans");
 							digCar.setCarStopped(false);
 							digCar.start();
-							Thread.sleep(6000);
+							Thread.sleep(5000);
 							fdc.diagnoseFully();
 							digCar.stop();
 							cards.show(cardPanel, "Full Diagnose");
@@ -127,7 +132,7 @@ public class BlackBoxSystem {
 		RtmCard.setBackground(new Color(230, 230, 250));
 
 		JButton btnGo = new JButton("Go");
-		//dg.add(btnGo);
+		// dg.add(btnGo);
 		btnGo.setBounds(557, 65, 55, 20);
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -139,13 +144,13 @@ public class BlackBoxSystem {
 				tireTest.setBounds(380, 10, 100, 24);
 				tireTest.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						//digCar = new CarFacade() ;
+						// digCar = new CarFacade() ;
 						carDig = digCar.getCar();
 						obdDig = digCar.getObdPort();
-						
+
 						tc = new TiresCard(carDig, obdDig);
 						cardPanel.add(tc, "Tires");
-						
+
 						TransitionCard tsc = new TransitionCard();
 						cardPanel.add(tsc, "Trans");
 
@@ -169,7 +174,7 @@ public class BlackBoxSystem {
 					}
 				});
 				tc.add(tireTest);
-				
+
 				ec = new EngineCard(carDig, obdDig);
 				cardPanel.add(ec, "Engine");
 
@@ -177,11 +182,11 @@ public class BlackBoxSystem {
 				engTest.setBounds(380, 10, 100, 24);
 				engTest.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-				
-						digCar = new CarFacade(car) ;
+
+						digCar = new CarFacade(car);
 						carDig = digCar.getCar();
 						obdDig = new OBD2Port(digCar);
-						
+
 						ec = new EngineCard(carDig, obdDig);
 						cardPanel.add(ec, "Engine");
 
@@ -208,33 +213,199 @@ public class BlackBoxSystem {
 					}
 				});
 				ec.add(engTest);
-				
+
 				cards.show(cardPanel, dg.getComboSelected());
-				
+
 			}
 		});
 
 		LogSheetCard = new JPanel();
 		LogSheetCard.setBackground(new Color(248, 248, 255));
-		
+		LogSheetCard.setLayout(null);
+
 		JComboBox cbSelectbyName = new JComboBox();
-		cbSelectbyName.setModel(new DefaultComboBoxModel(new String[] {"View by Users"}));
-		cbSelectbyName.setBounds(22, 11, 105, 20);
+		String queryName = "select distinct username from logsheet";
+		String colName = "username";
+		this.fillComboBox(cbSelectbyName, queryName, colName);
+
+		cbSelectbyName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select username as 'User', reportStatus as 'Report Status' from logsheet where username =?";
+				String item = (String) cbSelectbyName.getSelectedItem();
+				String displaytext = "The Records for " + item + " are: ";
+
+				selectComboBox(query, item, displaytext);
+				// Clear the window after selecting a new Category
+				// clearPane();
+			}
+		});
+		cbSelectbyName.setBounds(20, 11, 150, 20);
 		LogSheetCard.add(cbSelectbyName);
-		
+
 		JComboBox cbSelectedbyStatus = new JComboBox();
-		cbSelectedbyStatus.setModel(new DefaultComboBoxModel(new String[] {"View by Report Status"}));
-		cbSelectedbyStatus.setBounds(152, 11, 137, 20);
+		String queryStatus = "select distinct reportStatus from logsheet";
+		String colStatus = "reportStatus";
+		this.fillComboBox(cbSelectedbyStatus, queryStatus, colStatus);
+
+		cbSelectedbyStatus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select * from logsheet where reportStatus =?";
+				String item = (String) cbSelectedbyStatus.getSelectedItem();
+				String displaytext = "The " + item + " are: ";
+
+				selectComboBox(query, item, displaytext);
+				// Clear the window after selecting a new Category
+				// clearPane();
+			}
+		});
+		cbSelectedbyStatus.setBounds(175, 11, 180, 20);
 		LogSheetCard.add(cbSelectedbyStatus);
-		
-		JTable logTable = new JTable();
-		logTable.setBounds(21, 42, 590, 139);
-		LogSheetCard.add(logTable);
-		
+
+		JComboBox cbSelectDiag = new JComboBox();
+		String queryDiag = "select date from diagsheet";
+		String colDiag = "date";
+		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
+
+		cbSelectDiag.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select date as 'Diagnostic Date' from diagsheet where date =?";
+				String item = (String) cbSelectDiag.getSelectedItem();
+				String displaytext = "The Reports dated " + item + " are: ";
+
+				selectComboBox(query, item, displaytext);
+				// Clear the window after selecting a new Category
+				// clearPane();
+			}
+		});
+		cbSelectDiag.setBounds(365, 11, 180, 20);
+		LogSheetCard.add(cbSelectDiag);
+
+		lblShowText = new JLabel();
+		lblShowText.setBounds(20, 30, 200, 20);
+		LogSheetCard.add(lblShowText);
+
+		JLabel lblTireFR = new JLabel("New label");
+		lblTireFR.setBounds(20, 300, 40, 20);
+		LogSheetCard.add(lblTireFR);
+		/*
+		 * JLabel lblTireFL = new JLabel("New label");
+		 * 
+		 * JLabel lblTireRL = new JLabel("New label");
+		 * 
+		 * JLabel lblTireRR = new JLabel("New label");
+		 * 
+		 * JLabel lblOil = new JLabel("New label");
+		 * 
+		 * JLabel lblRPM = new JLabel("New label");
+		 * 
+		 * JLabel lblFuel = new JLabel("New label");
+		 * 
+		 * JLabel lblTemp = new JLabel("New label");
+		 */
+
+		logTable = new JTable();
+		JScrollPane scrollPane = new JScrollPane(logTable);
+		scrollPane.setLocation(20, 50);
+		scrollPane.setSize(590, 200);
+		logTable.setFillsViewportHeight(false);
+		scrollPane.setViewportView(logTable);
+
+		logTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				try {
+					int row = logTable.getSelectedRow();
+
+					// Send query to database
+			//		String tableclick = (logTable.getModel().getValueAt(row, 1).toString());
+			//		lblTireFR.setText(tableclick);
+
+					String tableclick1 = (logTable.getModel().getValueAt(row, 0).toString());
+					String query1 = "select * from logsheet where username = '" + tableclick1 + "'";
+
+					String tableclick2 = (logTable.getModel().getValueAt(row, 0).toString());
+					String query2 = "select * from diagsheet where date = '" + tableclick2 + "'";
+
+					PreparedStatement pst1 = connection1.prepareStatement(query1);
+					ResultSet rs1 = pst1.executeQuery();
+
+					PreparedStatement pst2 = connection1.prepareStatement(query2);
+					ResultSet rs2 = pst2.executeQuery();
+
+					if (rs1.next()) {
+
+						// Send the GUI components to their corresponding
+						// columns in database
+						/*
+						 * lblTireFL.setText(rs.getString("carTFL"));
+						 * lblTireFR.setText(rs.getString("carTFR"));
+						 * lblTireRL.setText(rs.getString("carTRL"));
+						 * lblTireRR.setText(rs.getString("carTRR"));
+						 * lblTemp.setText(rs.getString("carTemp"));
+						 * lblOil.setText(rs.getString("carOil"));
+						 * lblFuel.setText(rs.getString("carFuel"));
+						 * lblRPM.setText(rs.getString("carRPM"));
+						 */
+					}
+
+					if (rs2.next()) {
+						FullDiagCard fdc = new FullDiagCard(car, obd);
+						cardPanel.add(fdc, "Full Diagnose Report");
+						cards.show(cardPanel, "Full Diagnose Report");
+						
+						fdc.lbldate.setText(rs2.getString("date"));
+						fdc.rpmAvg.setText(rs2.getString("carRPM"));
+						fdc.olAvg.setText(rs2.getString("carOil"));
+						fdc.flAvg.setText(rs2.getString("carFuel"));
+						fdc.TempAvg.setText(rs2.getString("carTemp"));
+						fdc.TireFLAvg.setText(rs2.getString("carTFL"));
+						fdc.TireFRAvg.setText(rs2.getString("carTFR"));
+						fdc.TireRLAvg.setText(rs2.getString("carTRL"));
+						fdc.TireRRAvg.setText(rs2.getString("carTRR"));
+
+						fdc.rpmSV.setText(rs2.getString("SVrpm"));
+						fdc.olSV.setText(rs2.getString("SVoil"));
+						fdc.flSV.setText(rs2.getString("SVfuel"));
+						fdc.TempSV.setText(rs2.getString("SVtemp"));
+						fdc.TireSV.setText(rs2.getString("SVtire"));
+
+						fdc.rpmStatus.setText(rs2.getString("RPMStatus"));
+						fdc.olStatus.setText(rs2.getString("OilStatus"));
+						fdc.flStatus.setText(rs2.getString("FuelStatus"));
+						fdc.TempStatus.setText(rs2.getString("TempStatus"));
+						fdc.TireFLStatus.setText(rs2.getString("TFLStatus"));
+						fdc.TireFRStatus.setText(rs2.getString("TFRStatus"));
+						fdc.TireRLStatus.setText(rs2.getString("TRLStatus"));
+						fdc.TireRRStatus.setText(rs2.getString("TRRStatus"));
+						
+						fdc.save.setVisible(false);
+						
+					}
+
+					rs1.close();
+					rs2.close();
+					pst1.close();
+					pst2.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Nothing is selected.");
+				}
+			}
+
+		});
+		logTable.setForeground(new Color(0, 0, 128));
+		logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		logTable.setShowVerticalLines(false);
+		logTable.setShowHorizontalLines(false);
+		logTable.setShowGrid(false);
+		logTable.setRowSelectionAllowed(true);
+		logTable.setBackground(new Color(255, 250, 205));
+		logTable.setModel(new DefaultTableModel(new Object[][] {}, new String[] {}));
+		LogSheetCard.add(scrollPane);
+
 		JPanel logPanel = new JPanel();
 		logPanel.setBounds(21, 195, 590, 220);
 		LogSheetCard.add(logPanel);
-
 
 		// Create Panels for switching
 		cards = new CardLayout();
@@ -267,8 +438,8 @@ public class BlackBoxSystem {
 		pfPW = new JPasswordField();
 		pfPW.setEchoChar('*');
 		pfPW.setBounds(304, 194, 129, 20);
-		welcomeCard.add(pfPW);	
-		
+		welcomeCard.add(pfPW);
+
 		cardPanel.add(welcomeCard, "Welcome");
 
 		cardPanel.add(RtmCard, "Real-Time Monitor");
@@ -303,7 +474,7 @@ public class BlackBoxSystem {
 		startEngine.setBackground(new Color(240, 240, 240));
 		firstCard.add(startEngine, BorderLayout.CENTER);
 
-		thisCar.start();//Start a thread for CarFacade
+		thisCar.start();// Start a thread for CarFacade
 		RtmCard.add(realTimeMonitor);
 		startEngine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -311,7 +482,7 @@ public class BlackBoxSystem {
 				thisCar.startCar();
 				cards.show(cardPanel, "Real-Time Monitor");
 				s.setStarting(true);
-			
+
 				realTimeMonitor.startRun();
 			}
 
@@ -344,9 +515,9 @@ public class BlackBoxSystem {
 					lblWelcome.setText("Login As Another User");
 
 					thisCar.stopCar(); // stop the current thread;
-					//thisCar.stop();
+					// thisCar.stop();
 
-					//thisCar = new CarFacade(car);
+					// thisCar = new CarFacade(car);
 
 					thisCar.setCarStopped(true);
 					thisCar.resetMap();
@@ -363,7 +534,6 @@ public class BlackBoxSystem {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				try {
 					String user = tfUsername.getText().trim();
 					String pw = pfPW.getText().trim();
@@ -379,14 +549,14 @@ public class BlackBoxSystem {
 
 						name = rs.getString("username");
 						JOptionPane.showMessageDialog(null, "Login Successfully");
-						
+
 						driveStyle = rs.getString("drivestyle");
-						
+
 						profile.setStyle(driveStyle);
 						profile.setUsername(name);
-					//	System.out.println(driveStyle);
-					//	System.out.println(profile.getStyle());
-						
+						// System.out.println(driveStyle);
+						// System.out.println(profile.getStyle());
+
 						// clear the fields for reentering
 						clearUserInfo();
 
@@ -456,6 +626,49 @@ public class BlackBoxSystem {
 		tfUsername.setText("");
 		pfPW.setText("");
 	}
-	
+
+	public void fillComboBox(JComboBox cb, String query, String col) {
+		cb.removeAllItems(); // Clear existing comboBox
+		if(col.equals("date")) cb.setModel(new DefaultComboBoxModel(new String[] { "View Diagnostic Reports" }));
+		else cb.setModel(new DefaultComboBoxModel(new String[] { "View by " + col }));
+
+		try {
+			// Send query to database
+			PreparedStatement pst = connection1.prepareStatement(query);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+
+				String currentRow = rs.getString(col);
+				cb.addItem(currentRow); // Add the value in the column from the
+										// database to comboBox
+			}
+			rs.close();
+			pst.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void selectComboBox(String query, String selectedItem, String text) {
+		try {
+			PreparedStatement pst = connection1.prepareStatement(query);
+			pst.setString(1, selectedItem);
+			ResultSet rs = pst.executeQuery();
+
+			if (selectedItem != null) {
+				lblShowText.setText(text);
+				logTable.setModel(DbUtils.resultSetToTableModel(rs));
+			}
+			rs.close();
+			pst.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, ex);
+		}
+	}
 
 }
