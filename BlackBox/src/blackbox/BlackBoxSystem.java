@@ -20,7 +20,7 @@ public class BlackBoxSystem {
 	OBD2Port obd = thisCar.getObdPort();
 	DriverProfile profile = new DriverProfile();
 	Sensors s = new Sensors(obd, car, profile);
-	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);
+	RealTimeMonitor realTimeMonitor = new RealTimeMonitor(thisCar, s);//, monitor);
 	
 	CarFacade digCar = new CarFacade(car) ;
 	Car carDig = digCar.getCar();
@@ -303,7 +303,7 @@ public class BlackBoxSystem {
 		startEngine.setBackground(new Color(240, 240, 240));
 		firstCard.add(startEngine, BorderLayout.CENTER);
 
-		thisCar.start();//Start a new thread for CarFacade
+		thisCar.start();//Start a thread for CarFacade
 		RtmCard.add(realTimeMonitor);
 		startEngine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -311,11 +311,14 @@ public class BlackBoxSystem {
 				thisCar.startCar();
 				//thisCar.start();
 
+				cards.show(cardPanel, "Real-Time Monitor");
+				s.setStarting(true);
+			
 				//realTimeMonitor = new RealTimeMonitor(thisCar, s);
 				realTimeMonitor.startRun();
 				//RtmCard.add(realTimeMonitor);
 				
-				cards.show(cardPanel, "Real-Time Monitor");
+				
 			}
 
 		});

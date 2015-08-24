@@ -42,8 +42,8 @@ public class Honda extends Car {
 		this.sysEngine.setACCompressorClutchSTD(0.6);
 		this.sysEngine.setIdleRPM_AVG(600);
 		this.sysEngine.setIdleRPM_STD(50);
-		this.sysEngine.setOilLevelSensorAVG(80);
-		this.sysEngine.setOilLevelSensorSTD(20);
+		this.sysEngine.setOilLevelSensorAVG(100);
+		this.sysEngine.setOilLevelSensorSTD(40);
 		
 		
 		//Cooling system

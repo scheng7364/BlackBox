@@ -1,8 +1,8 @@
 package blackbox;
 
 enum DrivingStyle {
-	CRAZY(1.4),
-	AGGRESSIVE(1.2),
+	CRAZY(1.15),
+	AGGRESSIVE(1.05),
 	AVERAGE(1.0),
 	MILD(0.8);
 	

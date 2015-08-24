@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,34 +16,35 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class RealTimeMonitor extends JPanel {
+public class RealTimeMonitor extends JPanel implements Observer {
 	private CarFacade myCar;
 	private Sensors sensor;
-
+	// private SensorsMonitor monitor;
+	
 	Timer tm;
-	boolean timerPause=true;
+	boolean timerPause = true;
 	private static int PERIOD = 1000;
 
 	private JLabel lblSpeed = new JLabel("Current Speed:");
 	private JLabel lblUnitSpeed = new JLabel("MPH");
 	private JLabel lblTextSpeed = new JLabel();
-	
+
 	private JLabel lblRPM = new JLabel("Current RPM:");
 	private JLabel lblUnitRPM = new JLabel("RPM");
 	private JLabel lblTextRPM = new JLabel();
-	
+
 	private JLabel lblTemperature = new JLabel("Current Temperature:");
 	private JLabel lblUnitTemperature = new JLabel("Celcius");
 	private JLabel lblTextTemperature = new JLabel();
-	
+
 	private JLabel lblOil = new JLabel("Current Oil Level:");
 	private JLabel lblUnitOil = new JLabel("Quarts");
 	private JLabel lblTextOil = new JLabel();
-	
+
 	private JLabel lblFuel = new JLabel("Current Temperature:");
 	private JLabel lblUnitFuel = new JLabel("Gallons");
 	private JLabel lblTextFuel = new JLabel();
-	
+
 	private JLabel lblWarning = new JLabel();
 	private JButton btnStop = new JButton("Stop");
 	private JButton btnStart = new JButton("Restart");
@@ -51,7 +54,8 @@ public class RealTimeMonitor extends JPanel {
 		super();
 		myCar = cf;
 		sensor = s;
-		
+		sensor.addObserver(this);
+
 		setLayout(null);
 
 		add(lblSpeed);
@@ -77,7 +81,7 @@ public class RealTimeMonitor extends JPanel {
 		lblUnitRPM.setBounds(200, 145, 300, 150);
 		lblUnitRPM.setForeground(Color.WHITE);
 		add(lblUnitRPM);
-		
+
 		lblTextTemperature.setFont(new Font("Tahoma", Font.BOLD, 45));
 		lblTextTemperature.setBounds(35, 260, 300, 150);
 		lblTextTemperature.setForeground(Color.WHITE);
@@ -88,7 +92,7 @@ public class RealTimeMonitor extends JPanel {
 		lblUnitTemperature.setBounds(175, 275, 400, 150);
 		lblUnitTemperature.setForeground(Color.WHITE);
 		add(lblUnitTemperature);
-		
+
 		lblTextOil.setFont(new Font("Tahoma", Font.BOLD, 45));
 		lblTextOil.setBounds(330, 130, 300, 150);
 		lblTextOil.setForeground(Color.WHITE);
@@ -99,7 +103,7 @@ public class RealTimeMonitor extends JPanel {
 		lblUnitOil.setBounds(475, 145, 400, 150);
 		lblUnitOil.setForeground(Color.WHITE);
 		add(lblUnitOil);
-		
+
 		lblTextFuel.setFont(new Font("Tahoma", Font.BOLD, 45));
 		lblTextFuel.setBounds(330, 260, 300, 150);
 		lblTextFuel.setForeground(Color.WHITE);
@@ -110,7 +114,7 @@ public class RealTimeMonitor extends JPanel {
 		lblUnitFuel.setBounds(470, 275, 400, 150);
 		lblUnitFuel.setForeground(Color.WHITE);
 		add(lblUnitFuel);
-		
+
 		btnStop.setBounds(450, 400, 90, 23);
 		add(btnStop);
 
@@ -118,6 +122,8 @@ public class RealTimeMonitor extends JPanel {
 		add(btnStart);
 
 		lblWarning.setBounds(350, 0, 300, 150);
+		lblWarning.setForeground(Color.WHITE);
+//		lblWarning.setText("Starting");
 		lblWarning.setFont(new Font("Tahoma", Font.BOLD, 45));
 		add(lblWarning);
 
@@ -127,7 +133,7 @@ public class RealTimeMonitor extends JPanel {
 
 				myCar.setCarStopped(true);
 				//tm.stop();
-				timerPause=true;
+				timerPause = true;
 				// Thread sleeps to simulate the car slowing-down period
 				try {
 					Thread.sleep(1000);
@@ -140,20 +146,26 @@ public class RealTimeMonitor extends JPanel {
 				lblTextTemperature.setText("0.0");
 				lblTextOil.setText("0.0");
 				lblTextFuel.setText("0.0");
-				
+				lblWarning.setForeground(Color.WHITE);
+				lblWarning.setText("Stopped");
+
 			}
 		});
 
 		// Restart button to start the real time monitoring function
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				sensor.setStarting(true);
+			
 				myCar.setCarStopped(false);
-				//tm.start();
-				timerPause=false;
+				// tm.start();
+				timerPause = false;
+				
+				
+
 			}
 		});
-		
+
 		tm = new Timer(PERIOD, timerListener); // Change every second;
 		tm.start();
 	}
@@ -162,46 +174,33 @@ public class RealTimeMonitor extends JPanel {
 
 		public void actionPerformed(ActionEvent evt) {
 
-			//SensorsMonitor monitor = new SensorsMonitor(sensor);
+			// SensorsMonitor monitor = new SensorsMonitor(sensor);
 
 			// Set digits for decimal numbers
-			DecimalFormat one = new DecimalFormat("#0.0"); 
+			DecimalFormat one = new DecimalFormat("#0.0");
 
-			if(!timerPause) {
-			
+			if (!timerPause) {
+
 				lblTextSpeed.setText(one.format(sensor.getCarSpeed()));
 				lblTextRPM.setText(one.format(sensor.getCarRPM()));
 				lblTextTemperature.setText(one.format(sensor.getCarIntAirTemp()));
 				lblTextOil.setText(one.format(sensor.getCarOilLevel()));
 				lblTextFuel.setText(one.format(sensor.getCarFuelLevel()));
 
-			sensor.ifHealthy();
-
-			// If sensor warning is true, RealTimeMonitor will show warning & stop the car
-			if (sensor.getWarning()) {
-				lblWarning.setForeground(Color.RED);
-				lblWarning.setText("Warning");
-			
-//				myCar.setCarStopped(true);
-//				tm.stop();
-			}
-			// If sensor warning is false, RealTimeMonitor will show healthy & car runs;			
-			else { 
-				lblWarning.setForeground(Color.GREEN);
-				lblWarning.setText("Healthy"); 
-				}
+				sensor.ifHealthy(); // Check the car running status: starting or healthy or warning
 			}
 		}
 	};
 
 	public void startRun() {
 
-		//if (tm == null) {
-			//tm = new Timer(PERIOD, timerListener); // Change every second;
-			//tm.start();
-		//}
-		timerPause=false;
-		
+		// if (tm == null) {
+		// tm = new Timer(PERIOD, timerListener); // Change every second;
+		// tm.start();
+		// }
+		myCar.setCarStopped(false);
+		timerPause = false;
+
 	}
 
 	public void stopRun() {
@@ -213,15 +212,41 @@ public class RealTimeMonitor extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		//g.drawOval(20, 20, 150, 150);
+		// g.drawOval(20, 20, 150, 150);
 		Image meter = new ImageIcon("image/Meter.jpg").getImage();
 		g.drawImage(meter, 5, 5, this);
 		g.drawImage(meter, 5, 135, this);
 		g.drawImage(meter, 5, 265, this);
-		
+
 		g.drawImage(meter, 300, 5, this);
 		g.drawImage(meter, 300, 135, this);
 		g.drawImage(meter, 300, 265, this);
+
+	}
+
+	@Override
+	public void update(Observable obale, Object ifHealthy) {
+		boolean healthy = (Boolean) ifHealthy;
+		System.out.println("monitor: " + healthy);
+		
+		// If car is just starting
+		if(sensor.getStarting()) {
+			lblWarning.setForeground(Color.WHITE);
+			lblWarning.setText("Starting");
+			sensor.setStarting(false);
+		}
+		
+		// If car is in healthy condition
+		else if (healthy) {
+			lblWarning.setForeground(Color.GREEN);
+			lblWarning.setText("Healthy");
+
+		}
+		// If car is in warning condition
+		else {
+			lblWarning.setForeground(Color.RED);
+			lblWarning.setText("Warning");
+		}
 
 	}
 

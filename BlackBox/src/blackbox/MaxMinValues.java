@@ -57,7 +57,7 @@ public class MaxMinValues {
 	 */
 	public MaxMinValues(Car myCar) {
 		
-		int percentOut = 20; //gives percentage that range is outside of max / min value
+		int percentOut = 10; //gives percentage that range is outside of max / min value
 		
 		maxSpeed=(1-percentOut/200.0)*(myCar.getSpeedAVG() + myCar.getSpeedSTD());
 		minSpeed=(1+percentOut/200.0)*(myCar.getSpeedAVG() - myCar.getSpeedSTD());

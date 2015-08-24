@@ -8,7 +8,7 @@ public class Sensors extends Observable {
 	private OBD2Port obd;
 	private Car myCar;
 	private DriverProfile myProfile;
-	private boolean warning = false;
+	private boolean starting;
 	private boolean healthy = true;
 	//This Car should be passed to Sensors as Constructor (bcz only one car)
 	//Car myCar = new Honda();  	//if we decide to go with more than one car type we should
@@ -22,6 +22,14 @@ public class Sensors extends Observable {
 		myCar = car;
 		myProfile = profile;
 	//	coeff = this.myProfile.getCoeff();
+	}
+	
+	public boolean setStarting(boolean startornot) {
+		return this.starting = startornot;
+	}
+	
+	public boolean getStarting() {
+		return this.starting;
 	}
 
 	public double getDriverCoeff() {
@@ -80,15 +88,22 @@ public class Sensors extends Observable {
 		MaxMinValues threshold = new MaxMinValues(myCar);
 		healthy = true;
 
+		double currSpeed = this.getCarSpeed();
 		double currRPM = this.getCarRPM();
 		double currOil = this.getCarOilLevel();
 		double currFuel = this.getCarFuelLevel();
 		double[] currTire = this.getTiresPressure();
 		
+		if(currSpeed == 0 || this.getStarting()) this.setStarting(true);
+		else this.setStarting(false);
+		
+		System.out.println("starting? " + starting);
+				
 		if (currRPM >= threshold.getMaxRPM() ||
 				currRPM < threshold.getMinRPM()) {
 			healthy = false;
 		}
+		System.out.println(healthy);
 		
 		for (int i = 0; i < 4; i++) {
 			if (currTire[i] >= threshold.getMaxTirePressure() || 
@@ -97,29 +112,22 @@ public class Sensors extends Observable {
 				break;
 			}
 		}
-
+		System.out.println(healthy);
 		if (currFuel < threshold.getMinFuelLevel()) {
 			healthy = false;
 		}
 		
+		System.out.println(healthy);
+	
 		if (currOil < threshold.getMinOilLevelSensor() ||
 				currOil >= threshold.getMaxOilLevelSensor()) {
 			healthy = false;
 		}
-						
+		System.out.println(healthy);
+		
 		// Inform Sensors Monitor for the state change
 		setChanged();
 		notifyObservers(new Boolean(healthy));
-	}
 	
-	// If healthy becomes false, Sensors Monitor will set warning to true
-	public void setWarning(boolean ifwarning) {
-		
-		warning = ifwarning;
-		
-	}
-	
-	public boolean getWarning() {
-		return warning;
 	}
 }
