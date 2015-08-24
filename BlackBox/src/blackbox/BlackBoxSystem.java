@@ -355,6 +355,7 @@ public class BlackBoxSystem {
 					//thisCar = new CarFacade(car);
 
 					thisCar.setCarStopped(true);
+					thisCar.resetMap();
 				}
 			}
 		});
