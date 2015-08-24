@@ -161,7 +161,7 @@ public class RealTimeMonitor extends JPanel implements Observer {
 				myCar.setCarStopped(false);
 				// tm.start();
 				timerPause = false;
-			
+				myCar.resetMap();
 			}
 		});
 
