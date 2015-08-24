@@ -104,18 +104,23 @@ public class BlackBoxSystem {
 				TransitionCard tsc = new TransitionCard();
 				cardPanel.add(tsc, "Trans");
 
+				Thread.State digCarState = digCar.getState();
+				if(digCarState == Thread.State.NEW) {
+					digCar.setCarStopped(false);
+					digCar.start();
+				}
 				Thread thread = new Thread() {
 
 					public void run() {
 						try {
 							cards.show(cardPanel, "Trans");
 							digCar.setCarStopped(false);
-							digCar.start();
+							//digCar.start();
 							Thread.sleep(5000);
 							fdc.diagnoseFully();
-							digCar.stop();
+							//digCar.stop();
+							digCar.setCarStopped(true);
 							cards.show(cardPanel, "Full Diagnose");
-
 						} catch (InterruptedException ex) {
 						}
 
