@@ -155,6 +155,7 @@ public class BlackBoxSystem {
 		dg.setLayout(null);
 
 		JButton btnDiag = new JButton("Diagnose Fully");
+		dg.setBtnDiag(btnDiag);
 		btnDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 

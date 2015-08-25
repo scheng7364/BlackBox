@@ -33,7 +33,12 @@ public class DrawGraphics extends JPanel {
 	private JComboBox selection;
 	private JPanel panel = new JPanel();
 	private int x, y;
-
+	private JButton btnDiag;
+		
+	public void setBtnDiag(JButton btn) {
+		btnDiag = btn;
+	}
+	
 	public DrawGraphics() {
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(620, 400));
@@ -217,7 +222,7 @@ public class DrawGraphics extends JPanel {
 				temperatureOff();
 				engineOff();
 				tireOff();
-				
+				btnDiag.doClick();
 			
 			} else {
 				//selection.setSelectedItem(text);
