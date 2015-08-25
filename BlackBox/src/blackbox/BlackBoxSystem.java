@@ -13,12 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.itextpdf.text.Document;
@@ -56,20 +53,30 @@ public class BlackBoxSystem {
 	private JLabel lblShowText; // in Log Sheet card;
 	private JPanel RtmCard; // Card for real-time monitoring
 	private JPanel firstCard; // Card for start-engine button
-	private JLabel total, pass, rate;
+	private JLabel total, total_1, pass, rate;
 	private JTable logTable;
-	private JPanel starpanel;
-	
+	private JPanel starpanel, passpanel, reportStatuspanel; 
+
 	Connection connection1 = sqliteConnection.dbConnector();
 
-	private double passrate;
-	
+	private double passrate, personpass;
+
 	public void setPassRate(double value) {
 		this.passrate = value;
 	}
+
 	public double getPassRate() {
 		return this.passrate;
 	}
+
+	public void setPersonPass(double value) {
+		this.personpass = value;
+	}
+
+	public double getPersonPass() {
+		return this.personpass;
+	}
+
 	/**
 	 * Create the application.
 	 */
@@ -141,6 +148,7 @@ public class BlackBoxSystem {
 					cbSelectedbyStatus.setSelectedIndex(0);
 					cbSelectDiag.setSelectedIndex(0);
 					logpanel.setVisible(true);
+					passpanel.setVisible(false);
 				}
 			}
 		});
@@ -158,6 +166,7 @@ public class BlackBoxSystem {
 					cbSelectbyName.setSelectedIndex(0);
 					cbSelectDiag.setSelectedIndex(0);
 					logpanel.setVisible(false);
+					passpanel.setVisible(true);
 				}
 			}
 		});
@@ -175,6 +184,7 @@ public class BlackBoxSystem {
 					cbSelectedbyStatus.setSelectedIndex(0);
 					cbSelectbyName.setSelectedIndex(0);
 					logpanel.setVisible(false);
+					passpanel.setVisible(false);
 				}
 			}
 		});
@@ -227,10 +237,10 @@ public class BlackBoxSystem {
 							// digCar.stop();
 							digCar.setCarStopped(true);
 							cards.show(cardPanel, "Full Diagnose");
-							//Save panel to PDF
+							// Save panel to PDF
 							java.awt.Image image = getImageFromPanel(fdc);
 							String fileName = "DiagnosisReport.pdf";
-					        printToPDF(image, fileName);
+							printToPDF(image, fileName);
 						} catch (InterruptedException ex) {
 						}
 
@@ -284,19 +294,8 @@ public class BlackBoxSystem {
 					ResultSet rs2 = pst2.executeQuery();
 
 					if (rs1.next()) {
-				
-						// Send the GUI components to their corresponding
-						// columns in database
-						/*
-						 * lblTireFL.setText(rs.getString("carTFL"));
-						 * lblTireFR.setText(rs.getString("carTFR"));
-						 * lblTireRL.setText(rs.getString("carTRL"));
-						 * lblTireRR.setText(rs.getString("carTRR"));
-						 * lblTemp.setText(rs.getString("carTemp"));
-						 * lblOil.setText(rs.getString("carOil"));
-						 * lblFuel.setText(rs.getString("carFuel"));
-						 * lblRPM.setText(rs.getString("carRPM"));
-						 */
+
+						name = rs1.getString("username");
 					}
 
 					if (rs2.next()) {
@@ -349,7 +348,7 @@ public class BlackBoxSystem {
 		logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		logTable.setShowVerticalLines(false);
 		logTable.setShowHorizontalLines(false);
-		logTable.setShowGrid(false);
+		logTable.setShowGrid(true);
 		logTable.setRowSelectionAllowed(true);
 		logTable.setBackground(new Color(255, 250, 205));
 		logTable.setModel(new DefaultTableModel(new Object[][] {}, new String[] {}));
@@ -381,30 +380,56 @@ public class BlackBoxSystem {
 		lblRate.setBounds(10, 68, 94, 58);
 		logpanel.add(lblRate);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(201, 11, 169, 142);
-		logpanel.add(panel_1);
+		reportStatuspanel = new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+			
+				drawPieChart(g);
+			}
+
+		};
+		reportStatuspanel.setBounds(201, 11, 169, 142);
+		logpanel.add(reportStatuspanel);
 
 		starpanel = new JPanel() {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 
 				double Pass = getPassRate();
-				
+
 				java.awt.Image star = new ImageIcon("image/star.png").getImage();
-				
-				if(Pass > 0) g.drawImage(star, 0, 50, starpanel);
-				if(Pass >= 0.25) g.drawImage(star, 50, 50, starpanel);
-				if(Pass >= 0.5) g.drawImage(star, 100, 50, starpanel);
-				if(Pass >= 0.75) g.drawImage(star, 150, 50, starpanel);
-		
+
+				if (Pass > 0)
+					g.drawImage(star, 0, 50, starpanel);
+				if (Pass >= 0.25)
+					g.drawImage(star, 50, 50, starpanel);
+				if (Pass >= 0.5)
+					g.drawImage(star, 100, 50, starpanel);
+				if (Pass >= 0.75)
+					g.drawImage(star, 150, 50, starpanel);
+
 			}
 
 		};
 		starpanel.setBounds(398, 11, 206, 142);
 		starpanel.setBackground(Color.white);
 		logpanel.add(starpanel);
-		
+
+		passpanel = new JPanel();
+		passpanel.setBounds(10, 250, 614, 164);
+		passpanel.setVisible(false);
+		passpanel.setBackground(Color.white);
+		passpanel.setLayout(null);
+		LogSheetCard.add(passpanel);
+
+		JLabel lblTotal_1 = new JLabel("Total Records");
+		lblTotal_1.setBounds(10, 11, 85, 22);
+		passpanel.add(lblTotal_1);
+
+		total_1 = new JLabel("");
+		total_1.setBounds(114, 11, 85, 22);
+		passpanel.add(total_1);
+
 		// Create Panels for switching
 		cards = new CardLayout();
 		cardPanel = new JPanel();
@@ -466,7 +491,8 @@ public class BlackBoxSystem {
 		startEngine.setSize(200, 200);
 		ImageIcon image = new ImageIcon("image/EngineStart.png");
 		java.awt.Image im = image.getImage();
-		java.awt.Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(), java.awt.Image.SCALE_SMOOTH);
+		java.awt.Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(),
+				java.awt.Image.SCALE_SMOOTH);
 		ImageIcon icon = new ImageIcon(scaledImage);
 		startEngine.setIcon(icon);
 		startEngine.setBackground(new Color(240, 240, 240));
@@ -698,23 +724,26 @@ public class BlackBoxSystem {
 				}
 
 			}
-						
-			DecimalFormat formatter = new DecimalFormat("#0.0"); 
+
+			DecimalFormat formatter = new DecimalFormat("#0.0");
 			total.setText(Double.toString(counttotal));
+			total_1.setText(Double.toString(counttotal));
 			pass.setText(Double.toString(countpass));
-			
+
 			double ratepass = countpass / counttotal;
 			NumberFormat percentFormat = NumberFormat.getPercentInstance();
 			percentFormat.setMaximumFractionDigits(1);
-			
+
 			rate.setText(percentFormat.format(ratepass));
 			setPassRate(ratepass);
 			
 			starpanel.repaint();
-			
-			System.out.println(counttotal);
-			System.out.println(countpass);
 
+	//		System.out.println(counttotal);
+	//		System.out.println(countpass);
+
+			setPersonPass(countpass);
+			reportStatuspanel.repaint();
 			
 			rs.close();
 			rs1.close();
@@ -745,42 +774,93 @@ public class BlackBoxSystem {
 		lblShowText.setText("");
 		// clearTable();
 	}
-	
+
 	public java.awt.Image getImageFromPanel(Component component) {
 
-        BufferedImage image = new BufferedImage(component.getWidth(),
-                component.getHeight(), BufferedImage.TYPE_INT_RGB);
-        component.paint(image.getGraphics());
-        return image;
-    }
-	
+		BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+		component.paint(image.getGraphics());
+		return image;
+	}
+
 	public void printToPDF(java.awt.Image awtImage, String fileName) {
-        try {
-            Document d = new Document();
-            PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(
-                    fileName));
-            d.open();
+		try {
+			Document d = new Document();
+			PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(fileName));
+			d.open();
 
-            Image iTextImage = Image.getInstance(writer, awtImage, 1);
-            //iTextImage.setAbsolutePosition(50, 50);
-            iTextImage.scalePercent(80);
-            d.add(iTextImage);
+			Image iTextImage = Image.getInstance(writer, awtImage, 1);
+			// iTextImage.setAbsolutePosition(50, 50);
+			iTextImage.scalePercent(80);
+			d.add(iTextImage);
 
-            d.close();
+			d.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }   
-    }
-	/*
-	 * public int getRows(String table) { int count = 0; try {
-	 * 
-	 * PreparedStatement pst = connection1.prepareStatement(
-	 * "SELECT COUNT(*) AS rowcount FROM " + table); ResultSet rs =
-	 * pst.executeQuery(); rs.next(); count = rs.getInt("rowcount"); rs.close();
-	 * 
-	 * System.out.println(table + " has " + count + " row(s).");
-	 * 
-	 * } catch (Exception ex) { ex.printStackTrace(); } return count; }
-	 */
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public int getTotalPass(String table) {
+		int count = 0;
+		try {
+
+			PreparedStatement pst = connection1.prepareStatement("SELECT * FROM " + table);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				if (rs.getString(2).equals("Pass")) {
+					count++;
+				}
+			}
+			rs.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return count;
+	}
+
+	private void drawPieChart(Graphics g) {
+		double[] names = new double[2];
+
+		double personPass = getPersonPass();
+		double totalPass = getTotalPass("logsheet");
+		double others = totalPass - personPass;
+		
+		System.out.println(personPass);
+		System.out.println(totalPass);
+
+		names[0] = personPass;
+		names[1] = others;
+
+		// create temporary variables for pie chart calculations
+		double percentage = 0.0;
+		int startAngle = 0;
+		int arcAngle = 0;
+
+		for (int i = 0; i < 2; i++) {
+
+			if (totalPass != 0) {
+
+				// get percentage
+				percentage = names[i] / totalPass;
+				System.out.println(percentage);
+				// calculate arc angle for percentage
+				arcAngle = (int) Math.round(percentage * 360);
+
+				// set drawing Color for pie wedge
+				Color color = new Color(255, (20 + 10 * i), (10 + 100 * i));
+				g.setColor(color);
+
+				// draw pie wedge
+				g.fillArc(5, 5, 100, 100, startAngle, arcAngle);
+
+				// calculate startAngle for next pie wedge
+				startAngle += arcAngle;
+			}
+		}
+	} // end method drawPieChart
+
 }
