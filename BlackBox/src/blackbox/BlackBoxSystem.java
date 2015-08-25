@@ -7,7 +7,10 @@ import net.proteanit.sql.DbUtils;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -220,6 +223,25 @@ public class BlackBoxSystem {
 		String colDiag = "date";
 		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
 
+		//Add a button to export JTable to Excel
+		JButton exportBtn = new JButton("Export To File");
+		exportBtn.setBounds(20, 305, 180, 20);
+		exportBtn.setSize(new Dimension(140,25));
+		LogSheetCard.add(exportBtn);
+		exportBtn.setVisible(false);
+		exportBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String statusItem = (String) cbSelectedbyStatus.getSelectedItem();
+				String fileName = "StatusReport_" +statusItem + ".xls";
+				if(toExcel(logTable, new File(fileName))) {
+					JOptionPane.showMessageDialog(null, "Data Exported to "+ fileName + "!");
+				} else {
+					JOptionPane.showMessageDialog(null, "Failed to export logs to "+ fileName + "!", "Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});		
+		
 		cbSelectbyName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String query = "select username as 'User', reportStatus as 'Report Status' from logsheet where username =?";
@@ -232,6 +254,7 @@ public class BlackBoxSystem {
 					cbSelectDiag.setSelectedIndex(0);
 					logpanel.setVisible(true);
 					passpanel.setVisible(false);
+					exportBtn.setVisible(false);
 				}
 			}
 		});
@@ -250,6 +273,7 @@ public class BlackBoxSystem {
 					cbSelectDiag.setSelectedIndex(0);
 					logpanel.setVisible(false);
 					passpanel.setVisible(true);
+					exportBtn.setVisible(true);
 				}
 			}
 		});
@@ -268,6 +292,7 @@ public class BlackBoxSystem {
 					cbSelectbyName.setSelectedIndex(0);
 					logpanel.setVisible(false);
 					passpanel.setVisible(false);
+					exportBtn.setVisible(false);
 				}
 			}
 		});
@@ -930,6 +955,29 @@ public class BlackBoxSystem {
 		}
 	}
 
+	public boolean toExcel(JTable table, File file){
+		try{
+			DefaultTableModel model = (DefaultTableModel) logTable.getModel();
+			FileWriter excel = new FileWriter(file);
+
+			for(int i = 0; i < model.getColumnCount(); i++){
+				excel.write(model.getColumnName(i) + "\t");
+			}
+
+			excel.write("\n");
+
+			for(int i=0; i< model.getRowCount(); i++) {
+				for(int j=0; j < model.getColumnCount(); j++) {
+					excel.write(model.getValueAt(i,j).toString()+"\t");
+				}
+				excel.write("\n");
+			}
+
+			excel.close();
+			return true;
+		}catch(IOException e){ System.out.println(e); return false;}
+	}
+	
 	public int getTotalPW(String table, String pORw) {
 		int count = 0;
 		try {
