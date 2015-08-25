@@ -20,7 +20,7 @@ public class Sensors extends Observable {
 	private DriverProfile myProfile;
 	private boolean starting;
 	private boolean healthy = true;
-	private String status = "Good Record";
+	private String status = "Pass";
 
 	private double[] tires = new double[4];
 	private double coeff = 1.0;
@@ -197,7 +197,7 @@ public class Sensors extends Observable {
 		notifyObservers(new Boolean(healthy));
 
 		if (healthy == false)
-			list.set(1, "Bad Record");
+			list.set(1, "Warning");
 
 		// for debugging
 		// this.printlist();
@@ -219,11 +219,6 @@ public class Sensors extends Observable {
 				pst.executeUpdate();
 
 				pst.close();
-
-				// Update comboBoxes to reflect the latest change
-				// updateComboBox(cbByCat, query1, col1);
-				// updateComboBox(cbByDate, query2, col2);
-				// clearTable();
 
 			} catch (Exception ex) {
 				ex.printStackTrace();

@@ -51,9 +51,6 @@ public class BlackBoxSystem {
 	private JTextField textField;
 	private JTable logTable;
 
-	TiresCard tc;
-	EngineCard ec;
-
 	Connection connection1 = sqliteConnection.dbConnector();
 
 	/**
@@ -211,7 +208,7 @@ public class BlackBoxSystem {
 		RtmCard = new JPanel();
 		RtmCard.setBackground(new Color(230, 230, 250));
 
-		JButton btnGo = new JButton("Go");
+		/*JButton btnGo = new JButton("Go");
 		// dg.add(btnGo);
 		btnGo.setBounds(557, 65, 55, 20);
 		btnGo.addActionListener(new ActionListener() {
@@ -299,7 +296,7 @@ public class BlackBoxSystem {
 			}
 		});
 
-	
+	*/
 
 		lblShowText = new JLabel();
 		lblShowText.setBounds(20, 30, 200, 20);
@@ -711,7 +708,7 @@ public class BlackBoxSystem {
 				
 				while(rs1.next()) {
 					count++;
-					if (rs1.getString(2).equals("Good Record")) {
+					if (rs1.getString(2).equals("Pass")) {
 						count1++;
 					}
 				}
