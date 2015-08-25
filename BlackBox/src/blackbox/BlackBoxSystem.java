@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -55,12 +56,12 @@ public class BlackBoxSystem {
 	private JPanel firstCard; // Card for start-engine button
 	private JLabel total, total_1, pass, rate;
 	private JTable logTable;
-	private JPanel starpanel, passpanel, reportStatuspanel; 
+	private JPanel starpanel, passpanel, reportStatuspanel, piechart;
 
 	Connection connection1 = sqliteConnection.dbConnector();
 
 	private double passrate, personpass, persontotal;
-	
+
 	public void setPassRate(double value) {
 		this.passrate = value;
 	}
@@ -76,13 +77,85 @@ public class BlackBoxSystem {
 	public double getPersonPass() {
 		return this.personpass;
 	}
-	
+
 	public void setPersonTotal(double value) {
 		this.persontotal = value;
 	}
 
 	public double getPersonTotoal() {
 		return this.persontotal;
+	}
+
+	private String[] namelist;
+
+	public String[] getNameList() {
+		ArrayList<String> items = new ArrayList<String>();
+		String[] stringlist = new String[3];
+
+		try {
+			// Send query to database
+			PreparedStatement pst = connection1.prepareStatement("Select distinct username from logsheet");
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+
+				String currentname = rs.getString("username");
+				items.add(currentname);
+			}
+
+			for (int i = 0; i < items.size(); i++) {
+				stringlist[i] = (String) items.get(i);
+			}
+
+			namelist = stringlist;
+			rs.close();
+			pst.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return this.namelist;
+	}
+
+	private double[] percentage;
+
+	public double[] getPercentage(String pORw) {
+		ArrayList<Double> items = new ArrayList<Double>();
+		String[] listofname = getNameList();
+		double[] listresult = new double[3];
+		double total = getTotalPW("logsheet", pORw);
+		double count = 0;
+
+		for (int i = 0; i < listofname.length; i++) {
+			try {
+				// Send query to database
+				PreparedStatement pst = connection1.prepareStatement("Select * from logsheet where username = '"
+						+ listofname[i] + "' and reportStatus = '" + pORw + "'");
+				ResultSet rs = pst.executeQuery();
+
+				while (rs.next()) {
+
+					count++;
+				}
+
+				items.add(count);
+				count = 0;
+
+				rs.close();
+				pst.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		for (int i = 0; i < items.size(); i++) {
+			double result = (double) items.get(i) / total;
+			listresult[i] = result;
+		}
+
+		percentage = listresult;
+		return this.percentage;
 	}
 
 	/**
@@ -246,9 +319,9 @@ public class BlackBoxSystem {
 							digCar.setCarStopped(true);
 							cards.show(cardPanel, "Full Diagnose");
 							// Save panel to PDF
-							//java.awt.Image image = getImageFromPanel(fdc);
-							//String fileName = "DiagnosisReport.pdf";
-							//printToPDF(image, fileName);
+							// java.awt.Image image = getImageFromPanel(fdc);
+							// String fileName = "DiagnosisReport.pdf";
+							// printToPDF(image, fileName);
 						} catch (InterruptedException ex) {
 						}
 
@@ -389,11 +462,19 @@ public class BlackBoxSystem {
 		logpanel.add(lblRate);
 
 		reportStatuspanel = new JPanel() {
+
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
-			
-				drawPieChart(g);
-				drawLegend(g);
+
+				double prate = getPassRate();
+				double warningrate = (1 - prate);
+
+				double[] showitems = { prate, warningrate };
+				String[] legends = { "Pass", "Warning" };
+				Color[] colors = { new Color(124, 252, 0), new Color(255, 51, 51) };
+
+				drawPieChart(g, showitems, colors);
+				drawLegend(g, legends, colors);
 			}
 
 		};
@@ -402,23 +483,23 @@ public class BlackBoxSystem {
 		logpanel.add(reportStatuspanel);
 
 		starpanel = new JPanel() {
-		
+
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 
 				double Pass = getPassRate();
 
 				java.awt.Image star = new ImageIcon("image/star.png").getImage();
-				
-				Font font = new Font( "SansSerif", Font.BOLD, 15 );
-			    g.setFont( font );
-			    g.setColor(Color.darkGray);
-			      
+
+				Font font = new Font("SansSerif", Font.BOLD, 15);
+				g.setFont(font);
+				g.setColor(Color.darkGray);
+
 				if (Pass > 0) {
 					g.drawString("Performance: ", 0, 20);
-					g.drawImage(star, 0, 40, starpanel); 
+					g.drawImage(star, 0, 40, starpanel);
 				}
-				
+
 				if (Pass >= 0.25)
 					g.drawImage(star, 50, 40, starpanel);
 				if (Pass >= 0.5)
@@ -447,6 +528,22 @@ public class BlackBoxSystem {
 		total_1 = new JLabel("");
 		total_1.setBounds(114, 11, 85, 22);
 		passpanel.add(total_1);
+
+		piechart = new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				double[] showitems = getPercentage(cbSelectedbyStatus.getSelectedItem().toString());
+				String[] name = getNameList();
+				Color[] colors = { new Color(124, 202, 0), new Color(255, 51, 51), new Color(240, 151, 10) };
+
+				drawPieChart(g, showitems, colors);
+				drawLegend(g, name, colors);
+			}
+		};
+		piechart.setBounds(201, 11, 169, 142);
+		piechart.setBackground(Color.white);
+		passpanel.add(piechart);
 
 		// Create Panels for switching
 		cards = new CardLayout();
@@ -683,8 +780,6 @@ public class BlackBoxSystem {
 			PreparedStatement pst = connection1.prepareStatement(query);
 			ResultSet rs = pst.executeQuery();
 
-			int i = 0;
-
 			while (rs.next()) {
 
 				String currentRow = rs.getString(col);
@@ -705,9 +800,9 @@ public class BlackBoxSystem {
 
 			// Add the sorted items to combobox
 			for (int j = 0; j < items.size(); j++) {
-				String day = items.get(j);
-				System.out.println(day);
-				cb.addItem(day);
+				String show = items.get(j);
+				System.out.println(show);
+				cb.addItem(show);
 
 			}
 			rs.close();
@@ -754,16 +849,19 @@ public class BlackBoxSystem {
 
 			rate.setText(percentFormat.format(ratepass));
 			setPassRate(ratepass);
-			
+
+			System.out.println(ratepass);
 			starpanel.repaint();
 
-	//		System.out.println(counttotal);
-	//		System.out.println(countpass);
+			// System.out.println(counttotal);
+			// System.out.println(countpass);
 
 			setPersonPass(countpass);
 			setPersonTotal(counttotal);
 			reportStatuspanel.repaint();
-			
+
+			piechart.repaint();
+
 			rs.close();
 			rs1.close();
 			pst.close();
@@ -820,7 +918,7 @@ public class BlackBoxSystem {
 		}
 	}
 
-	public int getTotalPass(String table) {
+	public int getTotalPW(String table, String pORw) {
 		int count = 0;
 		try {
 
@@ -828,7 +926,7 @@ public class BlackBoxSystem {
 			ResultSet rs = pst.executeQuery();
 
 			while (rs.next()) {
-				if (rs.getString(2).equals("Pass")) {
+				if (rs.getString(2).equals(pORw)) {
 					count++;
 				}
 			}
@@ -841,71 +939,96 @@ public class BlackBoxSystem {
 		return count;
 	}
 
-	Color[] colors = {new Color(124, 252, 0), new Color(255, 51, 51)};
-	
-	private void drawPieChart(Graphics g) {
-		double[] names = new double[2];
+	private void drawPieChart(Graphics g, double[] showitems, Color[] colors) {
 
-		double personPass = getPersonPass();
-		double totalPass = getTotalPass("logsheet");
-		double personTotal = getPersonTotoal();
-		double others = personTotal - personPass;
-		
-		System.out.println(personPass);
-		System.out.println(personTotal);
+		// System.out.println(personPass);
+		// System.out.println(personTotal);
 
-		names[0] = personPass;
-		names[1] = others;
+		// showitems[0] = personPass;
+		// showitems[1] = others;
 
-		// create temporary variables for pie chart calculations
-		double percentage = 0.0;
 		int startAngle = 0;
 		int arcAngle = 0;
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < showitems.length; i++) {
 
-			if (personTotal != 0) {
+			// calculate arc angle for percentage
+			arcAngle = (int) Math.round(showitems[i] * 360);
+			// System.out.println(showitems[i]);
+			// set drawing Color for pie wedge
+			g.setColor(colors[i]);
 
-				// get percentage
-				percentage = names[i] / personTotal;
-				System.out.println(percentage);
-				// calculate arc angle for percentage
-				arcAngle = (int) Math.round(percentage * 360);
+			// draw pie wedge
+			g.fillArc(5, 5, 100, 100, startAngle, arcAngle);
 
-				// set drawing Color for pie wedge
-				g.setColor(colors[i]);
-
-				// draw pie wedge
-				g.fillArc(5, 5, 100, 100, startAngle, arcAngle);
-
-				// calculate startAngle for next pie wedge
-				startAngle += arcAngle;
-			}
+			// calculate startAngle for next pie wedge
+			startAngle += arcAngle;
 		}
 	} // end method drawPieChart
-	
+
 	// draw pie chart legend on given Graphics context
-	private void drawLegend( Graphics g )
-	   {
-			String[] show = new String[2];
-			
-			show[0] = "Pass";
-			show[1] = "Warning";
-			
-	      // create Font for Account name
-	      Font font = new Font( "SansSerif", Font.BOLD, 12 );
-	      g.setFont( font );
+	private void drawLegend(Graphics g, String[] legends, Color[] colors) {
 
-	      // draw description for each Account
-	      for ( int i = 0; i < 2; i++ ) {
-	         g.setColor(colors[i]);
-	         g.fillRect( 100, 100 + 15 * i, 10, 10 );
+		// show[0] = "Pass";
+		// show[1] = "Warning";
 
-	         // draw Account name next to color swatch
-	         g.setColor( Color.black );
-	         g.drawString( show[i], 115, 110 + 15 * i);
-	        }
-	   } // end method drawLegend
+		// create Font for Account name
+		Font font = new Font("SansSerif", Font.BOLD, 12);
+		g.setFont(font);
 
+		// draw description for each Account
+		for (int i = 0; i < legends.length; i++) {
+			g.setColor(colors[i]);
+			g.fillRect(100, 100 + 15 * i, 10, 10);
+
+			// draw Account name next to color swatch
+			g.setColor(Color.black);
+			g.drawString(legends[i], 115, 110 + 15 * i);
+		}
+	} // end method drawLegend
+
+	/*
+	 * private void drawPieChart(Graphics g) { double[] names = new double[2];
+	 * 
+	 * double personPass = getPersonPass(); double totalPass =
+	 * getTotalPass("logsheet"); double personTotal = getPersonTotoal(); double
+	 * others = personTotal - personPass;
+	 * 
+	 * // System.out.println(personPass); // System.out.println(personTotal);
+	 * 
+	 * names[0] = personPass; names[1] = others;
+	 * 
+	 * // create temporary variables for pie chart calculations double
+	 * percentage = 0.0; int startAngle = 0; int arcAngle = 0;
+	 * 
+	 * for (int i = 0; i < 2; i++) {
+	 * 
+	 * if (personTotal != 0) {
+	 * 
+	 * // get percentage percentage = names[i] / personTotal;
+	 * System.out.println(percentage); // calculate arc angle for percentage
+	 * arcAngle = (int) Math.round(percentage * 360);
+	 * 
+	 * // set drawing Color for pie wedge g.setColor(colors[i]);
+	 * 
+	 * // draw pie wedge g.fillArc(5, 5, 100, 100, startAngle, arcAngle);
+	 * 
+	 * // calculate startAngle for next pie wedge startAngle += arcAngle; } } }
+	 * // end method drawPieChart
+	 * 
+	 * // draw pie chart legend on given Graphics context private void
+	 * drawLegend( Graphics g ) { String[] show = new String[2];
+	 * 
+	 * show[0] = "Pass"; show[1] = "Warning";
+	 * 
+	 * // create Font for Account name Font font = new Font( "SansSerif",
+	 * Font.BOLD, 12 ); g.setFont( font );
+	 * 
+	 * // draw description for each Account for ( int i = 0; i < 2; i++ ) {
+	 * g.setColor(colors[i]); g.fillRect( 100, 100 + 15 * i, 10, 10 );
+	 * 
+	 * // draw Account name next to color swatch g.setColor( Color.black );
+	 * g.drawString( show[i], 115, 110 + 15 * i); } } // end method drawLegend
+	 */
 
 }
