@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -535,7 +537,17 @@ public class BlackBoxSystem {
 
 				double[] showitems = getPercentage(cbSelectedbyStatus.getSelectedItem().toString());
 				String[] name = getNameList();
-				Color[] colors = { new Color(124, 202, 0), new Color(255, 51, 51), new Color(240, 151, 10) };
+				Color[] colors = new Color[name.length]; 
+
+				System.out.println(name.length);
+
+				for (int i = 0; i < name.length; i++) {
+					int red = (int) (Math.random() * 256);
+					int green = (int) (Math.random() * 256);
+					int blue = (int) (Math.random() * 256);
+
+					colors[i] = new Color(red, green, blue);
+				}
 
 				drawPieChart(g, showitems, colors);
 				drawLegend(g, name, colors);
