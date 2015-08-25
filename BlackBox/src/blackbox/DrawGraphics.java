@@ -1,6 +1,10 @@
 package blackbox;
 
 import javax.swing.*;
+
+import blackbox.CarClasses.Car;
+import blackbox.CarClasses.Honda;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -9,6 +13,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class DrawGraphics extends JPanel {
 
@@ -39,34 +45,41 @@ public class DrawGraphics extends JPanel {
 		lblPart.setBounds(400, 400, 300, 150);
 		add(lblPart);
 		
+		Car myCar = new Honda();
+		NumberFormat formatter = new DecimalFormat("#0.0"); 
+		//formatter.format()
 //////////////////////////////////tires//////////////////////////////////
 		
-		lblTireMake = new JLabel("Tire Make: ");
+		lblTireMake = new JLabel("Tire Brand: " + myCar.getSysTires().getBrandName());
 		lblTireMake.setForeground(Color.BLUE);
 		lblTireMake.setBounds(5, 0, 150, 150);
 		add(lblTireMake);
 		
-		lblTireModel = new JLabel("Tire Model: ");
+		lblTireModel = new JLabel("Tire Model: " + myCar.getSysTires().getModelNumber());
 		lblTireModel.setForeground(Color.BLUE);
 		lblTireModel.setBounds(250, 0, 150, 150);
 		add(lblTireModel);
 		
-		lblTireFL = new JLabel("Front Left Tire: ");
+		lblTireFL = new JLabel("Front Left Tire: " + 
+		formatter.format(myCar.getSysTires().getTirePressure()));
 		lblTireFL.setForeground(Color.BLUE);
 		lblTireFL.setBounds(5, 25, 150, 150);
 		add(lblTireFL);
 		
-		lblTireFR = new JLabel("Front Right Tire: ");
+		lblTireFR = new JLabel("Front Right Tire: " +
+		formatter.format(myCar.getSysTires().getTirePressure()));
 		lblTireFR.setForeground(Color.BLUE);
 		lblTireFR.setBounds(5, 50, 150, 150);
 		add(lblTireFR);
 		
-		lblTireRL = new JLabel("Rear Left Tire: ");
+		lblTireRL = new JLabel("Rear Left Tire: " +
+		formatter.format(myCar.getSysTires().getTirePressure()));
 		lblTireRL.setForeground(Color.BLUE);
 		lblTireRL.setBounds(5, 75, 150, 150);
 		add(lblTireRL);
 		
-		lblTireRR = new JLabel("Rear Right Tire: ");
+		lblTireRR = new JLabel("Rear Right Tire: " + 
+		formatter.format(myCar.getSysTires().getTirePressure()));
 		lblTireRR.setForeground(Color.BLUE);
 		lblTireRR.setBounds(5, 100, 150, 150);
 		add(lblTireRR);
@@ -75,7 +88,8 @@ public class DrawGraphics extends JPanel {
 		
 //////////////////////////////////Temperature//////////////////////////////////
 		
-		lblTemperature = new JLabel("Temperature: ");
+		lblTemperature = new JLabel("Temperature: " +
+		formatter.format(myCar.getSysCooling().getTemperature()));
 		lblTemperature.setForeground(Color.BLUE);
 		lblTemperature.setBounds(5, 0, 150, 150);
 		add(lblTemperature);
@@ -84,16 +98,19 @@ public class DrawGraphics extends JPanel {
 
 //////////////////////////////////Engine//////////////////////////////////
 		
-		lblEngineType = new JLabel("Engine Type: ");
+		lblEngineType = new JLabel("Engine Type: " + myCar.getSysEngine().getType());
 		lblEngineType.setForeground(Color.BLUE);
-		lblEngineType.setBounds(5, 0, 150, 150);
+		lblEngineType.setBounds(5, 0, 500, 150);
 		add(lblEngineType);
 		
-		lblHorsePower = new JLabel("Horsepower: ");
+		lblHorsePower = new JLabel("Horsepower: " + 
+		formatter.format(myCar.getSysEngine().getHorsePower()));
 		lblHorsePower.setForeground(Color.BLUE);
 		lblHorsePower.setBounds(5, 25, 150, 150);
 		add(lblHorsePower);
-		lblRPM = new JLabel("Engine RPM: ");
+		
+		lblRPM = new JLabel("Engine RPM: " + 
+		formatter.format(myCar.getSysEngine().getRPM()));
 		lblRPM.setForeground(Color.BLUE);
 		lblRPM.setBounds(5, 50, 150, 150);
 		add(lblRPM);
