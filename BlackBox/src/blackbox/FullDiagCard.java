@@ -3,9 +3,13 @@ package blackbox;
 import blackbox.CarClasses.*;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
+
 public class FullDiagCard extends JPanel {
 	private Car myCar;
 	private OBD2Port obd;
@@ -29,6 +37,7 @@ public class FullDiagCard extends JPanel {
 	protected JLabel rpmStatus, olStatus, flStatus, TempStatus, TireFLStatus, TireFRStatus, TireRLStatus, TireRRStatus;
 	protected JLabel lbldate;
 	protected JButton save;
+	protected JButton saveToPDF;
 	
 	private String diagDate;
 	private int size; // to suit to database;
@@ -225,6 +234,26 @@ public class FullDiagCard extends JPanel {
 		save = new JButton("Save");
 		save.setBounds(521, 11, 80, 25);
 		add(save);
+		
+		saveToPDF = new JButton("Save To PDF");
+		saveToPDF.setBounds(251, 390, 80, 25);
+		saveToPDF.setSize(new Dimension(120,30));
+		add(saveToPDF);
+		saveToPDF.setVisible(false);
+		saveToPDF.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				java.awt.Image image = getImageFromPanel(FullDiagCard.this);
+				String fileName = "DiagnosisReport_"+ diagDate+ ".pdf";
+		        printToPDF(image, fileName);
+		        JOptionPane.showMessageDialog(null, "Data Saved to "+ fileName + ".");
+			}
+			
+		});
+		
+		
 	}
 
 	private String getDate() {
@@ -428,5 +457,33 @@ public class FullDiagCard extends JPanel {
 		TireRRStatus.setText("");
 
 	}
+	
+	public java.awt.Image getImageFromPanel(Component component) {
+
+        BufferedImage image = new BufferedImage(component.getWidth(),
+                component.getHeight(), BufferedImage.TYPE_INT_RGB);
+        component.paint(image.getGraphics());
+        return image;
+    }
+	
+	public void printToPDF(java.awt.Image awtImage, String fileName) {
+        try {
+            Document d = new Document();
+            PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(
+                    fileName));
+            d.open();
+
+            Image iTextImage = Image.getInstance(writer, awtImage, 1);
+            //iTextImage.setAbsolutePosition(50, 50);
+            iTextImage.scalePercent(80);
+            d.add(iTextImage);
+
+            d.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }   
+    }
+	
 
 }
