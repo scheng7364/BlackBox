@@ -246,7 +246,7 @@ public class FullDiagCard extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				java.awt.Image image = getImageFromPanel(FullDiagCard.this);
-				String fileName = "DiagnosisReport_"+ diagDate+ ".pdf";
+				String fileName = "DiagnosisReport_"+ lbldate.getText()+ ".pdf";
 		        printToPDF(image, fileName);
 		        JOptionPane.showMessageDialog(null, "Data Saved to "+ fileName + ".");
 			}
