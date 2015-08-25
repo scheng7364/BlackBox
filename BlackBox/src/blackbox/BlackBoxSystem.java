@@ -238,9 +238,9 @@ public class BlackBoxSystem {
 							digCar.setCarStopped(true);
 							cards.show(cardPanel, "Full Diagnose");
 							// Save panel to PDF
-							java.awt.Image image = getImageFromPanel(fdc);
-							String fileName = "DiagnosisReport.pdf";
-							printToPDF(image, fileName);
+							//java.awt.Image image = getImageFromPanel(fdc);
+							//String fileName = "DiagnosisReport.pdf";
+							//printToPDF(image, fileName);
 						} catch (InterruptedException ex) {
 						}
 
@@ -330,7 +330,7 @@ public class BlackBoxSystem {
 						fdc.TireRRStatus.setText(rs2.getString("TRRStatus"));
 
 						fdc.save.setVisible(false);
-
+						fdc.saveToPDF.setVisible(true);
 					}
 
 					rs1.close();
