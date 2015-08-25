@@ -9,11 +9,14 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class BlackBoxSystem {
@@ -47,12 +50,20 @@ public class BlackBoxSystem {
 	private JLabel lblShowText; // in Log Sheet card;
 	private JPanel RtmCard; // Card for real-time monitoring
 	private JPanel firstCard; // Card for start-engine button
-
-	private JTextField textField;
+	private JLabel total, pass, rate;
 	private JTable logTable;
-
+	private JPanel starpanel;
+	
 	Connection connection1 = sqliteConnection.dbConnector();
 
+	private double passrate;
+	
+	public void setPassRate(double value) {
+		this.passrate = value;
+	}
+	public double getPassRate() {
+		return this.passrate;
+	}
 	/**
 	 * Create the application.
 	 */
@@ -82,10 +93,18 @@ public class BlackBoxSystem {
 
 		firstCard = new JPanel();
 		firstCard.setBackground(new Color(255, 255, 204));
-		
+
 		LogSheetCard = new JPanel();
 		LogSheetCard.setBackground(new Color(248, 248, 255));
 		LogSheetCard.setLayout(null);
+
+		// Panel for showing rating
+		JPanel logpanel = new JPanel();
+		logpanel.setVisible(false);
+		logpanel.setBackground(Color.white);
+		logpanel.setBounds(10, 250, 614, 164);
+		LogSheetCard.add(logpanel);
+		logpanel.setLayout(null);
 
 		// Combobox - view records by username
 		JComboBox<String> cbSelectbyName = new JComboBox<String>();
@@ -93,56 +112,64 @@ public class BlackBoxSystem {
 		String colName = "username";
 		this.fillComboBox(cbSelectbyName, queryName, colName);
 
-		cbSelectbyName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String query = "select username as 'User', reportStatus as 'Report Status' from logsheet where username =?";
-				String item = (String) cbSelectbyName.getSelectedItem();
-				String displaytext = "The Records for " + item + " are: ";
-
-				selectComboBox(query, item, displaytext);
-				// Clear the window after selecting a new Category
-				// clearPane();
-			}
-		});
-		cbSelectbyName.setBounds(20, 11, 150, 20);
-		LogSheetCard.add(cbSelectbyName);
-
 		// ComboBox - view records by report type
 		JComboBox<String> cbSelectedbyStatus = new JComboBox<String>();
 		String queryStatus = "select distinct reportStatus from logsheet";
 		String colStatus = "reportStatus";
 		this.fillComboBox(cbSelectedbyStatus, queryStatus, colStatus);
 
+		// ComboBox - view diagnostic history
+		JComboBox<String> cbSelectDiag = new JComboBox<String>();
+		String queryDiag = "select distinct date from diagsheet";
+		String colDiag = "date";
+		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
+
+		cbSelectbyName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select username as 'User', reportStatus as 'Report Status' from logsheet where username =?";
+				String item = (String) cbSelectbyName.getSelectedItem();
+				String displaytext = "The Records for " + item + " are: ";
+
+				if (cbSelectbyName.getSelectedIndex() != 0) {
+					selectComboBox(query, item, displaytext);
+					cbSelectedbyStatus.setSelectedIndex(0);
+					cbSelectDiag.setSelectedIndex(0);
+					logpanel.setVisible(true);
+				}
+			}
+		});
+		cbSelectbyName.setBounds(20, 11, 150, 20);
+		LogSheetCard.add(cbSelectbyName);
+
 		cbSelectedbyStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String query = "select * from logsheet where reportStatus =?";
+				String query = "select username as 'User', reportStatus as 'Record', carSpeed as 'Speed', carRPM as 'RPM', carTemp as 'Temp', carOil as 'Oil level', carFuel as 'Gas', carTFL as 'Tire FL', carTFR as 'Tier FR', carTRL as 'Tire RL', carTRR as 'Tire RR' from logsheet where reportStatus =?";
 				String item = (String) cbSelectedbyStatus.getSelectedItem();
-				String displaytext = "The " + item + " are: ";
+				String displaytext = "The " + item + " Records are: ";
 
-				selectComboBox(query, item, displaytext);
-				// Clear the window after selecting a new Category
-				// clearPane();
+				if (cbSelectedbyStatus.getSelectedIndex() != 0) {
+					selectComboBox(query, item, displaytext);
+					cbSelectbyName.setSelectedIndex(0);
+					cbSelectDiag.setSelectedIndex(0);
+					logpanel.setVisible(false);
+				}
 			}
 		});
 		cbSelectedbyStatus.setBounds(175, 11, 180, 20);
 		LogSheetCard.add(cbSelectedbyStatus);
 
-		// ComboBox - view diagnostic history
-		JComboBox<String> cbSelectDiag = new JComboBox<String>();
-		String queryDiag = "select distinct date from diagsheet";
-		String colDiag = "date";
-		String diagtable = "diagsheet";
-		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
-
 		cbSelectDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String query = "select rowid as 'Record ID', date as 'Diagnostic Date' from diagsheet where date =?";
 				String item = (String) cbSelectDiag.getSelectedItem();
-				String displaytext = "The Reports dated " + item + " are: ";
+				String displaytext = "The Reports dated " + item + " are: " + "                  Click to view Report.";
 
-				selectComboBox(query, item, displaytext);
-				// Clear the window after selecting a new Category
-				// clearPane();
+				if (cbSelectDiag.getSelectedIndex() != 0) {
+					selectComboBox(query, item, displaytext);
+					cbSelectedbyStatus.setSelectedIndex(0);
+					cbSelectbyName.setSelectedIndex(0);
+					logpanel.setVisible(false);
+				}
 			}
 		});
 		cbSelectDiag.setBounds(365, 11, 180, 20);
@@ -209,123 +236,22 @@ public class BlackBoxSystem {
 		RtmCard = new JPanel();
 		RtmCard.setBackground(new Color(230, 230, 250));
 
-		/*JButton btnGo = new JButton("Go");
-		// dg.add(btnGo);
-		btnGo.setBounds(557, 65, 55, 20);
-		btnGo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// System.out.println(dg.getComboSelected());
-				tc = new TiresCard(carDig, obdDig);
-				cardPanel.add(tc, "Tires");
-
-				JButton tireTest = new JButton("Check");
-				tireTest.setBounds(380, 10, 100, 24);
-				tireTest.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						// digCar = new CarFacade() ;
-						carDig = digCar.getCar();
-						obdDig = digCar.getObdPort();
-
-						tc = new TiresCard(carDig, obdDig);
-						cardPanel.add(tc, "Tires");
-
-						TransitionCard tsc = new TransitionCard();
-						cardPanel.add(tsc, "Trans");
-
-						Thread thread = new Thread() {
-
-							public void run() {
-								try {
-									digCar.setCarStopped(false);
-									digCar.start();
-									cards.show(cardPanel, "Trans");
-									Thread.sleep(2000);
-									tc.diagnoseTires();
-									digCar.stop();
-									cards.show(cardPanel, "Tires");
-
-								} catch (InterruptedException ex) {
-								}
-							}
-						};
-						thread.start();
-					}
-				});
-				tc.add(tireTest);
-
-				ec = new EngineCard(carDig, obdDig);
-				cardPanel.add(ec, "Engine");
-
-				JButton engTest = new JButton("Check");
-				engTest.setBounds(380, 10, 100, 24);
-				engTest.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-
-						digCar = new CarFacade(car);
-						carDig = digCar.getCar();
-						obdDig = new OBD2Port(digCar);
-
-						ec = new EngineCard(carDig, obdDig);
-						cardPanel.add(ec, "Engine");
-
-						TransitionCard tsc = new TransitionCard();
-						cardPanel.add(tsc, "Trans");
-
-						Thread thread = new Thread() {
-
-							public void run() {
-								try {
-									digCar.setCarStopped(false);
-									digCar.start();
-									cards.show(cardPanel, "Trans");
-									Thread.sleep(3000);
-									ec.diagnoseEngine();
-									digCar.stop();
-									cards.show(cardPanel, "Engine");
-								} catch (InterruptedException ex) {
-								}
-							}
-						};
-
-						thread.start();
-					}
-				});
-				ec.add(engTest);
-
-				cards.show(cardPanel, dg.getComboSelected());
-
-			}
-		});
-
-	*/
-
 		lblShowText = new JLabel();
-		lblShowText.setBounds(20, 30, 200, 20);
+		lblShowText.setBounds(20, 30, 500, 20);
 		LogSheetCard.add(lblShowText);
 
-		JLabel lblTireFR = new JLabel("New label");
-		lblTireFR.setBounds(20, 300, 40, 20);
-		LogSheetCard.add(lblTireFR);
-		/*
-		 * JLabel lblTireFL = new JLabel("New label");
-		 * 
-		 * JLabel lblTireRL = new JLabel("New label");
-		 * 
-		 * JLabel lblTireRR = new JLabel("New label");
-		 * 
-		 * JLabel lblOil = new JLabel("New label");
-		 * 
-		 * JLabel lblRPM = new JLabel("New label");
-		 * 
-		 * JLabel lblFuel = new JLabel("New label");
-		 * 
-		 * JLabel lblTemp = new JLabel("New label");
-		 */
+		logTable = new JTable() {
+			private static final long serialVersionUID = 1L;
 
-		logTable = new JTable();
+			// Override the isCellEditable function to always return false
+			public boolean isCellEditable(int row, int column) {
+				return false; // Make an non-editable table
+			};
+		};
+
 		JScrollPane scrollPane = new JScrollPane(logTable);
-		scrollPane.setLocation(20, 50);
-		scrollPane.setSize(590, 200);
+		scrollPane.setLocation(10, 50);
+		scrollPane.setSize(614, 200);
 		logTable.setFillsViewportHeight(false);
 		scrollPane.setViewportView(logTable);
 
@@ -348,7 +274,7 @@ public class BlackBoxSystem {
 					ResultSet rs2 = pst2.executeQuery();
 
 					if (rs1.next()) {
-
+				
 						// Send the GUI components to their corresponding
 						// columns in database
 						/*
@@ -364,6 +290,7 @@ public class BlackBoxSystem {
 					}
 
 					if (rs2.next()) {
+
 						FullDiagCard fdc = new FullDiagCard(car, obd);
 						cardPanel.add(fdc, "Full Diagnose Report");
 						cards.show(cardPanel, "Full Diagnose Report");
@@ -408,7 +335,7 @@ public class BlackBoxSystem {
 			}
 
 		});
-		logTable.setForeground(new Color(0, 0, 128));
+		logTable.setForeground(new Color(0, 0, 0));
 		logTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		logTable.setShowVerticalLines(false);
 		logTable.setShowHorizontalLines(false);
@@ -418,10 +345,56 @@ public class BlackBoxSystem {
 		logTable.setModel(new DefaultTableModel(new Object[][] {}, new String[] {}));
 		LogSheetCard.add(scrollPane);
 
-		JPanel logPanel = new JPanel();
-		logPanel.setBounds(21, 195, 590, 220);
-		LogSheetCard.add(logPanel);
+		JLabel lblTotal = new JLabel("Total Records");
+		lblTotal.setBounds(10, 11, 85, 22);
+		logpanel.add(lblTotal);
 
+		total = new JLabel("");
+		total.setBounds(114, 11, 85, 22);
+		logpanel.add(total);
+
+		JLabel lblPass = new JLabel("Pass Records");
+		lblPass.setBounds(10, 35, 85, 22);
+		logpanel.add(lblPass);
+
+		pass = new JLabel("");
+		pass.setBounds(114, 35, 85, 22);
+		logpanel.add(pass);
+
+		rate = new JLabel("%");
+		rate.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		rate.setBounds(114, 68, 94, 58);
+		logpanel.add(rate);
+
+		JLabel lblRate = new JLabel("Pass Rate");
+		lblRate.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblRate.setBounds(10, 68, 94, 58);
+		logpanel.add(lblRate);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(201, 11, 169, 142);
+		logpanel.add(panel_1);
+
+		starpanel = new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+
+				double Pass = getPassRate();
+				
+				Image star = new ImageIcon("image/star.png").getImage();
+				
+				if(Pass > 0) g.drawImage(star, 0, 50, starpanel);
+				if(Pass >= 0.25) g.drawImage(star, 50, 50, starpanel);
+				if(Pass >= 0.5) g.drawImage(star, 100, 50, starpanel);
+				if(Pass >= 0.75) g.drawImage(star, 150, 50, starpanel);
+		
+			}
+
+		};
+		starpanel.setBounds(398, 11, 206, 142);
+		starpanel.setBackground(Color.white);
+		logpanel.add(starpanel);
+		
 		// Create Panels for switching
 		cards = new CardLayout();
 		cardPanel = new JPanel();
@@ -643,14 +616,14 @@ public class BlackBoxSystem {
 	public void fillComboBox(JComboBox<String> cb, String query, String col) {
 		cb.removeAllItems(); // Clear existing comboBox
 		if (col.equals("date")) {
-			cb.setModel(new DefaultComboBoxModel<String>(new String[] { "View Diagnostic History" }));
-			
+			cb.setModel(new DefaultComboBoxModel<String>(new String[] { "Select Diagnostic History" }));
+
 		} else {
 			cb.setModel(new DefaultComboBoxModel<String>(new String[] { "View by " + col }));
 		}
-		
+
 		ArrayList<String> items = new ArrayList<String>();
-		
+
 		try {
 			// Send query to database
 			PreparedStatement pst = connection1.prepareStatement(query);
@@ -701,22 +674,37 @@ public class BlackBoxSystem {
 			ResultSet rs = pst.executeQuery();
 			ResultSet rs1 = pst1.executeQuery();
 
-			int count = 0;
-			int count1 = 0;
+			double counttotal = 0;
+			double countpass = 0;
 			if (selectedItem != null) {
 				lblShowText.setText(text);
 				logTable.setModel(DbUtils.resultSetToTableModel(rs));
-				
-				while(rs1.next()) {
-					count++;
+
+				while (rs1.next()) {
+					counttotal++;
 					if (rs1.getString(2).equals("Pass")) {
-						count1++;
+						countpass++;
 					}
 				}
-				
+
 			}
-			System.out.println(count);
-			System.out.println(count1);
+						
+			DecimalFormat formatter = new DecimalFormat("#0.0"); 
+			total.setText(Double.toString(counttotal));
+			pass.setText(Double.toString(countpass));
+			
+			double ratepass = countpass / counttotal;
+			NumberFormat percentFormat = NumberFormat.getPercentInstance();
+			percentFormat.setMaximumFractionDigits(1);
+			
+			rate.setText(percentFormat.format(ratepass));
+			setPassRate(ratepass);
+			
+			starpanel.repaint();
+			
+			System.out.println(counttotal);
+			System.out.println(countpass);
+
 			
 			rs.close();
 			rs1.close();
@@ -728,8 +716,8 @@ public class BlackBoxSystem {
 			JOptionPane.showMessageDialog(null, ex);
 		}
 	}
-	
-	public void clearTable(){
+
+	public void clearTable() {
 		// Clear the table
 		DefaultTableModel model = (DefaultTableModel) logTable.getModel();
 
@@ -739,29 +727,24 @@ public class BlackBoxSystem {
 		}
 
 	}
-	
+
 	// Update comboBoxes to reflect the latest change
 	public void updateComboBox(JComboBox cb, String query, String col) {
-		
+
 		this.fillComboBox(cb, query, col);
 		lblShowText.setText("");
-		//clearTable();		
+		// clearTable();
 	}
-/*	public int getRows(String table) {
-		int count = 0;
-		try {
-
-			PreparedStatement pst = connection1.prepareStatement("SELECT COUNT(*) AS rowcount FROM " + table);
-			ResultSet rs = pst.executeQuery();
-			rs.next();
-			count = rs.getInt("rowcount");
-			rs.close();
-
-			System.out.println(table + " has " + count + " row(s).");
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return count;
-	}*/
+	
+	/*
+	 * public int getRows(String table) { int count = 0; try {
+	 * 
+	 * PreparedStatement pst = connection1.prepareStatement(
+	 * "SELECT COUNT(*) AS rowcount FROM " + table); ResultSet rs =
+	 * pst.executeQuery(); rs.next(); count = rs.getInt("rowcount"); rs.close();
+	 * 
+	 * System.out.println(table + " has " + count + " row(s).");
+	 * 
+	 * } catch (Exception ex) { ex.printStackTrace(); } return count; }
+	 */
 }

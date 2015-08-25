@@ -189,7 +189,7 @@ public class DrawGraphics extends JPanel {
 			}
 
 			else {
-				lblPart.setText("Choose the part");
+				lblPart.setText("Select a part");
 			}
 
 			repaint();
