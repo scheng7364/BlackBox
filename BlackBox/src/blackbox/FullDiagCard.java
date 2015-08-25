@@ -224,13 +224,6 @@ public class FullDiagCard extends JPanel {
 		
 		save = new JButton("Save");
 		save.setBounds(521, 11, 80, 25);
-		save.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				savetoDB();
-				JOptionPane.showMessageDialog(null, "Data Saved.");
-			}
-		});
 		add(save);
 	}
 

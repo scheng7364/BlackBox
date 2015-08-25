@@ -85,6 +85,71 @@ public class BlackBoxSystem {
 
 		firstCard = new JPanel();
 		firstCard.setBackground(new Color(255, 255, 204));
+		
+		LogSheetCard = new JPanel();
+		LogSheetCard.setBackground(new Color(248, 248, 255));
+		LogSheetCard.setLayout(null);
+
+		// Combobox - view records by username
+		JComboBox<String> cbSelectbyName = new JComboBox<String>();
+		String queryName = "select distinct username from logsheet";
+		String colName = "username";
+		this.fillComboBox(cbSelectbyName, queryName, colName);
+
+		cbSelectbyName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select username as 'User', reportStatus as 'Report Status' from logsheet where username =?";
+				String item = (String) cbSelectbyName.getSelectedItem();
+				String displaytext = "The Records for " + item + " are: ";
+
+				selectComboBox(query, item, displaytext);
+				// Clear the window after selecting a new Category
+				// clearPane();
+			}
+		});
+		cbSelectbyName.setBounds(20, 11, 150, 20);
+		LogSheetCard.add(cbSelectbyName);
+
+		// ComboBox - view records by report type
+		JComboBox<String> cbSelectedbyStatus = new JComboBox<String>();
+		String queryStatus = "select distinct reportStatus from logsheet";
+		String colStatus = "reportStatus";
+		this.fillComboBox(cbSelectedbyStatus, queryStatus, colStatus);
+
+		cbSelectedbyStatus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select * from logsheet where reportStatus =?";
+				String item = (String) cbSelectedbyStatus.getSelectedItem();
+				String displaytext = "The " + item + " are: ";
+
+				selectComboBox(query, item, displaytext);
+				// Clear the window after selecting a new Category
+				// clearPane();
+			}
+		});
+		cbSelectedbyStatus.setBounds(175, 11, 180, 20);
+		LogSheetCard.add(cbSelectedbyStatus);
+
+		// ComboBox - view diagnostic history
+		JComboBox<String> cbSelectDiag = new JComboBox<String>();
+		String queryDiag = "select distinct date from diagsheet";
+		String colDiag = "date";
+		String diagtable = "diagsheet";
+		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
+
+		cbSelectDiag.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String query = "select rowid as 'Record ID', date as 'Diagnostic Date' from diagsheet where date =?";
+				String item = (String) cbSelectDiag.getSelectedItem();
+				String displaytext = "The Reports dated " + item + " are: ";
+
+				selectComboBox(query, item, displaytext);
+				// Clear the window after selecting a new Category
+				// clearPane();
+			}
+		});
+		cbSelectDiag.setBounds(365, 11, 180, 20);
+		LogSheetCard.add(cbSelectDiag);
 
 		DiagCard = new JPanel();
 		DiagCard.setBackground(Color.WHITE);
@@ -101,6 +166,14 @@ public class BlackBoxSystem {
 				// obdDig = new OBD2Port(digCar);
 
 				FullDiagCard fdc = new FullDiagCard(carDig, obdDig);
+				fdc.save.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+
+						fdc.savetoDB();
+						JOptionPane.showMessageDialog(null, "Data Saved.");
+						updateComboBox(cbSelectDiag, queryDiag, colDiag);
+					}
+				});
 				cardPanel.add(fdc, "Full Diagnose");
 
 				TransitionCard tsc = new TransitionCard();
@@ -226,70 +299,7 @@ public class BlackBoxSystem {
 			}
 		});
 
-		LogSheetCard = new JPanel();
-		LogSheetCard.setBackground(new Color(248, 248, 255));
-		LogSheetCard.setLayout(null);
-
-		// Combobox - view records by username
-		JComboBox<String> cbSelectbyName = new JComboBox<String>();
-		String queryName = "select distinct username from logsheet";
-		String colName = "username";
-		this.fillComboBox(cbSelectbyName, queryName, colName);
-
-		cbSelectbyName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String query = "select username as 'User', reportStatus as 'Report Status' from logsheet where username =?";
-				String item = (String) cbSelectbyName.getSelectedItem();
-				String displaytext = "The Records for " + item + " are: ";
-
-				selectComboBox(query, item, displaytext);
-				// Clear the window after selecting a new Category
-				// clearPane();
-			}
-		});
-		cbSelectbyName.setBounds(20, 11, 150, 20);
-		LogSheetCard.add(cbSelectbyName);
-
-		// ComboBox - view records by report type
-		JComboBox<String> cbSelectedbyStatus = new JComboBox<String>();
-		String queryStatus = "select distinct reportStatus from logsheet";
-		String colStatus = "reportStatus";
-		this.fillComboBox(cbSelectedbyStatus, queryStatus, colStatus);
-
-		cbSelectedbyStatus.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String query = "select * from logsheet where reportStatus =?";
-				String item = (String) cbSelectedbyStatus.getSelectedItem();
-				String displaytext = "The " + item + " are: ";
-
-				selectComboBox(query, item, displaytext);
-				// Clear the window after selecting a new Category
-				// clearPane();
-			}
-		});
-		cbSelectedbyStatus.setBounds(175, 11, 180, 20);
-		LogSheetCard.add(cbSelectedbyStatus);
-
-		// ComboBox - view diagnostic history
-		JComboBox<String> cbSelectDiag = new JComboBox<String>();
-		String queryDiag = "select distinct date from diagsheet";
-		String colDiag = "date";
-		String diagtable = "diagsheet";
-		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
-
-		cbSelectDiag.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String query = "select rowid as 'Record ID', date as 'Diagnostic Date' from diagsheet where date =?";
-				String item = (String) cbSelectDiag.getSelectedItem();
-				String displaytext = "The Reports dated " + item + " are: ";
-
-				selectComboBox(query, item, displaytext);
-				// Clear the window after selecting a new Category
-				// clearPane();
-			}
-		});
-		cbSelectDiag.setBounds(365, 11, 180, 20);
-		LogSheetCard.add(cbSelectDiag);
+	
 
 		lblShowText = new JLabel();
 		lblShowText.setBounds(20, 30, 200, 20);
@@ -720,7 +730,25 @@ public class BlackBoxSystem {
 			JOptionPane.showMessageDialog(null, ex);
 		}
 	}
+	
+	public void clearTable(){
+		// Clear the table
+		DefaultTableModel model = (DefaultTableModel) logTable.getModel();
 
+		while (model.getRowCount() > 0) {
+			for (int i = 0; i < model.getRowCount(); i++)
+				model.removeRow(i);
+		}
+
+	}
+	
+	// Update comboBoxes to reflect the latest change
+	public void updateComboBox(JComboBox cb, String query, String col) {
+		
+		this.fillComboBox(cb, query, col);
+		lblShowText.setText("");
+		//clearTable();		
+	}
 /*	public int getRows(String table) {
 		int count = 0;
 		try {
