@@ -6,6 +6,8 @@ import net.proteanit.sql.DbUtils;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +20,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class BlackBoxSystem {
 
@@ -221,6 +227,10 @@ public class BlackBoxSystem {
 							// digCar.stop();
 							digCar.setCarStopped(true);
 							cards.show(cardPanel, "Full Diagnose");
+							//Save panel to PDF
+							java.awt.Image image = getImageFromPanel(fdc);
+							String fileName = "DiagnosisReport.pdf";
+					        printToPDF(image, fileName);
 						} catch (InterruptedException ex) {
 						}
 
@@ -381,7 +391,7 @@ public class BlackBoxSystem {
 
 				double Pass = getPassRate();
 				
-				Image star = new ImageIcon("image/star.png").getImage();
+				java.awt.Image star = new ImageIcon("image/star.png").getImage();
 				
 				if(Pass > 0) g.drawImage(star, 0, 50, starpanel);
 				if(Pass >= 0.25) g.drawImage(star, 50, 50, starpanel);
@@ -455,8 +465,8 @@ public class BlackBoxSystem {
 		JButton startEngine = new JButton("");
 		startEngine.setSize(200, 200);
 		ImageIcon image = new ImageIcon("image/EngineStart.png");
-		Image im = image.getImage();
-		Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(), Image.SCALE_SMOOTH);
+		java.awt.Image im = image.getImage();
+		java.awt.Image scaledImage = im.getScaledInstance(startEngine.getWidth(), startEngine.getHeight(), java.awt.Image.SCALE_SMOOTH);
 		ImageIcon icon = new ImageIcon(scaledImage);
 		startEngine.setIcon(icon);
 		startEngine.setBackground(new Color(240, 240, 240));
@@ -736,6 +746,32 @@ public class BlackBoxSystem {
 		// clearTable();
 	}
 	
+	public java.awt.Image getImageFromPanel(Component component) {
+
+        BufferedImage image = new BufferedImage(component.getWidth(),
+                component.getHeight(), BufferedImage.TYPE_INT_RGB);
+        component.paint(image.getGraphics());
+        return image;
+    }
+	
+	public void printToPDF(java.awt.Image awtImage, String fileName) {
+        try {
+            Document d = new Document();
+            PdfWriter writer = PdfWriter.getInstance(d, new FileOutputStream(
+                    fileName));
+            d.open();
+
+            Image iTextImage = Image.getInstance(writer, awtImage, 1);
+            //iTextImage.setAbsolutePosition(50, 50);
+            iTextImage.scalePercent(80);
+            d.add(iTextImage);
+
+            d.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }   
+    }
 	/*
 	 * public int getRows(String table) { int count = 0; try {
 	 * 
