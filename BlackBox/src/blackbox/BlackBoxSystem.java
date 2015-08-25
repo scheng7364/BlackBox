@@ -9,6 +9,8 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -105,7 +107,7 @@ public class BlackBoxSystem {
 				cardPanel.add(tsc, "Trans");
 
 				Thread.State digCarState = digCar.getState();
-				if(digCarState == Thread.State.NEW) {
+				if (digCarState == Thread.State.NEW) {
 					digCar.setCarStopped(false);
 					digCar.start();
 				}
@@ -115,10 +117,10 @@ public class BlackBoxSystem {
 						try {
 							cards.show(cardPanel, "Trans");
 							digCar.setCarStopped(false);
-							//digCar.start();
+							// digCar.start();
 							Thread.sleep(5000);
 							fdc.diagnoseFully();
-							//digCar.stop();
+							// digCar.stop();
 							digCar.setCarStopped(true);
 							cards.show(cardPanel, "Full Diagnose");
 						} catch (InterruptedException ex) {
@@ -228,7 +230,8 @@ public class BlackBoxSystem {
 		LogSheetCard.setBackground(new Color(248, 248, 255));
 		LogSheetCard.setLayout(null);
 
-		JComboBox cbSelectbyName = new JComboBox();
+		// Combobox - view records by username
+		JComboBox<String> cbSelectbyName = new JComboBox<String>();
 		String queryName = "select distinct username from logsheet";
 		String colName = "username";
 		this.fillComboBox(cbSelectbyName, queryName, colName);
@@ -247,7 +250,8 @@ public class BlackBoxSystem {
 		cbSelectbyName.setBounds(20, 11, 150, 20);
 		LogSheetCard.add(cbSelectbyName);
 
-		JComboBox cbSelectedbyStatus = new JComboBox();
+		// ComboBox - view records by report type
+		JComboBox<String> cbSelectedbyStatus = new JComboBox<String>();
 		String queryStatus = "select distinct reportStatus from logsheet";
 		String colStatus = "reportStatus";
 		this.fillComboBox(cbSelectedbyStatus, queryStatus, colStatus);
@@ -266,14 +270,16 @@ public class BlackBoxSystem {
 		cbSelectedbyStatus.setBounds(175, 11, 180, 20);
 		LogSheetCard.add(cbSelectedbyStatus);
 
-		JComboBox cbSelectDiag = new JComboBox();
-		String queryDiag = "select date from diagsheet";
+		// ComboBox - view diagnostic history
+		JComboBox<String> cbSelectDiag = new JComboBox<String>();
+		String queryDiag = "select distinct date from diagsheet";
 		String colDiag = "date";
+		String diagtable = "diagsheet";
 		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
 
 		cbSelectDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String query = "select date as 'Diagnostic Date' from diagsheet where date =?";
+				String query = "select rowid as 'Record ID', date as 'Diagnostic Date' from diagsheet where date =?";
 				String item = (String) cbSelectDiag.getSelectedItem();
 				String displaytext = "The Reports dated " + item + " are: ";
 
@@ -321,15 +327,11 @@ public class BlackBoxSystem {
 				try {
 					int row = logTable.getSelectedRow();
 
-					// Send query to database
-			//		String tableclick = (logTable.getModel().getValueAt(row, 1).toString());
-			//		lblTireFR.setText(tableclick);
-
 					String tableclick1 = (logTable.getModel().getValueAt(row, 0).toString());
-					String query1 = "select * from logsheet where username = '" + tableclick1 + "'";
+					String query1 = "select rowid,* from logsheet where username = '" + tableclick1 + "'";
 
 					String tableclick2 = (logTable.getModel().getValueAt(row, 0).toString());
-					String query2 = "select * from diagsheet where date = '" + tableclick2 + "'";
+					String query2 = "select rowid,* from diagsheet where rowid = '" + tableclick2 + "'";
 
 					PreparedStatement pst1 = connection1.prepareStatement(query1);
 					ResultSet rs1 = pst1.executeQuery();
@@ -357,7 +359,7 @@ public class BlackBoxSystem {
 						FullDiagCard fdc = new FullDiagCard(car, obd);
 						cardPanel.add(fdc, "Full Diagnose Report");
 						cards.show(cardPanel, "Full Diagnose Report");
-						
+
 						fdc.lbldate.setText(rs2.getString("date"));
 						fdc.rpmAvg.setText(rs2.getString("carRPM"));
 						fdc.olAvg.setText(rs2.getString("carOil"));
@@ -382,9 +384,9 @@ public class BlackBoxSystem {
 						fdc.TireFRStatus.setText(rs2.getString("TFRStatus"));
 						fdc.TireRLStatus.setText(rs2.getString("TRLStatus"));
 						fdc.TireRRStatus.setText(rs2.getString("TRRStatus"));
-						
+
 						fdc.save.setVisible(false);
-						
+
 					}
 
 					rs1.close();
@@ -559,8 +561,6 @@ public class BlackBoxSystem {
 
 						profile.setStyle(driveStyle);
 						profile.setUsername(name);
-						// System.out.println(driveStyle);
-						// System.out.println(profile.getStyle());
 
 						// clear the fields for reentering
 						clearUserInfo();
@@ -632,21 +632,48 @@ public class BlackBoxSystem {
 		pfPW.setText("");
 	}
 
-	public void fillComboBox(JComboBox cb, String query, String col) {
+	public void fillComboBox(JComboBox<String> cb, String query, String col) {
 		cb.removeAllItems(); // Clear existing comboBox
-		if(col.equals("date")) cb.setModel(new DefaultComboBoxModel(new String[] { "View Diagnostic Reports" }));
-		else cb.setModel(new DefaultComboBoxModel(new String[] { "View by " + col }));
-
+		if (col.equals("date")) {
+			cb.setModel(new DefaultComboBoxModel<String>(new String[] { "View Diagnostic History" }));
+			
+		} else {
+			cb.setModel(new DefaultComboBoxModel<String>(new String[] { "View by " + col }));
+		}
+		
+		ArrayList<String> items = new ArrayList<String>();
+		
 		try {
 			// Send query to database
 			PreparedStatement pst = connection1.prepareStatement(query);
 			ResultSet rs = pst.executeQuery();
 
+			int i = 0;
+
 			while (rs.next()) {
 
 				String currentRow = rs.getString(col);
-				cb.addItem(currentRow); // Add the value in the column from the
-										// database to comboBox
+				items.add(currentRow);
+
+			}
+
+			// Sort the items before adding into combobox
+			for (int j = 0; j < items.size() + 1; j++) {
+				for (int k = j + 1; k < items.size(); k++) {
+					if (items.get(k).compareTo(items.get(j)) < 0) {
+						String temp = items.get(j);
+						items.set(j, items.get(k));
+						items.set(k, temp);
+					}
+				}
+			}
+
+			// Add the sorted items to combobox
+			for (int j = 0; j < items.size(); j++) {
+				String day = items.get(j);
+				System.out.println(day);
+				cb.addItem(day);
+
 			}
 			rs.close();
 			pst.close();
@@ -660,15 +687,33 @@ public class BlackBoxSystem {
 	public void selectComboBox(String query, String selectedItem, String text) {
 		try {
 			PreparedStatement pst = connection1.prepareStatement(query);
+			PreparedStatement pst1 = connection1.prepareStatement(query);
 			pst.setString(1, selectedItem);
+			pst1.setString(1, selectedItem);
 			ResultSet rs = pst.executeQuery();
+			ResultSet rs1 = pst1.executeQuery();
 
+			int count = 0;
+			int count1 = 0;
 			if (selectedItem != null) {
 				lblShowText.setText(text);
 				logTable.setModel(DbUtils.resultSetToTableModel(rs));
+				
+				while(rs1.next()) {
+					count++;
+					if (rs1.getString(2).equals("Good Record")) {
+						count1++;
+					}
+				}
+				
 			}
+			System.out.println(count);
+			System.out.println(count1);
+			
 			rs.close();
+			rs1.close();
 			pst.close();
+			pst1.close();
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -676,4 +721,21 @@ public class BlackBoxSystem {
 		}
 	}
 
+/*	public int getRows(String table) {
+		int count = 0;
+		try {
+
+			PreparedStatement pst = connection1.prepareStatement("SELECT COUNT(*) AS rowcount FROM " + table);
+			ResultSet rs = pst.executeQuery();
+			rs.next();
+			count = rs.getInt("rowcount");
+			rs.close();
+
+			System.out.println(table + " has " + count + " row(s).");
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return count;
+	}*/
 }
