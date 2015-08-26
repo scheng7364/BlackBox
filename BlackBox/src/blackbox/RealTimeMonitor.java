@@ -111,7 +111,7 @@ public class RealTimeMonitor extends JPanel implements Observer {
 		add(lblTextFuel);
 
 		lblUnitFuel.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblUnitFuel.setBounds(470, 275, 400, 150);
+		lblUnitFuel.setBounds(465, 275, 400, 150);
 		lblUnitFuel.setForeground(Color.WHITE);
 		add(lblUnitFuel);
 
@@ -179,14 +179,16 @@ public class RealTimeMonitor extends JPanel implements Observer {
 			DecimalFormat one = new DecimalFormat("#0.0");
 
 			if (!timerPause) {
-
+				double fuelLevel = sensor.getCarFuelLevel();
+				
 				lblTextSpeed.setText(one.format(sensor.getCarSpeed()));
 				lblTextRPM.setText(one.format(sensor.getCarRPM()));
 				lblTextTemperature.setText(one.format(sensor.getCarIntAirTemp()));
 				lblTextOil.setText(one.format(sensor.getCarOilLevel()));
-				lblTextFuel.setText(one.format(sensor.getCarFuelLevel()));
-
+				//lblTextFuel.setText(one.format(sensor.getCarFuelLevel()));
+				lblTextFuel.setText(one.format(fuelLevel));
 				sensor.ifHealthy(); // Check the car running status: starting or healthy or warning
+				if(fuelLevel<=10.0&&fuelLevel!=0.0) myCar.setCarStopped(true);
 			}
 		}
 	};
