@@ -13,6 +13,7 @@ public class FuelSystem {
 
 	private double FuelLevelAVG;
 	private double FuelLevelSTD;
+	private double FuelLevel;
 	private double FuelToAirRatioAVG;
 	private double FuelToAirRatioSTD;
 	private double FuelPressureAVG;
@@ -30,6 +31,7 @@ public class FuelSystem {
 		FuelToAirRatioSTD = 0;
 		FuelPressureAVG = 0;
 		FuelPressureSTD = 0;
+		FuelLevel = 80;
 		lastServiceDate = "";
 	}
 
@@ -67,14 +69,19 @@ public class FuelSystem {
 	public void setFuelLevelSTD(double fuelLevelSTD) {
 		FuelLevelSTD = fuelLevelSTD;
 	}
-
+	
 	/**
 	 * @return the fuelLevel
 	 */
 	public double getFuelLevel() {
 		Random randomGenerator = new Random();
-		return this.FuelLevelSTD*randomGenerator.nextDouble() + 
-				this.FuelLevelAVG;
+		double curr = this.FuelLevel;
+		
+		curr = curr - this.FuelLevelSTD*randomGenerator.nextDouble()*0.05;
+		this.FuelLevel = curr;
+		return curr;
+		//return this.FuelLevelSTD*randomGenerator.nextDouble() + 
+			//	this.FuelLevelAVG;
 	}
 
 	/**

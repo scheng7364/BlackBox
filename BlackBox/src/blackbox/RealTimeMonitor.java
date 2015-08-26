@@ -41,8 +41,8 @@ public class RealTimeMonitor extends JPanel implements Observer {
 	private JLabel lblUnitOil = new JLabel("Quarts");
 	private JLabel lblTextOil = new JLabel();
 
-	private JLabel lblFuel = new JLabel("Current Temperature:");
-	private JLabel lblUnitFuel = new JLabel("Gallons");
+	private JLabel lblFuel = new JLabel("Current Fuel Level:");
+	private JLabel lblUnitFuel = new JLabel("% (Gas)");
 	private JLabel lblTextFuel = new JLabel();
 
 	private JLabel lblWarning = new JLabel();
