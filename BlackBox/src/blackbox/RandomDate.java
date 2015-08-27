@@ -1,3 +1,13 @@
+/**
+ * @(#)RandomDate.java
+ * 
+ * This class generates random dates for diagnostic reports
+ * This is used for simulation purpose
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import java.time.LocalDate;

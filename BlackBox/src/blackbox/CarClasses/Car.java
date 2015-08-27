@@ -1,15 +1,15 @@
 /**
+ * @(#)Car.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
 import java.util.Observable;
 import java.util.Random;
 
-/**
- * @author kchilds
- *
- */
 public class Car extends Observable {
 	
 	private double speedAVG;
@@ -85,32 +85,6 @@ public class Car extends Observable {
 	 * @param myEngine
 	 * @param myTires
 	 */
-/*	public Car(double mySpeedAVG, double mySpeedSTD, double myAccelerationAVG, double myAccelerationSTD, 
-			double myYahAVG, double myYahSTD, double myPitchAVG, double myPitchSTD, String myMake, 
-			String myModel, int myYear, int [] myOBD, CoolingSystem myCooling, ExhaustSystem myExhaust, 
-			FuelSystem myFuel, BrakingSystem myBrakes, IgnitionSystem myIgnition, SteeringSystem mySteer, 
-			Engine myEngine, Tires myTires) {
-		speedAVG = mySpeedAVG;
-		speedSTD = mySpeedSTD;
-		accelerationAVG = myAccelerationAVG;
-		accelerationSTD = myAccelerationSTD;
-		yahAVG = myYahAVG;
-		yahSTD = myYahSTD;
-		pitchAVG = myPitchAVG;
-		pitchSTD = myPitchSTD;
-		make = myMake;
-		model = myModel;
-		year = myYear;
-		OBD2Codes = myOBD;
-		this.sysCooling = myCooling;
-		this.sysExhaust = myExhaust;
-		this.sysFuel = myFuel;
-		this.sysBrake = myBrakes;
-		this.sysIgnition = myIgnition;
-		this.sysSteering = mySteer;
-		this.sysEngine = myEngine;
-		this.sysTires = myTires;
-	}*/
 
 	/**
 	 * @param speedAVG the speedAVG to set

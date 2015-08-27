@@ -1,3 +1,10 @@
+/**
+ * @(#)FullDiagCard.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import blackbox.CarClasses.*;
@@ -43,7 +50,7 @@ public class FullDiagCard extends JPanel {
 	private int size; // to suit to database;
 	private ArrayList<String> list;
 	
-
+	// Connection to database
 	Connection connection1 = ConnectionSqlite.dbConnector();
 
 	public FullDiagCard(Car car, OBD2Port obd2) {
@@ -250,17 +257,16 @@ public class FullDiagCard extends JPanel {
 		        printToPDF(image, fileName);
 		        JOptionPane.showMessageDialog(null, "Data Saved to "+ fileName + ".");
 			}
-			
-		});
-		
-		
+		});	
 	}
 
+	// Generate a random date for simulation purpose (so the user can retrieve the reports based on dates)
 	private String getDate() {
 		RandomDate randomDate = new RandomDate(LocalDate.of(2015, 1, 1), LocalDate.of(2015, 8, 27));
 		return randomDate.nextDate().toString();
 	}
 
+	// Get the number of columns of a data table
 	private int getColNum() {
 		int colnum = 0;
 
@@ -292,11 +298,9 @@ public class FullDiagCard extends JPanel {
 		}
 	}
 
+	// Diagnose the car & generate a full report
 	public void diagnoseFully() {
-		// {"date, carRPM, carTemp, carOil, carFuel, carTFL, carTFR, carTRL,
-		// carTRR, tempStatus, OilStatus, FuelStatus, TFLStatus, TFRStatus,
-		// TRLtatus, TRRStatus, RPMStatus, SVrpm, SVtemp, SVoil, SVfuel, SVTire;
-		
+		// Get threshold values
 		MaxMinValues threshold = new MaxMinValues(myCar);
 		
 		// Set digits for decimal numbers
@@ -322,7 +326,7 @@ public class FullDiagCard extends JPanel {
 		tireRLAvg.setText(one.format(avgTRL));
 		tireRRAvg.setText(one.format(avgTRR));
 
-		// Set threshold values
+		// Put threshold values onto labels
 		rpmSV.setText((one.format(threshold.getMinRPM())) + " - " + (one.format(threshold.getMaxRPM())));
 		olSV.setText((one.format(threshold.getMinOilLevelSensor())) + " - "
 				+ (one.format(threshold.getMaxOilLevelSensor())));
@@ -408,8 +412,8 @@ public class FullDiagCard extends JPanel {
 
 	}
 
+	// Save the generated values to database
 	public void savetoDB() {
-
 		// Pass the values to database
 		try {
 			// Send query to database
@@ -417,7 +421,6 @@ public class FullDiagCard extends JPanel {
 			PreparedStatement pst = connection1.prepareStatement(query);
 
 			// Write into database
-
 			for (int i = 0; i < size; i++) {
 				String item = list.get(i);
 				int index = i + 1;
@@ -427,17 +430,14 @@ public class FullDiagCard extends JPanel {
 			pst.executeUpdate();
 
 			pst.close();
-			// Update comboBoxes to reflect the latest change
-			// updateComboBox(cbByCat, query1, col1);
-			// updateComboBox(cbByDate, query2, col2);
-			// clearTable(); // Clear the list of photos
-
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, ex);
 		}
 	}
 
+	// Clear the panel for next event
 	public void clearFDC() {
 		rpmAvg.setText("");
 		olAvg.setText("");
@@ -455,7 +455,6 @@ public class FullDiagCard extends JPanel {
 		tireFRStatus.setText("");
 		tireRLStatus.setText("");
 		tireRRStatus.setText("");
-
 	}
 	
 	public java.awt.Image getImageFromPanel(Component component) {
@@ -466,6 +465,7 @@ public class FullDiagCard extends JPanel {
         return image;
     }
 	
+	// Enable to print the report to PDF
 	public void printToPDF(java.awt.Image awtImage, String fileName) {
         try {
             Document d = new Document();
@@ -474,7 +474,6 @@ public class FullDiagCard extends JPanel {
             d.open();
 
             Image iTextImage = Image.getInstance(writer, awtImage, 1);
-            //iTextImage.setAbsolutePosition(50, 50);
             iTextImage.scalePercent(80);
             d.add(iTextImage);
 

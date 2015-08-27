@@ -1,14 +1,14 @@
 /**
+ * @(#)IgnitionSystem.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
 import java.util.Random;
 
-/**
- * @author kchilds
- *
- */
 public class IgnitionSystem {
 	
 	private Boolean IgnitionSwitch;
@@ -19,9 +19,6 @@ public class IgnitionSystem {
 	private double AlternatorVoltageSTD;
 	private String LastServiceDate;
 
-	/**
-	 * 
-	 */
 	public IgnitionSystem() {
 		IgnitionSwitch = false;
 		ChargingSystemLight = false;

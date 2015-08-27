@@ -1,8 +1,14 @@
+/**
+ * @(#)OBD2Port.java
+ * 
+ * A simplified OBD2 Port Class to get 
+ * sensors values from Car
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
-/*
- * A simplified OBD2 Port Class
- */
 public class OBD2Port {
 
 	private DriverProfile driver = new DriverProfile(null, DrivingStyle.AVERAGE, Gender.UNKNOWN);

@@ -1,5 +1,13 @@
+/**
+ * @(#)DriverProfile.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
+// Constant values for different types of drivers / different driving styles
 enum DrivingStyle {
 	CRAZY(1.15),
 	AGGRESSIVE(1.05),
@@ -82,7 +90,6 @@ public class DriverProfile {
 	}
 
 	public DrivingStyle getStyle() {
-	//	System.out.println(style);
 		return style;
 	}
 
@@ -91,7 +98,6 @@ public class DriverProfile {
 	}
 
 	public void setStyle(String style) {
-	//	System.out.println(style);
 		this.style = DrivingStyle.valueOf(style);
 	}
 	

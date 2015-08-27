@@ -1,7 +1,7 @@
 /**
  * @(#)ConnectionSqlite.java
  * 
- * @author Xiao Xiao
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
  * @version 1.0
 */
 

@@ -1,3 +1,10 @@
+/**
+ * @(#)BlackBoxTester.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import java.awt.EventQueue;

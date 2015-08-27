@@ -1,14 +1,14 @@
 /**
+ * @(#)FuelSystem.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
 import java.util.Random;
 
-/**
- * @author kchilds
- *
- */
 public class FuelSystem {
 
 	private double FuelLevelAVG;
@@ -20,10 +20,6 @@ public class FuelSystem {
 	private double FuelPressureSTD;
 	private String lastServiceDate;
 	
-	
-	/**
-	 * 
-	 */
 	public FuelSystem() {
 		FuelLevelAVG = 0;
 		FuelLevelSTD = 0;
@@ -80,8 +76,6 @@ public class FuelSystem {
 		curr = curr - this.FuelLevelSTD*randomGenerator.nextDouble()*0.05;
 		this.FuelLevel = curr;
 		return curr;
-		//return this.FuelLevelSTD*randomGenerator.nextDouble() + 
-			//	this.FuelLevelAVG;
 	}
 
 	/**

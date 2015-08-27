@@ -1,3 +1,13 @@
+/**
+ * @(#)TansitionCard.java
+ * 
+ * This class is used for transition while 
+ * waiting for reports
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import java.awt.Color;

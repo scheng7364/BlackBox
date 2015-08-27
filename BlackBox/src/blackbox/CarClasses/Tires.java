@@ -1,25 +1,22 @@
 /**
+ * @(#)Tires.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
 import java.util.Observable;
 import java.util.Random;
 
-/**
- * @author kevinchilds
- *
- */
-public class Tires extends Observable {
+public class Tires {
 	private double tirePressureAVG;
 	private double tirePressureSTD;
 	private String modelNumber;
 	private String brandName;
 	private String serviceDate;
 
-	/**
-	 * 
-	 */
 	public Tires() {
 		tirePressureAVG = 0;
 		tirePressureSTD = 0;
@@ -51,9 +48,6 @@ public class Tires extends Observable {
 	 */
 	public void setTirePressureAVG(double tirePressureAVG) {
 		this.tirePressureAVG = tirePressureAVG;
-		setChanged();
-		// notify Observers that model has changed
-		notifyObservers(new Double(tirePressureAVG));
 	}
 
 	/**
@@ -61,9 +55,6 @@ public class Tires extends Observable {
 	 */
 	public void setTirePressureSTD(double tirePressureSTD) {
 		this.tirePressureSTD = tirePressureSTD;
-		setChanged();
-		// notify Observers that model has changed
-		notifyObservers(new Double(tirePressureSTD));
 	}
 	
 	/**

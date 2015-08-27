@@ -1,14 +1,14 @@
 /**
+ * @(#)CoolingSystem.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
 import java.util.Random;
 
-/**
- * @author kchilds
- *
- */
 public class CoolingSystem {
 	
 	private double temperatureAVG;
@@ -23,9 +23,6 @@ public class CoolingSystem {
 	private double minFluidLevel;
 	private String lastServiceDate;
 
-	/**
-	 * 
-	 */
 	public CoolingSystem() {
 		
 		temperatureAVG = 0;

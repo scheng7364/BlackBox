@@ -1,3 +1,10 @@
+/**
+ * @(#)DrawGraphics.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import javax.swing.*;
@@ -44,7 +51,6 @@ public class DrawGraphics extends JPanel {
 		setPreferredSize(new Dimension(620, 400));
 		setLayout(null);
 		
-		//lblPart.setFont(new Font("Tahoma", Font.BOLD, 45));
 		lblPart = new JLabel("");
 		lblPart.setForeground(Color.BLUE);
 		lblPart.setBounds(400, 400, 300, 150);
@@ -52,7 +58,7 @@ public class DrawGraphics extends JPanel {
 		
 		Car myCar = new Honda();
 		NumberFormat formatter = new DecimalFormat("#0.0"); 
-		//formatter.format()
+		
 //////////////////////////////////tires//////////////////////////////////
 		
 		lblTireMake = new JLabel("Tire Brand: " + myCar.getSysTires().getBrandName());
@@ -122,15 +128,11 @@ public class DrawGraphics extends JPanel {
 		
 		engineOff();
 		
-		//selection = new JComboBox();
-		//selection.setModel(new DefaultComboBoxModel(new String[] { "Choose the part", "Engine", "Tires" }));
-		//selection.setBounds(497, 35, 123, 23);
-		//add(selection);
-		
 		addMouseMotionListener(new MouseEventAdapterA());
 		addMouseListener(new MouseEventAdapterA());
 	}
 
+	// Enable components related to tire
 	public void tireOn(){
 		lblTireFL.setVisible(true);
 		lblTireFR.setVisible(true);
@@ -140,6 +142,7 @@ public class DrawGraphics extends JPanel {
 		lblTireModel.setVisible(true);
 	}
 	
+	// Disable components related to tire
 	public void tireOff(){
 		lblTireFL.setVisible(false);
 		lblTireFR.setVisible(false);
@@ -149,21 +152,24 @@ public class DrawGraphics extends JPanel {
 		lblTireModel.setVisible(false);
 	}
 	
+	// Enable components related to temperature
 	public void temperatureOn(){
 		lblTemperature.setVisible(true);
 	}
 	
+	// Disable components related to temperature
 	public void temperatureOff(){
 		lblTemperature.setVisible(false);
 	}
 	
+	// Enable components related to engine
 	public void engineOn(){
 		lblEngineType.setVisible(true);
 		lblHorsePower.setVisible(true);
 		lblRPM.setVisible(true);
-
 	}
 	
+	// Disable components related to engine
 	public void engineOff(){
 		lblEngineType.setVisible(false);
 		lblHorsePower.setVisible(false);
@@ -172,7 +178,7 @@ public class DrawGraphics extends JPanel {
 	
 	class MouseEventAdapterA extends MouseAdapter {
 		public void mouseMoved(MouseEvent e) {
-
+			// Get coordinates of the mouse location 
 			x = e.getX();
 			y = e.getY();
 
@@ -199,34 +205,36 @@ public class DrawGraphics extends JPanel {
 		public void mouseClicked(MouseEvent e) {
 			String text = new String(lblPart.getText());
 			
+			// Enable tire selection
 			if ((x >= 235 && x <= 300) && (y >= 280 && y <= 360) || (x >= 465 && x <= 515) && (y >= 210 && y <= 280)) {
-				//selection.setSelectedItem(text);
 				tireOn();
 				temperatureOff();
 				engineOff();
 				repaint();
-
-			} else if ((x >= 130 && x <= 250) && (y >= 215 && y <= 280)) {
-				//selection.setSelectedItem(text);
+				
+			} // Enable engine selection
+			else if ((x >= 130 && x <= 250) && (y >= 215 && y <= 280)) {
 				temperatureOff();
 				engineOn();
 				tireOff();
 				
-			} else if ((x >= 90 && x <= 155) && (y >= 280 && y <= 315)) {
-				//selection.setSelectedItem(text);
+			} // Enable temperature selection 
+			else if ((x >= 90 && x <= 155) && (y >= 280 && y <= 315)) {
 				temperatureOn();
 				engineOff();
 				tireOff();
 
-			} else if ((x >= 220 && x <= 450) && (y >= 117 && y <= 205)) {
+			} // Enable "full diagnose" 
+			else if ((x >= 220 && x <= 450) && (y >= 117 && y <= 205)) {
 				temperatureOff();
 				engineOff();
 				tireOff();
-				btnDiag.doClick();
+
+				// Simulate the mouse click as button click
+				btnDiag.doClick(); 
 			
 			} else {
-				//selection.setSelectedItem(text);
-
+				//Do nothing;
 			}
 		}
 	}
@@ -265,6 +273,7 @@ public class DrawGraphics extends JPanel {
 
 	}
 	
+	// Return the the selected item as string
 	public String getComboSelected() {
 		return selection.getSelectedItem().toString();
 	}

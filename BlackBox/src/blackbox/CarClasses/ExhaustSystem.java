@@ -1,14 +1,14 @@
 /**
+ * @(#)ExhaustSystem.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
 import java.util.Random;
 
-/**
- * @author kchilds
- *
- */
 public class ExhaustSystem {
 	
 	private double firstOxygenSensorAVG;
@@ -19,10 +19,6 @@ public class ExhaustSystem {
 	private double catalyticConverterSensorSTD;
 	private String lastServiceDate;
 	
-
-	/**
-	 * 
-	 */
 	public ExhaustSystem() {
 		
 		firstOxygenSensorAVG = 0;

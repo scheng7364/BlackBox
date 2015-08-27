@@ -1,3 +1,10 @@
+/**
+ * @(#)RealTimeMonitor.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import java.awt.Color;
@@ -19,7 +26,6 @@ import javax.swing.Timer;
 public class RealTimeMonitor extends JPanel implements Observer {
 	private CarFacade myCar;
 	private Sensors sensor;
-	// private SensorsMonitor monitor;
 	
 	Timer tm;
 	boolean timerPause = true;
@@ -157,9 +163,7 @@ public class RealTimeMonitor extends JPanel implements Observer {
 		// Restart button to start the real time monitoring function
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				myCar.setCarStopped(false);
-				// tm.start();
 				timerPause = false;
 				myCar.resetMap();
 			}
@@ -169,11 +173,10 @@ public class RealTimeMonitor extends JPanel implements Observer {
 		tm.start();
 	}
 
+	// Anonymous class to show the changing values (real-time monitoring the sensor values)
 	ActionListener timerListener = new ActionListener() {
 
 		public void actionPerformed(ActionEvent evt) {
-
-			// SensorsMonitor monitor = new SensorsMonitor(sensor);
 
 			// Set digits for decimal numbers
 			DecimalFormat one = new DecimalFormat("#0.0");
@@ -185,27 +188,23 @@ public class RealTimeMonitor extends JPanel implements Observer {
 				lblTextRPM.setText(one.format(sensor.getCarRPM()));
 				lblTextTemperature.setText(one.format(sensor.getCarIntAirTemp()));
 				lblTextOil.setText(one.format(sensor.getCarOilLevel()));
-				//lblTextFuel.setText(one.format(sensor.getCarFuelLevel()));
 				lblTextFuel.setText(one.format(fuelLevel));
-				sensor.ifHealthy(); // Check the car running status: starting or healthy or warning
+				
+				// Check the car running status: starting or healthy or warning
+				sensor.ifHealthy(); 				
+				
+				// Stop the car if fuel level is running very low (<= 10%)
 				if(fuelLevel<=10.0&&fuelLevel!=0.0) myCar.setCarStopped(true);
 			}
 		}
 	};
 
 	public void startRun() {
-
-		// if (tm == null) {
-		// tm = new Timer(PERIOD, timerListener); // Change every second;
-		// tm.start();
-		// }
 		myCar.setCarStopped(false);
 		timerPause = false;
-
 	}
 
 	public void stopRun() {
-
 		tm.stop();
 	}
 
@@ -213,7 +212,6 @@ public class RealTimeMonitor extends JPanel implements Observer {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		// g.drawOval(20, 20, 150, 150);
 		Image meter = new ImageIcon("image/Meter.jpg").getImage();
 		g.drawImage(meter, 5, 5, this);
 		g.drawImage(meter, 5, 135, this);
@@ -222,7 +220,6 @@ public class RealTimeMonitor extends JPanel implements Observer {
 		g.drawImage(meter, 300, 5, this);
 		g.drawImage(meter, 300, 135, this);
 		g.drawImage(meter, 300, 265, this);
-
 	}
 
 	@Override
@@ -235,19 +232,15 @@ public class RealTimeMonitor extends JPanel implements Observer {
 			lblWarning.setForeground(Color.WHITE);
 			lblWarning.setText("Starting");
 		}
-		
 		// If car is in healthy condition
 		else if (healthy) {
 			lblWarning.setForeground(Color.GREEN);
 			lblWarning.setText("Healthy");
-
 		}
 		// If car is in warning condition
 		else {
 			lblWarning.setForeground(Color.RED);
 			lblWarning.setText("Warning");
 		}
-
 	}
-
 }

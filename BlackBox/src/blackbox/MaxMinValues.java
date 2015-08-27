@@ -1,14 +1,14 @@
 /**
+ * @(#)MaxMinValues.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import blackbox.CarClasses.Car;
 
-/**
- * @author KC
- *
- */
 public class MaxMinValues {
 	
 	private double maxSpeed;

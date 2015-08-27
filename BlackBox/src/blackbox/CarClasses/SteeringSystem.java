@@ -1,15 +1,15 @@
-package blackbox.CarClasses;
 /**
+ * @(#)SteeringSystem.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
+package blackbox.CarClasses;
 
 
 import java.util.Random;
 
-/**
- * @author kchilds
- *
- */
 public class SteeringSystem {
 	
 	private String SteeringType;
@@ -23,9 +23,6 @@ public class SteeringSystem {
 	private double MinPressure;
 	private String LastServiceDate;
 
-	/**
-	 * 
-	 */
 	public SteeringSystem() {
 		SteeringType = "";
 		SteeringFluidLevelAVG = 0;
@@ -66,7 +63,6 @@ public class SteeringSystem {
 		MinPressure = myMinPress;
 		LastServiceDate = myServDate;
 	}
-
 
 	/**
 	 * @return the steeringType
@@ -206,8 +202,5 @@ public class SteeringSystem {
 	public void setLastServiceDate(String lastServiceDate) {
 		LastServiceDate = lastServiceDate;
 	}
-	
-	
-
 	
 }

@@ -1,3 +1,10 @@
+/**
+ * @(#)BlackBoxSystem.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import blackbox.CarClasses.Car;
@@ -27,10 +34,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class BlackBoxSystem {
 
-	Car car = new Honda();
-	CarFacade thisCar = new CarFacade(car);
+	Car car = new Honda(); // Car Object to be used throughout
+	CarFacade thisCar = new CarFacade(car); 
 
-	// OBD2Port obd = new OBD2Port(thisCar);
 	OBD2Port obd = thisCar.getObdPort();
 	DriverProfile profile = new DriverProfile();
 	Sensors s = new Sensors(obd, car, profile);
@@ -39,13 +45,12 @@ public class BlackBoxSystem {
 	CarFacade digCar = new CarFacade(car);
 	Car carDig = digCar.getCar();
 	OBD2Port obdDig = digCar.getObdPort();
-	// OBD2Port obdDig = new OBD2Port(digCar);
 
 	private JFrame guiFrame;
 	private CardLayout cards;
 	private JPanel buttonPanel;
 	private JPanel cardPanel;
-	private JPanel DiagCard;
+	private JPanel diagCard;
 	private JTextField tfUsername;
 	private JPasswordField pfPW;
 	private JLabel lblUser; // show the user name on buttonPanel after login
@@ -60,10 +65,13 @@ public class BlackBoxSystem {
 	private JTable logTable;
 	private JPanel starpanel, passpanel, reportStatuspanel, piechart;
 
+	// Set up sqlite connection
 	Connection connection1 = ConnectionSqlite.dbConnector();
 
 	private double passrate, personpass, persontotal;
 
+	// Pass rate is used to calculate the ratio of "pass" records over total
+	// records
 	public void setPassRate(double value) {
 		this.passrate = value;
 	}
@@ -72,6 +80,7 @@ public class BlackBoxSystem {
 		return this.passrate;
 	}
 
+	// Pass rate for individuals
 	public void setPersonPass(double value) {
 		this.personpass = value;
 	}
@@ -80,6 +89,7 @@ public class BlackBoxSystem {
 		return this.personpass;
 	}
 
+	// Individual total records
 	public void setPersonTotal(double value) {
 		this.persontotal = value;
 	}
@@ -90,6 +100,7 @@ public class BlackBoxSystem {
 
 	private String[] namelist;
 
+	// Get list of distinct usernames from database
 	public String[] getNameList() {
 		ArrayList<String> items = new ArrayList<String>();
 		String[] stringlist = new String[3];
@@ -102,9 +113,11 @@ public class BlackBoxSystem {
 			while (rs.next()) {
 
 				String currentname = rs.getString("username");
+				// Save the distinct names to arraylist
 				items.add(currentname);
 			}
 
+			// Copy the list from arraylist to String array
 			for (int i = 0; i < items.size(); i++) {
 				stringlist[i] = (String) items.get(i);
 			}
@@ -122,16 +135,21 @@ public class BlackBoxSystem {
 
 	private double[] percentage;
 
+	// Percentage of selected records over total records
 	public double[] getPercentage(String pORw) {
 		ArrayList<Double> items = new ArrayList<Double>();
 		String[] listofname = getNameList();
 		double[] listresult = new double[3];
+
+		// Get total records of a table
 		double total = getTotalPW("logsheet", pORw);
 		double count = 0;
 
+		// Get the number of "pass" or "warning" records for individuals
 		for (int i = 0; i < listofname.length; i++) {
 			try {
-				// Send query to database
+				// Send query to database (get "pass" or "warning" reports for
+				// one user
 				PreparedStatement pst = connection1.prepareStatement("Select * from logsheet where username = '"
 						+ listofname[i] + "' and reportStatus = '" + pORw + "'");
 				ResultSet rs = pst.executeQuery();
@@ -151,6 +169,7 @@ public class BlackBoxSystem {
 			}
 		}
 
+		// Calculate the percentage
 		for (int i = 0; i < items.size(); i++) {
 			double result = (double) items.get(i) / total;
 			listresult[i] = result;
@@ -220,25 +239,27 @@ public class BlackBoxSystem {
 		String colDiag = "date";
 		this.fillComboBox(cbSelectDiag, queryDiag, colDiag);
 
-		//Add a button to export JTable to Excel
+		// Add a button to export JTable to Excel
 		JButton exportBtn = new JButton("Export To File");
 		exportBtn.setBounds(20, 305, 180, 20);
-		exportBtn.setSize(new Dimension(140,25));
+		exportBtn.setSize(new Dimension(140, 25));
 		LogSheetCard.add(exportBtn);
 		exportBtn.setVisible(false);
 		exportBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String statusItem = (String) cbSelectedbyStatus.getSelectedItem();
-				String fileName = "StatusReport_" +statusItem + ".xls";
-				if(toExcel(logTable, new File(fileName))) {
-					JOptionPane.showMessageDialog(null, "Data Exported to "+ fileName + "!");
+				String fileName = "StatusReport_" + statusItem + ".xls";
+				if (toExcel(logTable, new File(fileName))) {
+					JOptionPane.showMessageDialog(null, "Data Exported to " + fileName + "!");
 				} else {
-					JOptionPane.showMessageDialog(null, "Failed to export logs to "+ fileName + "!", "Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Failed to export logs to " + fileName + "!", "Error",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
-		});		
-		
+		});
+
+		// Enable the combobox to select the records by names from the database
 		cbSelectbyName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String query = "select username as 'User', reportStatus as 'Report Status' from logsheet where username =?";
@@ -258,6 +279,8 @@ public class BlackBoxSystem {
 		cbSelectbyName.setBounds(20, 11, 150, 20);
 		LogSheetCard.add(cbSelectbyName);
 
+		// Enable the combobox to select by report status ("pass" or "warning")
+		// from the database
 		cbSelectedbyStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String query = "select username as 'User', reportStatus as 'Record', carSpeed as 'Speed', carRPM as 'RPM', carTemp as 'Temp', carOil as 'Oil level', carFuel as 'Gas', carTFL as 'Tire FL', carTFR as 'Tier FR', carTRL as 'Tire RL', carTRR as 'Tire RR' from logsheet where reportStatus =?";
@@ -277,6 +300,8 @@ public class BlackBoxSystem {
 		cbSelectedbyStatus.setBounds(175, 11, 180, 20);
 		LogSheetCard.add(cbSelectedbyStatus);
 
+		// Enable the combobox to select historic diagnostic reports by date
+		// from the database
 		cbSelectDiag.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String query = "select rowid as 'Record ID', date as 'Diagnostic Date' from diagsheet where date =?";
@@ -296,10 +321,11 @@ public class BlackBoxSystem {
 		cbSelectDiag.setBounds(365, 11, 180, 20);
 		LogSheetCard.add(cbSelectDiag);
 
-		DiagCard = new JPanel();
-		DiagCard.setBackground(Color.WHITE);
+		// Panel for "Diagnostic"
+		diagCard = new JPanel();
+		diagCard.setBackground(Color.WHITE);
 		DrawGraphics dg = new DrawGraphics();
-		DiagCard.add(dg, "Graphics");
+		diagCard.add(dg, "Graphics");
 		dg.setLayout(null);
 
 		JButton btnDiag = new JButton("Diagnose Fully");
@@ -336,21 +362,14 @@ public class BlackBoxSystem {
 						try {
 							cards.show(cardPanel, "Trans");
 							digCar.setCarStopped(false);
-							// digCar.start();
 							Thread.sleep(5000);
 							fdc.diagnoseFully();
-							// digCar.stop();
 							digCar.setCarStopped(true);
 							cards.show(cardPanel, "Full Diagnose");
-							// Save panel to PDF
-							// java.awt.Image image = getImageFromPanel(fdc);
-							// String fileName = "DiagnosisReport.pdf";
-							// printToPDF(image, fileName);
 						} catch (InterruptedException ex) {
-						}
-
 					}
-				};
+				}
+			};
 
 				thread.start();
 			}
@@ -559,7 +578,7 @@ public class BlackBoxSystem {
 
 				double[] showitems = getPercentage(cbSelectedbyStatus.getSelectedItem().toString());
 				String[] name = getNameList();
-				Color[] colors = new Color[name.length]; 
+				Color[] colors = new Color[name.length];
 
 				System.out.println(name.length);
 
@@ -617,7 +636,7 @@ public class BlackBoxSystem {
 		cardPanel.add(rtmCard, "Real-Time Monitor");
 		rtmCard.setLayout(new BorderLayout(0, 0));
 
-		cardPanel.add(DiagCard, "Diagnose");
+		cardPanel.add(diagCard, "Diagnose");
 		cardPanel.add(LogSheetCard, "Log Sheets");
 		cardPanel.add(firstCard, "First Page");
 		firstCard.setLayout(new BorderLayout());
@@ -952,29 +971,33 @@ public class BlackBoxSystem {
 		}
 	}
 
-	public boolean toExcel(JTable table, File file){
-		try{
+	public boolean toExcel(JTable table, File file) {
+		try {
 			DefaultTableModel model = (DefaultTableModel) logTable.getModel();
 			FileWriter excel = new FileWriter(file);
 
-			for(int i = 0; i < model.getColumnCount(); i++){
+			for (int i = 0; i < model.getColumnCount(); i++) {
 				excel.write(model.getColumnName(i) + "\t");
 			}
 
 			excel.write("\n");
 
-			for(int i=0; i< model.getRowCount(); i++) {
-				for(int j=0; j < model.getColumnCount(); j++) {
-					excel.write(model.getValueAt(i,j).toString()+"\t");
+			for (int i = 0; i < model.getRowCount(); i++) {
+				for (int j = 0; j < model.getColumnCount(); j++) {
+					excel.write(model.getValueAt(i, j).toString() + "\t");
 				}
 				excel.write("\n");
 			}
 
 			excel.close();
 			return true;
-		}catch(IOException e){ System.out.println(e); return false;}
+		} catch (IOException e) {
+			System.out.println(e);
+			return false;
+		}
 	}
-	
+
+	// Get total "pass" records or total "warning" records
 	public int getTotalPW(String table, String pORw) {
 		int count = 0;
 		try {
@@ -996,13 +1019,8 @@ public class BlackBoxSystem {
 		return count;
 	}
 
+	// Draw pie chart
 	private void drawPieChart(Graphics g, double[] showitems, Color[] colors) {
-
-		// System.out.println(personPass);
-		// System.out.println(personTotal);
-
-		// showitems[0] = personPass;
-		// showitems[1] = others;
 
 		int startAngle = 0;
 		int arcAngle = 0;
@@ -1012,6 +1030,7 @@ public class BlackBoxSystem {
 			// calculate arc angle for percentage
 			arcAngle = (int) Math.round(showitems[i] * 360);
 			// System.out.println(showitems[i]);
+
 			// set drawing Color for pie wedge
 			g.setColor(colors[i]);
 
@@ -1023,11 +1042,8 @@ public class BlackBoxSystem {
 		}
 	} // end method drawPieChart
 
-	// draw pie chart legend on given Graphics context
+	// Draw pie chart legend on given Graphics context
 	private void drawLegend(Graphics g, String[] legends, Color[] colors) {
-
-		// show[0] = "Pass";
-		// show[1] = "Warning";
 
 		// create Font for Account name
 		Font font = new Font("SansSerif", Font.BOLD, 12);
@@ -1043,49 +1059,5 @@ public class BlackBoxSystem {
 			g.drawString(legends[i], 115, 110 + 15 * i);
 		}
 	} // end method drawLegend
-
-	/*
-	 * private void drawPieChart(Graphics g) { double[] names = new double[2];
-	 * 
-	 * double personPass = getPersonPass(); double totalPass =
-	 * getTotalPass("logsheet"); double personTotal = getPersonTotoal(); double
-	 * others = personTotal - personPass;
-	 * 
-	 * // System.out.println(personPass); // System.out.println(personTotal);
-	 * 
-	 * names[0] = personPass; names[1] = others;
-	 * 
-	 * // create temporary variables for pie chart calculations double
-	 * percentage = 0.0; int startAngle = 0; int arcAngle = 0;
-	 * 
-	 * for (int i = 0; i < 2; i++) {
-	 * 
-	 * if (personTotal != 0) {
-	 * 
-	 * // get percentage percentage = names[i] / personTotal;
-	 * System.out.println(percentage); // calculate arc angle for percentage
-	 * arcAngle = (int) Math.round(percentage * 360);
-	 * 
-	 * // set drawing Color for pie wedge g.setColor(colors[i]);
-	 * 
-	 * // draw pie wedge g.fillArc(5, 5, 100, 100, startAngle, arcAngle);
-	 * 
-	 * // calculate startAngle for next pie wedge startAngle += arcAngle; } } }
-	 * // end method drawPieChart
-	 * 
-	 * // draw pie chart legend on given Graphics context private void
-	 * drawLegend( Graphics g ) { String[] show = new String[2];
-	 * 
-	 * show[0] = "Pass"; show[1] = "Warning";
-	 * 
-	 * // create Font for Account name Font font = new Font( "SansSerif",
-	 * Font.BOLD, 12 ); g.setFont( font );
-	 * 
-	 * // draw description for each Account for ( int i = 0; i < 2; i++ ) {
-	 * g.setColor(colors[i]); g.fillRect( 100, 100 + 15 * i, 10, 10 );
-	 * 
-	 * // draw Account name next to color swatch g.setColor( Color.black );
-	 * g.drawString( show[i], 115, 110 + 15 * i); } } // end method drawLegend
-	 */
 
 }

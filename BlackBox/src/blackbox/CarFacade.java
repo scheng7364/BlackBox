@@ -1,3 +1,10 @@
+/**
+ * @(#)CarFacade.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
 import java.util.HashMap;
@@ -14,8 +21,6 @@ public class CarFacade extends Thread {
 	private Car myCar;
 	private OBD2Port obdPort;
 	
-	//May need some Driver profile 
-
 	//A HashMap	
 	private HashMap<String, CarDataItem> carDataItemMap;
 	private static int PERIOD = 1000;
@@ -36,7 +41,6 @@ public class CarFacade extends Thread {
 	}
 	public CarFacade(Car newCar) {
 		myCar = newCar;
-		//myCar = new Honda();
 		obdPort = new OBD2Port(this);
 		carDataItemMap = new HashMap<String,CarDataItem>();
 		//Create Map
@@ -96,8 +100,6 @@ public class CarFacade extends Thread {
 		if(carDataItemMap.get(key)!=null) {
 			if(counter != 0) { 
 			value = carDataItemMap.get(key).getSum()/(counter); }
-		//	System.out.println(value);
-		//	System.out.println(counter);
 			return (value);
 		} else {
 			System.out.println("Warning: No" + key + "Data is Retrieved!");
@@ -122,7 +124,6 @@ public class CarFacade extends Thread {
 			System.out.println("CarFacade ID"+ID+ ": " + key+ "curr =" + formatter.format(item.getCurrValue()));
 			if(counter != 0) { 
 			System.out.println(key+ " avg =" + formatter.format(item.getSum()/counter));}
-		//	System.out.println(counter);
 		}	
 	}
 		
@@ -177,14 +178,15 @@ public class CarFacade extends Thread {
 		private double temp = prevValue;
 		public CarDataItem(String name) {super(name);}
 		public CarDataItem(){this("");}
-		public void updateItem() {
-			
+		
+		public void updateItem() {		
 			prevValue=currValue; 
 			
 			currValue=fetch().doubleValue();
 			
 			if(currValue>peakValue) peakValue = currValue;
-			}
+		}
+		
 		public double getPrevValue() {return prevValue;}
 		public double getCurrValue() {return currValue;}
 		public String getCurrDataStr() {return Double.toString(currValue);}
@@ -210,7 +212,6 @@ public class CarFacade extends Thread {
 	
 	public void resetMap() {
 		for(Map.Entry<String, CarDataItem> entry : carDataItemMap.entrySet()) {
-			//String key = entry.getKey();
 			CarDataItem item = entry.getValue();
 			item.reset();
 		}	

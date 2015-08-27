@@ -1,14 +1,14 @@
 /**
+ * @(#)Engine.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
 import java.util.Random;
 
-/**
- * @author kchilds
- *
- */
 public class Engine {
 	
 	private String type;

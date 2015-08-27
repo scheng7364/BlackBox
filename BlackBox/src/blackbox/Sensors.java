@@ -1,7 +1,12 @@
+/**
+ * @(#)Sensors.java
+ * 
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox;
 
-import java.awt.Cursor;
-import java.awt.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +14,6 @@ import java.sql.ResultSetMetaData;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Observable;
-
 import javax.swing.JOptionPane;
 
 import blackbox.CarClasses.Car;
@@ -43,89 +47,98 @@ public class Sensors extends Observable {
 		this.createArrayList();
 	}
 
+	// Create an array list for storing the data from OBD2Port
 	public void createArrayList() {
-
 		for (int i = 0; i < size; i++) {
 			list.add(i, "0.0");
 		}
 	}
 
-	public void printlist() {
+	// For debugging
+	/*public void printlist() {
 		for (int i = 0; i < size; i++) {
 			String item = list.get(i);
 			System.out.println("value at " + i + " " + item);
 		}
-	}
+	}*/
 
+	// Set the Car to start or stop
 	public boolean setStarting(boolean startornot) {
 		return this.starting = startornot;
 	}
 
+	// Get the stop or start status of the car
 	public boolean getStarting() {
 		return this.starting;
 	}
 
+	// Get the drivers coefficient from database (this is for simulation purpose) 
 	public double getDriverCoeff() {
 		coeff = this.myProfile.getCoeff();
-		System.out.println("From Sensors: " + coeff);
 		return coeff;
 	}
 
+	// Get the username of the logged-in user & write value into respective column in data table
 	public String getUsername() {
 		String name = myProfile.getUsername();
 		list.set(0, name);
 		return name;
 	}
 
+	// Get "pass" or "warning" status of the report & write value into respective column in data table
 	public String getStatus() {
 		list.set(1, status);
 		return this.status;
 	}
 
-	// To get car speed
+	// To get car speed & write value into respective column in data table
 	public double getCarSpeed() {
+		// Driver's coefficient is here to simulate different values for different user
 		coeff = this.getDriverCoeff();
 		double speed = coeff * obd.readDoubleData("Speed");
 		list.set(2, formatter.format(speed));
 		return speed;
 	}
 
-	// To get Car RPM (For Engine)
+	// To get Car RPM (For Engine) & write value into respective column in data table
 	public double getCarRPM() {
+		// Driver's coefficient is here to simulate different values for different user
 		coeff = this.getDriverCoeff();
 		double rpm = coeff * obd.readDoubleData("RPM");
 		list.set(3, formatter.format(rpm));
-
 		return rpm;
 	}
 
-	// To get Car Int Air Temp (For Cooling System)
+	// To get Car Int Air Temp (For Cooling System) & write value into respective column in data table
 	public double getCarIntAirTemp() {
+		// Driver's coefficient is here to simulate different values for different user
 		coeff = this.getDriverCoeff();
 		double temp = coeff * obd.readDoubleData("IntAirTemp");
 		list.set(4, formatter.format(temp));
 		return temp;
 	}
 
-	// To get Car Oil Level (For Engine)
+	// To get Car Oil Level (For Engine) & write value into respective column in data table
 	public double getCarOilLevel() {
+		// Driver's coefficient is here to simulate different values for different user
 		coeff = this.getDriverCoeff();
 		double ol = coeff * obd.readDoubleData("OilLevel");
 		list.set(5, formatter.format(ol));
 		return ol;
 	}
 
-	// To get Car Fuel Level (For Fuel System)
+	// To get Car Fuel Level (For Fuel System) & write value into respective column in data table
 	public double getCarFuelLevel() {
+		// Driver's coefficient is here to simulate different values for different user
 		coeff = this.getDriverCoeff();
 		double fl = coeff * obd.readDoubleData("FuelLevel");
 		list.set(6, formatter.format(fl));
 		return fl;
 	}
 
-	// To get Tires pressure
+	// To get Tires pressure & write value into respective column in data table
 	public double[] getTiresPressure() {
-
+		// Driver's coefficient is here to simulate different values for different user
 		coeff = this.getDriverCoeff();
 
 		tires[0] = (coeff * obd.readDoubleData("TirePressure_LF"));
@@ -139,12 +152,11 @@ public class Sensors extends Observable {
 		list.set(10, formatter.format(tires[3]));
 
 		return tires;
-
 	}
 
 	// To check if Car is healthy
 	public void ifHealthy() {
-
+		// Get the threshold values
 		MaxMinValues threshold = new MaxMinValues(myCar);
 		healthy = true;
 
@@ -158,31 +170,27 @@ public class Sensors extends Observable {
 		double currFuel = this.getCarFuelLevel();
 		double[] currTire = this.getTiresPressure();
 
+		// If the below situation occurs (i.e. exceeding the threshold range, "Warning" sign will be shown in the real time monitor)
 		if (currSpeed == 0)
 			this.setStarting(true);
 		else
 			this.setStarting(false);
 
-		// System.out.println("starting? " + starting);
-
 		if (currRPM >= threshold.getMaxRPM() || currRPM < threshold.getMinRPM()) {
 			healthy = false;
 		}
-		System.out.println(healthy);
-
+		
 		for (int i = 0; i < 4; i++) {
 			if (currTire[i] >= threshold.getMaxTirePressure() || currTire[i] < threshold.getMinTirePressure()) {
 				healthy = false;
 				break;
 			}
 		}
-		System.out.println(healthy);
+		
 		if (currFuel < threshold.getMinFuelLevel()) {
 			healthy = false;
 		}
-
-		System.out.println(healthy);
-
+		
 		if (currTemp > threshold.getMaxTemperature() || currTemp < threshold.getMinTemperature()) {
 			healthy = false;
 		}
@@ -190,8 +198,7 @@ public class Sensors extends Observable {
 		if (currOil < threshold.getMinOilLevelSensor() || currOil >= threshold.getMaxOilLevelSensor()) {
 			healthy = false;
 		}
-		System.out.println(healthy);
-
+		
 		// Inform Sensors Monitor for the state change
 		setChanged();
 		notifyObservers(new Boolean(healthy));
@@ -209,7 +216,7 @@ public class Sensors extends Observable {
 				String query = "Insert into logsheet(username, reportStatus, carSpeed, carRPM, carTemp, carOil, carFuel, carTFL, carTFR, carTRL, carTRR) values(?,?,?,?,?,?,?,?,?,?,?)";
 				PreparedStatement pst = connection1.prepareStatement(query);
 
-				// Write into database
+				// Write into database. Index and item are matched so for loop can be used 
 				for (int i = 0; i < size; i++) {
 					String item = list.get(i);
 					int index = i + 1;
@@ -228,6 +235,7 @@ public class Sensors extends Observable {
 		}
 	}
 
+	// Get the total number of columns of a data table
 	public int getColNum() {
 		int colnum = 0;
 		try {
@@ -245,8 +253,6 @@ public class Sensors extends Observable {
 		}
 
 		size = colnum;
-		System.out.println(size);
-
 		return size;
 	}
 

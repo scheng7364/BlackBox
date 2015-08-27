@@ -1,17 +1,14 @@
 /**
+ * @(#)Honda.java
  * 
- */
+ * @author Kevin Childs, Shen Cheng, Xiao Xiao
+ * @version 1.0
+*/
+
 package blackbox.CarClasses;
 
-/**
- * @author KC
- *
- */
 public class Honda extends Car {
-	//
-	/**
-	 * 
-	 */
+
 	public Honda() {
 		
 		//value for car
@@ -29,8 +26,6 @@ public class Honda extends Car {
 		this.setPitchSTD(0);
 		
 		//values for engine
-		//int [] OBD2= {1, 2, 3, 4};		
-		//this.setOBD2Codes(OBD2);
 		this.sysEngine.setType("16 Valve SOHC V-Tec");
 		this.sysEngine.setAirFlowMeterAVG(40);
 		this.sysEngine.setAirFlowMeterSTD(30);
