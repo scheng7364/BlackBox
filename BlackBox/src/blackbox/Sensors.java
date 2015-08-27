@@ -28,7 +28,7 @@ public class Sensors extends Observable {
 	private int size; // size of arraylist
 	private ArrayList<String> list;
 	
-	Connection connection1 = sqliteConnection.dbConnector();
+	Connection connection1 = ConnectionSqlite.dbConnector();
 
 	// Formate Double to show one digit
 	DecimalFormat formatter = new DecimalFormat("#0.0");

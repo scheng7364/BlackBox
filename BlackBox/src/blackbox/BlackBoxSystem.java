@@ -54,13 +54,13 @@ public class BlackBoxSystem {
 	private String name; // username to be displayed
 	private String driveStyle; // driving styles for different users
 	private JLabel lblShowText; // in Log Sheet card;
-	private JPanel RtmCard; // Card for real-time monitoring
+	private JPanel rtmCard; // Card for real-time monitoring
 	private JPanel firstCard; // Card for start-engine button
 	private JLabel total, total_1, pass, rate;
 	private JTable logTable;
 	private JPanel starpanel, passpanel, reportStatuspanel, piechart;
 
-	Connection connection1 = sqliteConnection.dbConnector();
+	Connection connection1 = ConnectionSqlite.dbConnector();
 
 	private double passrate, personpass, persontotal;
 
@@ -358,8 +358,8 @@ public class BlackBoxSystem {
 		dg.add(btnDiag);
 		btnDiag.setBounds(497, 0, 123, 23);
 
-		RtmCard = new JPanel();
-		RtmCard.setBackground(new Color(230, 230, 250));
+		rtmCard = new JPanel();
+		rtmCard.setBackground(new Color(230, 230, 250));
 
 		lblShowText = new JLabel();
 		lblShowText.setBounds(20, 30, 500, 20);
@@ -413,26 +413,26 @@ public class BlackBoxSystem {
 						fdc.rpmAvg.setText(rs2.getString("carRPM"));
 						fdc.olAvg.setText(rs2.getString("carOil"));
 						fdc.flAvg.setText(rs2.getString("carFuel"));
-						fdc.TempAvg.setText(rs2.getString("carTemp"));
-						fdc.TireFLAvg.setText(rs2.getString("carTFL"));
-						fdc.TireFRAvg.setText(rs2.getString("carTFR"));
-						fdc.TireRLAvg.setText(rs2.getString("carTRL"));
-						fdc.TireRRAvg.setText(rs2.getString("carTRR"));
+						fdc.tempAvg.setText(rs2.getString("carTemp"));
+						fdc.tireFLAvg.setText(rs2.getString("carTFL"));
+						fdc.tireFRAvg.setText(rs2.getString("carTFR"));
+						fdc.tireRLAvg.setText(rs2.getString("carTRL"));
+						fdc.tireRRAvg.setText(rs2.getString("carTRR"));
 
 						fdc.rpmSV.setText(rs2.getString("SVrpm"));
 						fdc.olSV.setText(rs2.getString("SVoil"));
 						fdc.flSV.setText(rs2.getString("SVfuel"));
-						fdc.TempSV.setText(rs2.getString("SVtemp"));
-						fdc.TireSV.setText(rs2.getString("SVtire"));
+						fdc.tempSV.setText(rs2.getString("SVtemp"));
+						fdc.tireSV.setText(rs2.getString("SVtire"));
 
 						fdc.rpmStatus.setText(rs2.getString("RPMStatus"));
 						fdc.olStatus.setText(rs2.getString("OilStatus"));
 						fdc.flStatus.setText(rs2.getString("FuelStatus"));
-						fdc.TempStatus.setText(rs2.getString("TempStatus"));
-						fdc.TireFLStatus.setText(rs2.getString("TFLStatus"));
-						fdc.TireFRStatus.setText(rs2.getString("TFRStatus"));
-						fdc.TireRLStatus.setText(rs2.getString("TRLStatus"));
-						fdc.TireRRStatus.setText(rs2.getString("TRRStatus"));
+						fdc.tempStatus.setText(rs2.getString("TempStatus"));
+						fdc.tireFLStatus.setText(rs2.getString("TFLStatus"));
+						fdc.tireFRStatus.setText(rs2.getString("TFRStatus"));
+						fdc.tireRLStatus.setText(rs2.getString("TRLStatus"));
+						fdc.tireRRStatus.setText(rs2.getString("TRRStatus"));
 
 						fdc.save.setVisible(false);
 						fdc.saveToPDF.setVisible(true);
@@ -614,8 +614,8 @@ public class BlackBoxSystem {
 
 		cardPanel.add(welcomeCard, "Welcome");
 
-		cardPanel.add(RtmCard, "Real-Time Monitor");
-		RtmCard.setLayout(new BorderLayout(0, 0));
+		cardPanel.add(rtmCard, "Real-Time Monitor");
+		rtmCard.setLayout(new BorderLayout(0, 0));
 
 		cardPanel.add(DiagCard, "Diagnose");
 		cardPanel.add(LogSheetCard, "Log Sheets");
@@ -648,7 +648,7 @@ public class BlackBoxSystem {
 		firstCard.add(startEngine, BorderLayout.CENTER);
 
 		thisCar.start();// Start a thread for CarFacade
-		RtmCard.add(realTimeMonitor);
+		rtmCard.add(realTimeMonitor);
 		startEngine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 

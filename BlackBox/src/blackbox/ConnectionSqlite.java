@@ -1,5 +1,5 @@
 /**
- * @(#)sqliteConnection.java
+ * @(#)ConnectionSqlite.java
  * 
  * @author Xiao Xiao
  * @version 1.0
@@ -10,7 +10,7 @@ package blackbox;
 import java.sql.*;
 import javax.swing.*;
 
-public class sqliteConnection {
+public class ConnectionSqlite {
 
 	Connection conn = null;
 
