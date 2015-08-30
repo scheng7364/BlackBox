@@ -41,12 +41,13 @@ public class DrawGraphics extends JPanel {
 	private JPanel panel = new JPanel();
 	private int x, y;
 	private JButton btnDiag;
-		
+	private Car myCar;
+	
 	public void setBtnDiag(JButton btn) {
 		btnDiag = btn;
 	}
 	
-	public DrawGraphics() {
+	public DrawGraphics(Car car) {
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(620, 400));
 		setLayout(null);
@@ -55,8 +56,8 @@ public class DrawGraphics extends JPanel {
 		lblPart.setForeground(Color.BLUE);
 		lblPart.setBounds(400, 400, 300, 150);
 		add(lblPart);
+		myCar = car;
 		
-		Car myCar = new Honda();
 		NumberFormat formatter = new DecimalFormat("#0.0"); 
 		
 //////////////////////////////////tires//////////////////////////////////

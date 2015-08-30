@@ -324,7 +324,7 @@ public class BlackBoxSystem {
 		// Panel for "Diagnostic"
 		diagCard = new JPanel();
 		diagCard.setBackground(Color.WHITE);
-		DrawGraphics dg = new DrawGraphics();
+		DrawGraphics dg = new DrawGraphics(car);
 		diagCard.add(dg, "Graphics");
 		dg.setLayout(null);
 
