@@ -36,7 +36,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class FullDiagCard extends JPanel {
-	private Car myCar;
+	private Car thisCar;
 	private OBD2Port obd;
 
 	protected JLabel rpmAvg, olAvg, flAvg, tempAvg, tireFLAvg, tireFRAvg, tireRLAvg, tireRRAvg;
@@ -55,7 +55,7 @@ public class FullDiagCard extends JPanel {
 
 	public FullDiagCard(Car car, OBD2Port obd2) {
 		super();
-		myCar = car;
+		thisCar = car;
 		obd = obd2;
 		diagDate = this.getDate();
 		size = this.getColNum();
@@ -301,7 +301,7 @@ public class FullDiagCard extends JPanel {
 	// Diagnose the car & generate a full report
 	public void diagnoseFully() {
 		// Get threshold values
-		MaxMinValues threshold = new MaxMinValues(myCar);
+		MaxMinValues threshold = new MaxMinValues(thisCar);
 		
 		// Set digits for decimal numbers
 		DecimalFormat one = new DecimalFormat("#0.0");
