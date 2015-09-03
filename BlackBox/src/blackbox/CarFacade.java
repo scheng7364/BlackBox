@@ -18,7 +18,7 @@ import java.text.NumberFormat;
 
 public class CarFacade extends Thread {
 
-	private Car myCar;
+	private Car thisCar;
 	private OBD2Port obdPort;
 	
 	//A HashMap	
@@ -40,7 +40,7 @@ public class CarFacade extends Thread {
 		return this.carStopped;
 	}
 	public CarFacade(Car newCar) {
-		myCar = newCar;
+		thisCar = newCar;
 		obdPort = new OBD2Port(this);
 		carDataItemMap = new HashMap<String,CarDataItem>();
 		//Create Map
@@ -50,26 +50,26 @@ public class CarFacade extends Thread {
 		System.out.println("Creating CarFacade ID = " + ID);
 	}
 
-	public void setMyCar(Car myCar) {
-		this.myCar = myCar;
+	public void setthisCar(Car thisCar) {
+		this.thisCar = thisCar;
 	}
 
 	private void createDataMap() {
 		//1. Speed
-		addMapItem("Speed", new CarDataItem() {public Double fetch(){return myCar.getSpeed();}});
+		addMapItem("Speed", new CarDataItem() {public Double fetch(){return thisCar.getSpeed();}});
 		//2. RPM
-		addMapItem("RPM", new CarDataItem() {public Double fetch(){return Math.floor(myCar.sysEngine.getRPM());}});
+		addMapItem("RPM", new CarDataItem() {public Double fetch(){return Math.floor(thisCar.sysEngine.getRPM());}});
 		//3. Fuel Level
-		addMapItem("FuelLevel", new CarDataItem() {public Double fetch(){return myCar.sysFuel.getFuelLevel();}});
+		addMapItem("FuelLevel", new CarDataItem() {public Double fetch(){return thisCar.sysFuel.getFuelLevel();}});
 		//4. Internal Temperature
-		addMapItem("IntAirTemp", new CarDataItem() {public Double fetch(){return myCar.sysCooling.getTemperature();}});
+		addMapItem("IntAirTemp", new CarDataItem() {public Double fetch(){return thisCar.sysCooling.getTemperature();}});
 		//5. Oil Level
-		addMapItem("OilLevel", new CarDataItem() {public Double fetch(){return myCar.sysEngine.getOilLevelSensor();}});
+		addMapItem("OilLevel", new CarDataItem() {public Double fetch(){return thisCar.sysEngine.getOilLevelSensor();}});
 		//6. Tire Pressures
-		addMapItem("TirePressure_LF", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});
-		addMapItem("TirePressure_LR", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});
-		addMapItem("TirePressure_RF", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});
-		addMapItem("TirePressure_RR", new CarDataItem() {public Double fetch(){return myCar.sysTires.getTirePressure();}});		
+		addMapItem("TirePressure_LF", new CarDataItem() {public Double fetch(){return thisCar.sysTires.getTirePressure();}});
+		addMapItem("TirePressure_LR", new CarDataItem() {public Double fetch(){return thisCar.sysTires.getTirePressure();}});
+		addMapItem("TirePressure_RF", new CarDataItem() {public Double fetch(){return thisCar.sysTires.getTirePressure();}});
+		addMapItem("TirePressure_RR", new CarDataItem() {public Double fetch(){return thisCar.sysTires.getTirePressure();}});		
 		
 	}
 	
@@ -202,7 +202,7 @@ public class CarFacade extends Thread {
 		
 	// Used for Part cards to get Car info
 	public Car getCar(){
-		return this.myCar;
+		return this.thisCar;
 	}
 
 	public OBD2Port getObdPort() {
@@ -220,9 +220,9 @@ public class CarFacade extends Thread {
 	
 	// for debug only
 	/*public static void main(String [] args) {
-		CarFacade myCar = new CarFacade();
+		CarFacade thisCar = new CarFacade();
 		
-		myCar.start();
+		thisCar.start();
 		
 		try {
 			sleep(10000);
@@ -231,7 +231,7 @@ public class CarFacade extends Thread {
 			e.printStackTrace();
 		}
 		
-		myCar.stopCar();*/
+		thisCar.stopCar();*/
 		
 	/*	try {
 			sleep(5000);
@@ -240,6 +240,6 @@ public class CarFacade extends Thread {
 			e.printStackTrace();
 		}
 		
-		myCar.startCar();
+		thisCar.startCar();
 	} */
 }

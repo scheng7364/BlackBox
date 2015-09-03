@@ -20,7 +20,7 @@ import blackbox.CarClasses.Car;
 
 public class Sensors extends Observable {
 	private OBD2Port obd;
-	private Car myCar;
+	private Car thisCar;
 	private DriverProfile myProfile;
 	private boolean starting;
 	private boolean healthy = true;
@@ -39,7 +39,7 @@ public class Sensors extends Observable {
 
 	public Sensors(OBD2Port obd2p, Car car, DriverProfile profile) {
 		obd = obd2p;
-		myCar = car;
+		thisCar = car;
 		myProfile = profile;
 
 		size = this.getColNum();
@@ -157,7 +157,7 @@ public class Sensors extends Observable {
 	// To check if Car is healthy
 	public void ifHealthy() {
 		// Get the threshold values
-		MaxMinValues threshold = new MaxMinValues(myCar);
+		MaxMinValues threshold = new MaxMinValues(thisCar);
 		healthy = true;
 
 		String username = this.getUsername();
